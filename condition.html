@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>办学条件 - 广州实验中学</title>
+  <link rel="icon" type="image/svg+xml" href="G校标修改.svg" />
+  <style>
+    /* ---------- 字体加载 ---------- */
+    @font-face {
+      font-family: '芝加哥正黑体';
+      src: url('fonts/芝加哥正黑体.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ---------- 全局重置与基础样式 ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
+      background-color: #c29c83;
+      color: #10215b;
+      line-height: 1.8;
+    }
+    a {
+      text-decoration: none;
+      color: #10215b;
+    }
+
+    /* ---------- 头部样式（与首页一致，宽度 1400px） ---------- */
+    header {
+      background-image: url('header.png');
+      background-size: cover;
+      background-position: center;
+      height: 300px;
+      position: relative;
+    }
+    header .overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+    header .container {
+      position: relative;
+      max-width: 1400px; /* 与首页统一 */
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    .logo img {
+      height: 90px;
+    }
+    nav a {
+      margin-left: 20px;
+      font-size: 1.2rem;
+    }
+    .slogan {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    /* ---------- 页面主体内容，宽度同样调整为 1400px ---------- */
+    .container-main {
+      max-width: 1400px; /* 与首页统一 */
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      font-size: 2.2rem;
+      border-bottom: 2px solid #10215b;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #10215b;
+      padding-bottom: 4px;
+      font-weight: normal;
+    }
+    p {
+      text-indent: 2em;
+      margin-bottom: 16px;
+    }
+
+    /* ---------- 办学设施内容样式 ---------- */
+    .facility-section {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .facility-text {
+      flex: 1 1 55%;
+    }
+
+    .facility-image {
+      flex: 1 1 40%;
+      text-align: center;
+    }
+
+    .facility-image img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ---------- 响应式 ---------- */
+    @media (max-width: 768px) {
+      .slogan {
+        font-size: 2.2rem;
+      }
+      nav a {
+        font-size: 1rem;
+        margin-left: 15px;
+      }
+      .facility-section {
+        flex-direction: column;
+      }
+      .facility-text, .facility-image {
+        flex: 1 1 100%;
+      }
+    }
+    @media (max-width: 480px) {
+      .slogan {
+        font-size: 1.6rem;
+      }
+      nav a {
+        font-size: 0.95rem;
+        margin-left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ---------- 头部：已替换为单个 SVG 图 ---------- -->
+  <header>
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="logo">
+        <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
+      </div>
+      <nav>
+        <a href="index.html">首页</a>
+        <a href="about.html">学校简介</a>
+        <a href="condition.html">办学条件</a>
+        <a href="philosophy.html">办学理念</a>
+      </nav>
+    </div>
+    <div class="slogan">研精覃思  循真至美</div>
+  </header>
+
+  <!-- ---------- 主要内容 ---------- -->
+  <main class="container-main">
+    <h1>办学条件</h1>
+
+    <h2>师资力量</h2>
+    <p>截止到2024年5月，学校现有专任教师133人，拥有高中教师资格证110人，毕业于985和211大学人数55人。学校已有区级以上骨干教师24人，获得区级以上综合类奖项（荣誉）110余项。</p>
+
+    <h2>办学设施</h2>
+    <div class="facility-section">
+      <div class="facility-text">
+        <p>
+          学校总用地面积约10.3万平方米，总投资超过15亿元，设施设备齐全、先进，学校图书室、阅览室、器材室、标准化田径场、足球场、篮球场（馆）、羽毛球场（馆）、游泳馆、网球场等活动场所及相应仪器设备一应俱全。
+        </p>
+      </div>
+      <div class="facility-image">
+        <img src="广实足球场.jpeg" alt="广实足球场" />
+      </div>
+    </div>
+  </main>
+</body>
+</html>

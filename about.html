@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>学校简介 - 广州实验中学</title>
+  <link rel="icon" type="image/svg+xml" href="G校标修改.svg" />
+  <style>
+    /* ---------- 字体加载 ---------- */
+    @font-face {
+      font-family: '芝加哥正黑体';
+      src: url('fonts/芝加哥正黑体.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* ---------- 全局重置与基础样式 ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
+      background-color: #c29c83;
+      color: #10215b;
+      line-height: 1.8;
+    }
+    a {
+      text-decoration: none;
+      color: #10215b;
+    }
+
+    /* ---------- 头部样式（与首页保持一致，宽度 1400px） ---------- */
+    header {
+      background-image: url('header.png');
+      background-size: cover;
+      background-position: center;
+      height: 300px;
+      position: relative;
+    }
+    header .overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+    header .container {
+      position: relative;
+      max-width: 1400px; /* 与首页统一 */
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    .logo img {
+      height: 90px;
+    }
+    nav a {
+      margin-left: 20px;
+      font-size: 1.2rem;
+    }
+    .slogan {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    /* ---------- 页面主体内容，宽度也调整为 1400px ---------- */
+    .container-main {
+      max-width: 1400px; /* 与首页统一 */
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      font-size: 2.2rem;
+      border-bottom: 2px solid #10215b;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+    /* 左右布局容器 */
+    .content-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .content-wrapper .text {
+      flex: 1;
+      min-width: 280px;
+      text-align: left;
+    }
+    .content-wrapper .image {
+      flex: 1;
+      min-width: 280px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .content-wrapper .image img {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    p {
+      text-indent: 2em;
+      margin-bottom: 16px;
+    }
+
+    /* ---------- 响应式 ---------- */
+    @media (max-width: 768px) {
+      .slogan {
+        font-size: 2.2rem;
+      }
+      nav a {
+        font-size: 1rem;
+        margin-left: 15px;
+      }
+      .content-wrapper {
+        flex-direction: column;
+      }
+      .content-wrapper .image {
+        margin-top: 20px;
+      }
+    }
+    @media (max-width: 480px) {
+      .slogan {
+        font-size: 1.6rem;
+      }
+      nav a {
+        font-size: 0.95rem;
+        margin-left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ---------- 头部：已替换为单个 SVG 图 ---------- -->
+  <header>
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="logo">
+        <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
+      </div>
+      <nav>
+        <a href="index.html">首页</a>
+        <a href="about.html">学校简介</a>
+        <a href="condition.html">办学条件</a>
+        <a href="philosophy.html">办学理念</a>
+      </nav>
+    </div>
+    <div class="slogan">研精覃思  循真至美</div>
+  </header>
+
+  <!-- ---------- 主要内容：左右布局 ---------- -->
+  <main class="container-main">
+    <h1>学校简介</h1>
+    <div class="content-wrapper">
+      <!-- 左侧文字部分 -->
+      <div class="text">
+        <p>广州实验中学（Guangzhou Experimental Secondary School）坐落于广州市黄埔区，是广州市教育局与广州市黄埔区人民政府共建、由广州市教育研究院与广州市黄埔区教育局共管的一所公办完全中学，是广东省义务教育标准化学校。</p>
+        <p>学校创办于2021年；是广州实验教育集团旗舰校，同时也是黄埔广州实验中学教育集团核心校。</p>
+        <p>项目总投资超15亿元，定位为国家级示范性高中和广州市示范性高中，用地面积103000㎡（约154亩）。项目建成后开设初中30个班，高中60个班，能容纳4500名学生。</p>
+      </div>
+      <!-- 右侧图片部分 -->
+      <div class="image">
+        <img src="广实鸟瞰图.jpg" alt="广州实验中学鸟瞰图" />
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 广州实验中学 版权所有 | 地址：广州市黄埔区修业路6号
+  </footer>
+</body>
+</html>

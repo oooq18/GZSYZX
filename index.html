@@ -1,0 +1,263 @@
+<!DOCTYPE html>  
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>广州实验中学</title>
+  <link rel="icon" type="image/svg+xml" href="G校标修改.svg" />
+  <style>
+    @font-face {
+      font-family: '芝加哥正黑体';
+      src: url('fonts/芝加哥正黑体.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
+      background-color: #c29c83;
+      color: #10215b;
+      font-weight: normal;
+      line-height: 1.8;
+    }
+
+    a {
+      text-decoration: none;
+      color: #10215b;
+    }
+
+    header {
+      background-image: url('header.png');
+      background-size: cover;
+      background-position: center;
+      height: 300px;
+      position: relative;
+    }
+
+    header .overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    header .container {
+      position: relative;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 90px;
+    }
+
+    nav a {
+      margin-left: 20px;
+      font-size: 1.2rem;
+    }
+
+    .slogan {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .horizontal-sections {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+
+    .horizontal-sections a {
+      flex: 1 1 300px;
+      min-width: 280px;
+      color: inherit;
+      transition: transform 0.3s ease;
+      display: block;
+      background-color: #fff8f2;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+    }
+
+    .horizontal-sections a:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+
+    .horizontal-sections a h2 {
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+      border-bottom: 2px solid #10215b;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .horizontal-sections a p {
+      margin-top: 10px;
+      text-indent: 2em;
+      color: #10215b;
+    }
+
+    /* 二维码区域样式 */
+    .qr-section {
+      max-width: 1400px;
+      margin: 60px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .qr-section .title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .qr-section .qr-images {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .qr-section .qr-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .qr-section .qr-item img {
+      width: 160px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .qr-section .qr-item span {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #10215b;
+    }
+
+    footer {
+      background-color: #10215b;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .slogan {
+        font-size: 2.2rem;
+      }
+      nav a {
+        font-size: 1rem;
+        margin-left: 15px;
+      }
+
+      .horizontal-sections {
+        flex-direction: column;
+      }
+
+      .horizontal-sections a {
+        min-width: auto;
+      }
+
+      .qr-section .qr-images {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .slogan {
+        font-size: 1.6rem;
+      }
+      nav a {
+        font-size: 0.95rem;
+        margin-left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="logo">
+        <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
+      </div>
+      <nav>
+        <a href="index.html">首页</a>
+        <a href="about.html">学校简介</a>
+        <a href="condition.html">办学条件</a>
+        <a href="philosophy.html">办学理念</a>
+      </nav>
+    </div>
+    <div class="slogan">研精覃思  循真至美</div>
+  </header>
+
+  <main>
+    <div class="horizontal-sections">
+      <a href="about.html" aria-label="学校简介">
+        <h2>学校简介</h2>
+        <p>广州实验中学（Guangzhou Experimental Secondary School）坐落于广州市黄埔区，是广州市教育局与黄埔区共建的一所标准化学校……</p>
+      </a>
+
+      <a href="condition.html" aria-label="办学条件">
+        <h2>办学条件</h2>
+        <p>截止到2024年5月，学校现有专任教师133人，拥有高中教师资格证110人，办学设施先进完善，建设投资超过15亿元……</p>
+      </a>
+
+      <a href="philosophy.html" aria-label="办学理念">
+        <h2>办学理念</h2>
+        <p>学校提出“自主发展、幸福成长”的理念，强调解放教师、激活学生潜能、依托教研力量改革课程体系……</p>
+      </a>
+    </div>
+
+    <!-- 了解更多 & 二维码区域 -->
+    <div class="qr-section">
+      <div class="title">了解更多</div>
+      <div class="qr-images">
+        <div class="qr-item">
+          <img src="广州实验中学B站二维码.png" alt="广州实验中学 B站二维码" />
+          <span>B站二维码</span>
+        </div>
+        <div class="qr-item">
+          <img src="广州实验中学公众号二维码.png" alt="广州实验中学 公众号二维码" />
+          <span>公众号二维码</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © 2025 广州实验中学 版权所有 | 地址：广州市黄埔区修业路6号
+  </footer>
+</body>
+</html>
