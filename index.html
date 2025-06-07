@@ -34,43 +34,56 @@
     }
 
     header {
+      position: relative;
       background-image: url('header.png');
       background-size: cover;
       background-position: center;
       height: 300px;
-      position: relative;
+      overflow: hidden;
+      padding: 20px 0;
     }
 
+    /* 半透明遮罩 */
     header .overlay {
       position: absolute;
       inset: 0;
       background-color: rgba(0, 0, 0, 0.3);
+      z-index: 0;
     }
 
+    /* 顶部容器：校标 + 导航 */
     header .container {
       position: relative;
       max-width: 1400px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      z-index: 1;
     }
 
+    /* 校标 */
     .logo {
       display: flex;
       align-items: center;
     }
-
     .logo img {
       height: 90px;
     }
 
+    /* 导航 */
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
     nav a {
-      margin-left: 20px;
       font-size: 1.2rem;
+      color: inherit;
     }
 
+    /* 标语：默认绝对定位，居中显示 */
     .slogan {
       position: absolute;
       bottom: 20px;
@@ -80,6 +93,9 @@
       font-weight: bold;
       color: #fff;
       text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+      white-space: nowrap;
+      text-align: center;
+      z-index: 1;
     }
 
     main {
@@ -127,7 +143,7 @@
       color: #10215b;
     }
 
-    /* 二维码区域样式 */
+    /* 二维码区域 */
     .qr-section {
       max-width: 1400px;
       margin: 60px auto;
@@ -171,36 +187,57 @@
       font-size: 0.9rem;
     }
 
+    /* ===== 手机端（小于768px）样式 ===== */
     @media (max-width: 768px) {
-      .slogan {
-        font-size: 2.2rem;
+      /* 顶部容器改为纵向排列，并居中 */
+      header .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* 导航放在校标下方，保持横向排列，不换为竖排 */
+      nav {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: nowrap;
       }
       nav a {
-        font-size: 1rem;
-        margin-left: 15px;
+        font-size: 0.8rem; /* 减小导航文字大小 */
+        margin: 0 10px;
       }
 
-      .horizontal-sections {
-        flex-direction: column;
+      /* 标语改为静态显示，白色文字且居中 */
+      .slogan {
+        position: static;
+        transform: none;
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        font-size: 2.5rem; /* 增大标语文字大小 */
+        white-space: normal;
+        text-align: center;
       }
 
-      .horizontal-sections a {
-        min-width: auto;
+      /* 强制“循真至美”换到下一行 */
+      .slogan .part2::before {
+        content: "\A";
+        white-space: pre;
       }
-
-      .qr-section .qr-images {
-        flex-direction: column;
-        gap: 20px;
+      .slogan .space {
+        display: none;
       }
     }
 
+    /* ===== 更小屏幕（小于480px）进一步微调 ===== */
     @media (max-width: 480px) {
       .slogan {
-        font-size: 1.6rem;
+        font-size: 2rem; /* 增大标语文字大小 */
       }
       nav a {
-        font-size: 0.95rem;
-        margin-left: 10px;
+        font-size: 0.7rem; /* 减小导航文字大小 */
+        margin: 0 8px;
       }
     }
   </style>
@@ -209,9 +246,11 @@
   <header>
     <div class="overlay"></div>
     <div class="container">
+      <!-- 校标 -->
       <div class="logo">
         <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
       </div>
+      <!-- 导航 -->
       <nav>
         <a href="index.html">首页</a>
         <a href="about.html">学校简介</a>
@@ -219,7 +258,10 @@
         <a href="philosophy.html">办学理念</a>
       </nav>
     </div>
-    <div class="slogan">研精覃思  循真至美</div>
+    <!-- 标语：分两部分，通过 part2::before 在需要时强制换行 -->
+    <div class="slogan">
+      <span class="part1">研精覃思</span><span class="space">&nbsp;&nbsp;</span><span class="part2">循真至美</span>
+    </div>
   </header>
 
   <main>
@@ -240,28 +282,28 @@
       </a>
     </div>
 
-<!-- 了解更多 & 二维码区域 -->
-<div class="qr-section">
-  <div class="title">了解更多</div>
-  <p style="margin-bottom: 30px; font-size: 1.25rem; color: #10215b;">
-    <a href="https://space.bilibili.com/694776231?spm_id_from=333.337.0.0" target="_blank" style="color: #10215b; text-decoration: underline;">B站</a>、微信视频号搜索“广州实验中学”或扫描以下二维码了解更多内容😘
-  </p>
-  <div class="qr-images">
-    <div class="qr-item">
-      <img src="广州实验中学B站二维码.png" alt="广州实验中学 B站二维码" />
-      <span>B站二维码</span>
+    <!-- 了解更多 & 二维码区域 -->
+    <div class="qr-section">
+      <div class="title">了解更多</div>
+      <p style="margin-bottom: 30px; font-size: 1.25rem; color: #10215b;">
+        <a href="https://space.bilibili.com/694776231?spm_id_from=333.337.0.0" target="_blank" style="color: #10215b; text-decoration: underline;">B站</a>、微信视频号搜索“广州实验中学”或扫描以下二维码了解更多内容😘
+      </p>
+      <div class="qr-images">
+        <div class="qr-item">
+          <img src="广州实验中学B站二维码.png" alt="广州实验中学 B站二维码" />
+          <span>B站二维码</span>
+        </div>
+        <div class="qr-item">
+          <img src="广州实验中学公众号二维码.png" alt="广州实验中学 公众号二维码" />
+          <span>公众号二维码</span>
+        </div>
+        <div class="qr-item">
+          <img src="初升高QQ群.png" alt="广州实验中学 升高QQ群二维码" />
+          <span>升高QQ群二维码</span>
+        </div>
+      </div>
     </div>
-    <div class="qr-item">
-      <img src="广州实验中学公众号二维码.png" alt="广州实验中学 公众号二维码" />
-      <span>公众号二维码</span>
-    </div>
-    <div class="qr-item">
-      <img src="初升高QQ群.png" alt="广州实验中学 升高QQ群二维码" />
-      <span>升高QQ群二维码</span>
-    </div>
-  </div>
-</div>
-</main>
+  </main>
 
   <footer>
     © 2025 广州实验中学 版权所有 | 地址：广州市黄埔区修业路6号
