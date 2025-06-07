@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'ChicagoHei';
+    src: url('ChicagoHei.woff2') format('woff2'),
+        url('ChicagoHei.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
