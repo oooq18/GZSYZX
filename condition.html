@@ -5,66 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>办学条件 - 广州实验中学</title>
   <link rel="icon" type="image/svg+xml" href="G校标修改.svg" />
+
   <style>
-    /* ---------- 字体加载 ---------- */
     @font-face {
       font-family: '芝加哥正黑体';
-      src: url('fonts/芝加哥正黑体.ttf') format('truetype');
+      src: url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff2') format('woff2'),
+           url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff') format('woff');
       font-weight: normal;
       font-style: normal;
       font-display: swap;
     }
 
-    /* ---------- 全局重置与基础样式 ---------- */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       font-family: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
       background-color: #c29c83;
       color: #10215b;
+      font-weight: normal;
       line-height: 1.8;
     }
+
     a {
       text-decoration: none;
       color: #10215b;
     }
 
-    /* ---------- 头部样式（与首页一致，宽度 1400px） ---------- */
+    /* 顶部 Banner 区，包括背景图、遮罩层、导航栏和标语 */
     header {
+      position: relative;
       background-image: url('header.png');
       background-size: cover;
       background-position: center;
       height: 300px;
-      position: relative;
+      overflow: hidden;
+      padding: 20px 0;
     }
+
     header .overlay {
       position: absolute;
       inset: 0;
       background-color: rgba(0, 0, 0, 0.3);
+      z-index: 0;
     }
+
     header .container {
       position: relative;
-      max-width: 1400px; /* 与首页统一 */
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 0 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      z-index: 1;
     }
+
     .logo {
       display: flex;
       align-items: center;
     }
+
     .logo img {
       height: 90px;
     }
-    nav a {
-      margin-left: 20px;
-      font-size: 1.2rem;
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
+
+    nav a {
+      font-size: 1.2rem;
+      color: inherit;
+    }
+
     .slogan {
       position: absolute;
       bottom: 20px;
@@ -74,20 +93,24 @@
       font-weight: bold;
       color: #fff;
       text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+      white-space: nowrap;
+      text-align: center;
+      z-index: 1;
     }
 
-    /* ---------- 页面主体内容，宽度同样调整为 1400px ---------- */
-    .container-main {
-      max-width: 1400px; /* 与首页统一 */
+    main {
+      max-width: 1400px;
       margin: 40px auto;
       padding: 0 20px;
     }
+
     h1 {
       font-size: 2.2rem;
       border-bottom: 2px solid #10215b;
       padding-bottom: 8px;
       margin-bottom: 20px;
     }
+
     h2 {
       font-size: 1.8rem;
       margin-top: 30px;
@@ -96,12 +119,13 @@
       padding-bottom: 4px;
       font-weight: normal;
     }
+
     p {
       text-indent: 2em;
       margin-bottom: 16px;
     }
 
-    /* ---------- 办学设施内容样式 ---------- */
+    /* 办学设施内容样式 */
     .facility-section {
       display: flex;
       align-items: flex-start;
@@ -127,15 +151,46 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
 
-    /* ---------- 响应式 ---------- */
+    /* 响应式：小屏适配 */
     @media (max-width: 768px) {
-      .slogan {
-        font-size: 2.2rem;
+      header .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
       }
+
+      nav {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: nowrap;
+      }
+
       nav a {
-        font-size: 1rem;
-        margin-left: 15px;
+        font-size: 0.8rem;
+        margin: 0 10px;
       }
+
+      .slogan {
+        position: static;
+        transform: none;
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        font-size: 2.5rem;
+        white-space: normal;
+        text-align: center;
+      }
+
+      .slogan .part2::before {
+        content: "\A";
+        white-space: pre;
+      }
+
+      .slogan .space {
+        display: none;
+      }
+
       .facility-section {
         flex-direction: column;
       }
@@ -143,25 +198,30 @@
         flex: 1 1 100%;
       }
     }
+
     @media (max-width: 480px) {
       .slogan {
-        font-size: 1.6rem;
+        font-size: 2rem;
       }
+
       nav a {
-        font-size: 0.95rem;
-        margin-left: 10px;
+        font-size: 0.7rem;
+        margin: 0 8px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- ---------- 头部：已替换为单个 SVG 图 ---------- -->
+  <!-- 顶部导航区 -->
   <header>
     <div class="overlay"></div>
     <div class="container">
+      <!-- 学校徽标 -->
       <div class="logo">
         <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
       </div>
+
+      <!-- 主导航 -->
       <nav>
         <a href="index.html">首页</a>
         <a href="about.html">学校简介</a>
@@ -169,11 +229,14 @@
         <a href="philosophy.html">办学理念</a>
       </nav>
     </div>
-    <div class="slogan">研精覃思  循真至美</div>
+
+    <!-- 校训标语 -->
+    <div class="slogan">
+      <span class="part1">研精覃思</span><span class="space">&nbsp;&nbsp;</span><span class="part2">循真至美</span>
+    </div>
   </header>
 
-  <!-- ---------- 主要内容 ---------- -->
-  <main class="container-main">
+  <main>
     <h1>办学条件</h1>
 
     <h2>师资力量</h2>
