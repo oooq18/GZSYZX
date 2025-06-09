@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>广州实验中学</title>
+  <link rel="icon" type="image/svg+xml" href="G校标修改.svg" />
+
+  <!-- SEO 优化信息 -->
+  <meta name="description" content="广州实验中学官网，介绍学校简介、办学条件与办学理念，展示校本特色与教学资源。">
+  <meta name="keywords" content="广州实验中学, 广州中学, 黄埔区中学, 公立学校, 教育资源">
+
+  <!-- 页面样式，包括字体定义、布局设计和响应式支持 -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      /* 先使用系统默认字体 */
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background-color: #c29c83;
+      color: #10215b;
+      font-weight: normal;
+      line-height: 1.8;
+    }
+
+    a {
+      text-decoration: none;
+      color: #10215b;
+    }
+
+    /* 顶部 Banner 区，包括背景图、遮罩层、导航栏和标语 */
+    header {
+      position: relative;
+      background-image: url('header.png');
+      background-size: cover;
+      background-position: center;
+      height: 300px;
+      overflow: hidden;
+      padding: 20px 0;
+    }
+
+    header .overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 0;
+    }
+
+    header .container {
+      position: relative;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 90px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    nav a {
+      font-size: 1.2rem;
+      color: inherit;
+    }
+
+    .slogan {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+      white-space: nowrap;
+      text-align: center;
+      z-index: 1;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    /* 三栏内容区块 */
+    .horizontal-sections {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+
+    .horizontal-sections a {
+      flex: 1 1 300px;
+      min-width: 280px;
+      color: inherit;
+      transition: transform 0.3s ease;
+      display: block;
+      background-color: #fff8f2;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+    }
+
+    .horizontal-sections a:hover {
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+
+    .horizontal-sections a h2 {
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+      border-bottom: 2px solid #10215b;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    .horizontal-sections a p {
+      margin-top: 10px;
+      text-indent: 2em;
+      color: #10215b;
+    }
+
+    /* 二维码信息区 */
+    .qr-section {
+      max-width: 1400px;
+      margin: 60px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .qr-section .title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .qr-section .qr-images {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .qr-section .qr-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .qr-section .qr-item img {
+      width: 160px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .qr-section .qr-item span {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #10215b;
+    }
+
+    footer {
+      background-color: #10215b;
+      color: #fff;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+      font-size: 0.9rem;
+    }
+
+    /* 响应式：小屏适配 */
+    @media (max-width: 768px) {
+      header .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo img {
+        height: 60px; /* 校标变小 */
+      }
+
+      nav {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      nav a {
+        font-size: 1.2rem; /* 增大导航文字大小 */
+        margin: 0 10px;
+      }
+
+      /* 让部分导航项显示在校标旁边 */
+      nav a:nth-child(1),
+      nav a:nth-child(2),
+      nav a:nth-child(3),
+      nav a:nth-child(4) {
+        display: inline-block;
+        margin: 0 10px;
+      }
+
+      /* 让其他导航项在下面 */
+      nav a:nth-child(n+5) {
+        display: block;
+        margin-top: 10px;
+      }
+
+      .slogan {
+        position: static;
+        transform: none;
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        font-size: 2.5rem;
+        white-space: normal;
+        text-align: center;
+      }
+
+      .slogan .part2::before {
+        content: "\A";
+        white-space: pre;
+      }
+
+      .slogan .space {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .slogan {
+        font-size: 2rem;
+      }
+
+      nav a {
+        font-size: 1.1rem; /* 增大导航文字大小 */
+        margin: 0 8px;
+      }
+    }
+
+    /* 加载提示样式 */
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .loading-progress {
+      width: 300px;
+      max-width: 80%;
+      height: 20px;
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    .loading-bar {
+      height: 100%;
+      width: 0%;
+      background-color: #10215b;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    #loading-text {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #10215b;
+    }
+
+    #content {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- 加载提示 -->
+  <div id="loading">
+    <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" style="height: 100px; margin-bottom: 20px;">
+    <p>正在加载...</p>
+    <div class="loading-progress">
+      <div class="loading-bar" id="loading-bar"></div>
+    </div>
+    <div id="loading-text">准备资源</div>
+  </div>
+
+  <!-- 页面内容 -->
+  <div id="content">
+    <!-- 顶部导航区 -->
+    <header>
+      <div class="overlay"></div>
+      <div class="container">
+        <!-- 学校徽标 -->
+        <div class="logo">
+          <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
+        </div>
+
+        <!-- 主导航 -->
+        <nav>
+          <a href="index.html">首页</a>
+          <a href="about.html">学校简介</a>
+          <a href="condition.html">办学条件</a>
+          <a href="philosophy.html">办学理念</a>
+        </nav>
+      </div>
+
+      <!-- 校训标语 -->
+      <div class="slogan">
+        <span class="part1">研精覃思</span><span class="space">&nbsp;&nbsp;</span><span class="part2">循真至美</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- 网站首页欢迎语 -->
+      <section style="margin: 40px 0; text-align: center;">
+        <h2 style="font-size: 2rem; color: #10215b; font-weight: bold;">欢迎访问广州实验中学官网</h2>
+      </section>
+
+      <!-- 内容区块：简介、条件、理念 -->
+      <div class="horizontal-sections">
+        <a href="about.html" aria-label="学校简介">
+          <h2>学校简介</h2>
+          <p>广州实验中学（Guangzhou Experimental Secondary School）坐落于广州市黄埔区，是广州市教育局与黄埔区共建的一所标准化学校……</p>
+        </a>
+
+        <a href="condition.html" aria-label="办学条件">
+          <h2>办学条件</h2>
+          <p>截止到2024年5月，学校现有专任教师133人，拥有高中教师资格证110人，办学设施先进完善，建设投资超过15亿元……</p>
+        </a>
+
+        <a href="philosophy.html" aria-label="办学理念">
+          <h2>办学理念</h2>
+          <p>学校提出“自主发展、幸福成长”的理念，强调解放教师、激活学生潜能、依托教研力量改革课程体系……</p>
+        </a>
+      </div>
+
+      <!-- 扫码了解更多信息 -->
+      <div class="qr-section">
+        <div class="title">了解更多</div>
+        <p style="margin-bottom: 30px; font-size: 1.25rem; color: #10215b;">
+          <a href="https://space.bilibili.com/694776231?spm_id_from=333.337.0.0" target="_blank" style="color: #10215b; text-decoration: underline;">B站</a>、微信视频号搜索“广州实验中学”或扫描以下二维码了解更多内容😘
+        </p>
+        <div class="qr-images">
+          <div class="qr-item">
+            <img src="广州实验中学B站二维码.png" alt="广州实验中学 B站二维码" />
+            <span>B站二维码</span>
+          </div>
+          <div class="qr-item">
+            <img src="广州实验中学公众号二维码.png" alt="广州实验中学 公众号二维码" />
+            <span>公众号二维码</span>
+          </div>
+          <div class="qr-item">
+            <img src="初升高QQ群.png" alt="广州实验中学 升高QQ群二维码" />
+            <span>升高QQ群二维码</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 页脚版权 -->
+    <footer>
+      © 2025 广州实验中学 版权所有 | 地址：广州市黄埔区修业路6号
+    </footer>
+  </div>
+
+  <script>
+    // 加载进度模拟
+    const loadingBar = document.getElementById('loading-bar');
+    const loadingText = document.getElementById('loading-text');
+    let progress = 0;
+    let loadedImages = 0;
+    const totalImages = 2; // 需要预加载的图片总数
+    
+    // 需要预加载的图片列表
+    const imagesToPreload = [
+      '广实鸟瞰图.jpg',
+      '广实足球场.jpeg'
+    ];
+
+    const steps = [
+      { text: "准备资源", progress: 10 },
+      { text: "加载页面结构", progress: 30 },
+      { text: "预加载图片", progress: 80 },
+      { text: "初始化交互", progress: 90 },
+      { text: "完成加载", progress: 100 }
+    ];
+
+    function updateProgress() {
+      if (progress < 100) {
+        // 如果图片全部加载完成，进度直接跳到80%
+        if (loadedImages === totalImages && progress < steps[2].progress) {
+          progress = steps[2].progress;
+          loadingBar.style.width = `${progress}%`;
+          loadingText.textContent = steps[3].text;
+          setTimeout(updateProgress, 300);
+          return;
+        }
+        
+        const currentStep = steps.find(s => s.progress > progress);
+        if (currentStep) {
+          // 随机增加进度，但不超过当前步骤的进度
+          const increment = Math.random() * 5;
+          progress = Math.min(progress + increment, currentStep.progress);
+          loadingBar.style.width = `${progress}%`;
+          loadingText.textContent = currentStep.text;
+        }
+        setTimeout(updateProgress, 300);
+      }
+    }
+
+    // 开始加载动画
+    updateProgress();
+
+    // 预加载图片函数
+    function preloadImages() {
+      return Promise.all(imagesToPreload.map(src => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            loadedImages++;
+            resolve();
+          };
+          img.onerror = () => {
+            loadedImages++;
+            console.error(`图片加载失败: ${src}`);
+            resolve();
+          };
+          img.src = src;
+        });
+      }));
+    }
+
+    // 动态加载字体
+    function loadFont() {
+      const style = document.createElement('style');
+      style.textContent = `
+        @font-face {
+          font-family: '芝加哥正黑体';
+          src: url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff2') format('woff2'),
+               url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff') format('woff');
+          font-weight: normal;
+          font-style: normal;
+          font-display: swap;
+        }
+        body {
+          font-family: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // 监听页面加载完成事件
+    window.addEventListener('load', function() {
+      // 预加载图片和字体
+      Promise.all([preloadImages(), loadFont()])
+        .then(() => {
+          // 确保进度条达到100%
+          loadingBar.style.width = '100%';
+          loadingText.textContent = '加载完成';
+          
+          // 延迟一点时间再隐藏加载界面，让用户能看到100%的状态
+          setTimeout(function() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+          }, 500);
+        })
+        .catch(error => {
+          console.error('资源加载出错:', error);
+          // 即使出错也继续显示页面
+          loadingBar.style.width = '100%';
+          loadingText.textContent = '加载完成';
+          setTimeout(function() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+          }, 500);
+        });
+    });
+  </script>
+</body>
+</html>
