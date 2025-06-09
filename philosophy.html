@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>办学理念 - 广州实验中学</title>
+  <link rel="icon" type="image/svg+xml" href="G校标修改.svg" />
+
+  <style>
+    @font-face {
+      font-family: '芝加哥正黑体';
+      src: url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff2') format('woff2'),
+           url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
+      background-color: #c29c83;
+      color: #10215b;
+      font-weight: normal;
+      line-height: 1.8;
+    }
+
+    a {
+      text-decoration: none;
+      color: #10215b;
+    }
+
+    /* 顶部 Banner 区，包括背景图、遮罩层、导航栏和标语 */
+    header {
+      position: relative;
+      background-image: url('header.png');
+      background-size: cover;
+      background-position: center;
+      height: 300px;
+      overflow: hidden;
+      padding: 20px 0;
+    }
+
+    header .overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 0;
+    }
+
+    header .container {
+      position: relative;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 90px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    nav a {
+      font-size: 1.2rem;
+      color: inherit;
+    }
+
+    .slogan {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 3rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+      white-space: nowrap;
+      text-align: center;
+      z-index: 1;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      border-bottom: 2px solid #10215b;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #10215b;
+      padding-bottom: 4px;
+      font-weight: normal;
+    }
+
+    p {
+      text-indent: 2em;
+      margin-bottom: 16px;
+    }
+
+    /* 响应式：小屏适配 */
+    @media (max-width: 768px) {
+      header .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      nav {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: nowrap;
+      }
+
+      nav a {
+        font-size: 0.8rem;
+        margin: 0 10px;
+      }
+
+      .slogan {
+        position: static;
+        transform: none;
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        font-size: 2.5rem;
+        white-space: normal;
+        text-align: center;
+      }
+
+      .slogan .part2::before {
+        content: "\A";
+        white-space: pre;
+      }
+
+      .slogan .space {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .slogan {
+        font-size: 2rem;
+      }
+
+      nav a {
+        font-size: 0.7rem;
+        margin: 0 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 顶部导航区 -->
+  <header>
+    <div class="overlay"></div>
+    <div class="container">
+      <!-- 学校徽标 -->
+      <div class="logo">
+        <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
+      </div>
+
+      <!-- 主导航 -->
+      <nav>
+        <a href="index.html">首页</a>
+        <a href="about.html">学校简介</a>
+        <a href="condition.html">办学条件</a>
+        <a href="philosophy.html">办学理念</a>
+      </nav>
+    </div>
+
+    <!-- 校训标语 -->
+    <div class="slogan">
+      <span class="part1">研精覃思</span><span class="space">&nbsp;&nbsp;</span><span class="part2">循真至美</span>
+    </div>
+  </header>
+
+  <main>
+    <h1>办学理念</h1>
+
+    <h2>教学愿景</h2>
+    <p>希望广实学子成为具有民族情结、家国认同的爱国者，报效国家、服务社会的奉献者，具有自由精神、独立思想的探索者。希望带领全体师生为学校打好基础，朝着知识高地的智慧高峰迈进。</p>
+
+    <h2>办学规划</h2>
+    <p>将老师们从形式主义、案头工作、繁重会议当中解放出来，真正以研究者的姿态投入工作。为此，学校将大胆又谨慎地对学校的运作、课程、教法、活动进行全方位的改革。希望能够探索建立一个让学生能够自主发展、教师享受职业尊严和幸福的场所。</p>
+    <p>同时将依靠市教研院领域以及汇集周边大专院校、高科技企业的人才和智慧，探索一条助力学科教学和发展的全新制度。</p>
+  </main>
+</body>
+</html>
