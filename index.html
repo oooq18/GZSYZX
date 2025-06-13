@@ -300,6 +300,125 @@
     #content {
       display: none;
     }
+
+    /* 游戏区域样式 */
+    .game-section {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .game-section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    .game-controls {
+      margin-bottom: 20px;
+    }
+
+    .game-controls button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #fff8f2;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      margin: 0 10px;
+    }
+
+    .game-controls button:hover {
+      transform: scale(1.05);
+    }
+
+    .game-stats {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+    }
+
+    /* 记忆卡片游戏样式 */
+    .memory-game {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 10px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .memory-card {
+      aspect-ratio: 1 / 1;
+      background-color: #10215b;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: transparent;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .memory-card.flipped {
+      background-color: #fff8f2;
+      color: #10215b;
+    }
+
+    .memory-card.matched {
+      background-color: #8bc34a;
+      color: #fff;
+      cursor: default;
+    }
+
+    /* 游戏胜利模态框 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #fff8f2;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .modal h3 {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    .modal p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .modal button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #10215b;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .modal button:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -361,6 +480,36 @@
           <h2>办学理念</h2>
           <p>学校希望广实学子成为具有民族情结、家国认同的爱国者。通过开展爱国主义教育活动……</p>
         </a>
+      </div>
+
+      <!-- 记忆配对卡片游戏 -->
+      <div class="game-section">
+        <h2>记忆配对卡片</h2>
+        <p>翻牌寻找配对的图案，锻炼你的记忆力！</p>
+        
+        <div class="game-controls">
+          <button id="easy-mode">简单模式</button>
+          <button id="medium-mode">中等模式</button>
+          <button id="hard-mode">困难模式</button>
+        </div>
+        
+        <div class="game-stats">
+          <span id="moves">步数: 0</span> | 
+          <span id="timer">时间: 0 秒</span>
+        </div>
+        
+        <div class="memory-game" id="memory-game"></div>
+      </div>
+
+      <!-- 游戏胜利模态框 -->
+      <div class="modal" id="win-modal">
+        <div class="modal-content">
+          <h3>恭喜你！</h3>
+          <p>你成功匹配了所有卡片！</p>
+          <p>用时: <span id="final-time">0</span> 秒</p>
+          <p>步数: <span id="final-moves">0</span></p>
+          <button id="play-again">再玩一次</button>
+        </div>
       </div>
 
       <!-- 扫码了解更多信息 -->
@@ -507,6 +656,196 @@
           }, 500);
         });
     });
+
+    // 记忆配对卡片游戏逻辑
+    const memoryGame = document.getElementById('memory-game');
+    const movesElement = document.getElementById('moves');
+    const timerElement = document.getElementById('timer');
+    const winModal = document.getElementById('win-modal');
+    const finalTimeElement = document.getElementById('final-time');
+    const finalMovesElement = document.getElementById('final-moves');
+    const playAgainButton = document.getElementById('play-again');
+    const easyModeButton = document.getElementById('easy-mode');
+    const mediumModeButton = document.getElementById('medium-mode');
+    const hardModeButton = document.getElementById('hard-mode');
+
+    // 游戏变量
+    let cards = [];
+    let flippedCards = [];
+    let matchedCards = [];
+    let moves = 0;
+    let timer = 0;
+    let timerInterval;
+    let isPlaying = false;
+    let gameSize = 12; // 默认中等难度
+    let isTimerStarted = false; // 新增变量，用于记录计时器是否已经启动
+
+    // 卡片内容（表情符号）
+    const cardContents = [
+      '📚', '✏️', '🎓', '🎯', '🏫', '🎨',
+      '🔬', '💻', '📝', '🎵', '🏃', '🌍',
+      '🌱', '🌞', '🌙', '⭐', '💡', '📌'
+    ];
+
+    // 初始化游戏
+    function initGame() {
+      // 重置游戏状态
+      resetGame();
+      
+      // 根据难度选择卡片数量
+      let contents = cardContents.slice(0, gameSize / 2);
+      // 创建配对卡片
+      cards = [...contents, ...contents];
+      
+      // 洗牌
+      cards = shuffleArray(cards);
+      
+      // 创建卡片元素
+      memoryGame.innerHTML = '';
+      cards.forEach((content, index) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.index = index;
+        card.dataset.content = content;
+        card.textContent = content;
+        card.addEventListener('click', handleCardClick);
+        memoryGame.appendChild(card);
+      });
+      
+      // 开始游戏，但不启动计时器
+      isPlaying = true;
+      timer = 0;
+      moves = 0;
+      movesElement.textContent = `步数: ${moves}`;
+      timerElement.textContent = `时间: ${timer} 秒`;
+      isTimerStarted = false;
+    }
+
+    // 洗牌算法
+    function shuffleArray(array) {
+      const newArray = [...array];
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+
+    // 处理卡片点击
+    function handleCardClick(e) {
+      const card = e.target;
+      
+      // 如果卡片已翻开或已匹配，或者游戏未开始，或者已经翻开两张卡片，则不处理
+      if (
+        card.classList.contains('flipped') ||
+        card.classList.contains('matched') ||
+        !isPlaying ||
+        flippedCards.length >= 2
+      ) {
+        return;
+      }
+      
+      // 如果计时器还未启动，启动计时器
+      if (!isTimerStarted) {
+        timerInterval = setInterval(() => {
+          timer++;
+          timerElement.textContent = `时间: ${timer} 秒`;
+        }, 1000);
+        isTimerStarted = true;
+      }
+      
+      // 翻开卡片
+      card.classList.add('flipped');
+      flippedCards.push(card);
+      
+      // 如果翻开了两张卡片，检查是否匹配
+      if (flippedCards.length === 2) {
+        moves++;
+        movesElement.textContent = `步数: ${moves}`;
+        
+        setTimeout(checkMatch, 500);
+      }
+    }
+
+    // 检查卡片是否匹配
+    function checkMatch() {
+      const [card1, card2] = flippedCards;
+      
+      if (card1.dataset.content === card2.dataset.content) {
+        // 卡片匹配
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        matchedCards.push(card1, card2);
+        
+        // 检查游戏是否结束
+        if (matchedCards.length === cards.length) {
+          endGame();
+        }
+      } else {
+        // 卡片不匹配，翻回
+        setTimeout(() => {
+          card1.classList.remove('flipped');
+          card2.classList.remove('flipped');
+        }, 500);
+      }
+      
+      // 重置已翻开的卡片
+      flippedCards = [];
+    }
+
+    // 开始游戏
+    function startGame() {
+      isPlaying = true;
+      timer = 0;
+      moves = 0;
+      movesElement.textContent = `步数: ${moves}`;
+      timerElement.textContent = `时间: ${timer} 秒`;
+      
+      // 启动计时器
+      timerInterval = setInterval(() => {
+        timer++;
+        timerElement.textContent = `时间: ${timer} 秒`;
+      }, 1000);
+    }
+
+    // 结束游戏
+    function endGame() {
+      isPlaying = false;
+      clearInterval(timerInterval);
+      
+      // 显示胜利模态框
+      finalTimeElement.textContent = timer;
+      finalMovesElement.textContent = moves;
+      winModal.style.display = 'flex';
+    }
+
+    // 重置游戏
+    function resetGame() {
+      isPlaying = false;
+      clearInterval(timerInterval);
+      flippedCards = [];
+      matchedCards = [];
+      winModal.style.display = 'none';
+      isTimerStarted = false; // 重置计时器启动状态
+    }
+
+    // 事件监听器
+    playAgainButton.addEventListener('click', initGame);
+    easyModeButton.addEventListener('click', () => {
+      gameSize = 8;
+      initGame();
+    });
+    mediumModeButton.addEventListener('click', () => {
+      gameSize = 12;
+      initGame();
+    });
+    hardModeButton.addEventListener('click', () => {
+      gameSize = 16;
+      initGame();
+    });
+
+    // 默认初始化中等难度游戏
+    initGame();
   </script>
 </body>
 </html>
