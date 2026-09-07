@@ -237,7 +237,7 @@
     loadNews();
   }
 
-  /* ===== 图片点击放大预览 ===== */
+  /* ===== 图片点击放大预览（FLIP动画） ===== */
   (function initLightbox() {
     const overlay = document.createElement('div');
     overlay.className = 'lightbox-overlay';
@@ -245,22 +245,80 @@
     document.body.appendChild(overlay);
 
     const lightboxImg = overlay.querySelector('.lightbox-img');
-
     let scrollPos = 0;
+    let originRect = null;
+    let isAnimating = false;
 
-    function open(src, alt) {
+    function getFullscreenRect() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const maxW = vw * 0.92;
+      const maxH = vh * 0.88;
+      const img = new Image();
+      img.src = lightboxImg.src;
+      let w = maxW, h = maxH;
+      if (img.naturalWidth && img.naturalHeight) {
+        const ratio = img.naturalWidth / img.naturalHeight;
+        if (maxW / ratio > maxH) {
+          h = maxH;
+          w = maxH * ratio;
+        } else {
+          w = maxW;
+          h = maxW / ratio;
+        }
+      }
+      return {
+        left: (vw - w) / 2,
+        top: (vh - h) / 2,
+        width: w,
+        height: h
+      };
+    }
+
+    function applyRect(rect) {
+      lightboxImg.style.left = rect.left + 'px';
+      lightboxImg.style.top = rect.top + 'px';
+      lightboxImg.style.width = rect.width + 'px';
+      lightboxImg.style.height = rect.height + 'px';
+    }
+
+    function open(imgEl) {
+      if (isAnimating) return;
+      isAnimating = true;
       scrollPos = window.scrollY || window.pageYOffset;
-      lightboxImg.src = src;
-      lightboxImg.alt = alt || '';
+      originRect = imgEl.getBoundingClientRect();
+
+      lightboxImg.src = imgEl.src;
+      lightboxImg.alt = imgEl.alt || '';
+
+      // 先放到小图位置
+      applyRect(originRect);
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+
+      // 下一帧放大到全屏
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const target = getFullscreenRect();
+          applyRect(target);
+          setTimeout(() => { isAnimating = false; }, 350);
+        });
+      });
     }
 
     function close() {
-      overlay.classList.remove('active');
-      document.body.style.overflow = '';
-      window.scrollTo(0, scrollPos);
-      setTimeout(() => { lightboxImg.src = ''; }, 300);
+      if (isAnimating || !originRect) return;
+      isAnimating = true;
+      // 缩回小图位置
+      applyRect(originRect);
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollPos);
+        lightboxImg.src = '';
+        originRect = null;
+        isAnimating = false;
+      }, 320);
     }
 
     overlay.addEventListener('click', () => close());
@@ -269,7 +327,6 @@
       if (e.key === 'Escape' && overlay.classList.contains('active')) close();
     });
 
-    // 给内容区所有图片绑定点击（排除校标、二维码、图标）
     function bindImages() {
       document.querySelectorAll('main img, .content-block img, .campus-gallery img, .facility-grid img, .split-image img, .facility-item').forEach(el => {
         if (el.dataset.lightboxBound) return;
@@ -279,13 +336,12 @@
         el.style.cursor = 'zoom-in';
         el.addEventListener('click', (e) => {
           e.preventDefault();
-          open(img.src, img.alt);
+          open(img);
         });
       });
     }
 
     bindImages();
-    // 动态内容（新闻图片）加载后再绑定
     setTimeout(bindImages, 2000);
   })();
 })();
