@@ -483,7 +483,9 @@ img {
 }
 
 .hero-page .hero-title {
+  font-family: '江城黑体', '创粗黑', '微软雅黑', sans-serif;
   font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
 }
 
 /* ===== 主内容区 ===== */
