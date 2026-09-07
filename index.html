@@ -5,847 +5,114 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>广州实验中学</title>
   <link rel="icon" type="image/svg+xml" href="G校标修改.svg" />
+  <link rel="stylesheet" href="style.css" />
 
-  <!-- SEO 优化信息 -->
+  <!-- SEO -->
   <meta name="description" content="广州实验中学官网，介绍学校简介、办学条件与办学理念，展示校本特色与教学资源。">
   <meta name="keywords" content="广州实验中学, 广州中学, 黄埔区中学, 公立学校, 教育资源">
-
-  <!-- 页面样式，包括字体定义、布局设计和响应式支持 -->
-  <style>
-    @font-face {
-      font-family: '芝加哥正黑体';
-      src: url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff2') format('woff2'),
-           url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff') format('woff');
-      font-weight: normal;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
-      background-color: #c29c83;
-      color: #10215b;
-      font-weight: normal;
-      line-height: 1.8;
-    }
-
-    a {
-      text-decoration: none;
-      color: #10215b;
-    }
-
-    /* 顶部 Banner 区，包括背景图、遮罩层、导航栏和标语 */
-    header {
-      position: relative;
-      background-image: url('header.png');
-      background-size: cover;
-      background-position: center;
-      height: 300px;
-      overflow: hidden;
-      padding: 20px 0;
-    }
-
-    header .overlay {
-      position: absolute;
-      inset: 0;
-      background-color: rgba(0, 0, 0, 0.3);
-      z-index: 0;
-    }
-
-    header .container {
-      position: relative;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 1;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo img {
-      height: 90px;
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    nav a {
-      font-size: 1.2rem;
-      color: inherit;
-    }
-
-    .slogan {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 3rem;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
-      white-space: nowrap;
-      text-align: center;
-      z-index: 1;
-    }
-
-    main {
-      max-width: 1400px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    /* 三栏内容区块 */
-    .horizontal-sections {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: space-between;
-    }
-
-    .horizontal-sections a {
-      flex: 1 1 300px;
-      min-width: 280px;
-      color: inherit;
-      transition: transform 0.3s ease;
-      display: block;
-      background-color: #fff8f2;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      text-decoration: none;
-    }
-
-    .horizontal-sections a:hover {
-      transform: scale(1.05);
-      cursor: pointer;
-    }
-
-    .horizontal-sections a h2 {
-      margin-bottom: 15px;
-      font-size: 1.8rem;
-      border-bottom: 2px solid #10215b;
-      display: inline-block;
-      padding-bottom: 5px;
-    }
-
-    .horizontal-sections a p {
-      margin-top: 10px;
-      text-indent: 2em;
-      color: #10215b;
-    }
-
-    /* 二维码信息区 */
-    .qr-section {
-      max-width: 1400px;
-      margin: 60px auto;
-      padding: 0 20px;
-      text-align: center;
-    }
-
-    .qr-section .title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .qr-section .qr-images {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 40px;
-    }
-
-    .qr-section .qr-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .qr-section .qr-item img {
-      width: 160px;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .qr-section .qr-item span {
-      margin-top: 8px;
-      font-size: 1rem;
-      color: #10215b;
-    }
-
-    footer {
-      background-color: #10215b;
-      color: #fff;
-      text-align: center;
-      padding: 20px 0;
-      margin-top: 40px;
-      font-size: 0.9rem;
-    }
-
-    /* 响应式：小屏适配 */
-    @media (max-width: 768px) {
-      header .container {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-      }
-
-      nav {
-        order: 1;
-        width: 100%;
-        justify-content: center;
-        flex-wrap: nowrap;
-      }
-
-      nav a {
-        font-size: 0.8rem;
-        margin: 0 10px;
-      }
-
-      .slogan {
-        position: static;
-        transform: none;
-        display: block;
-        width: 100%;
-        margin-top: 10px;
-        font-size: 2.5rem;
-        white-space: normal;
-        text-align: center;
-      }
-
-      .slogan .part2::before {
-        content: "\A";
-        white-space: pre;
-      }
-
-      .slogan .space {
-        display: none;
-      }
-
-      .horizontal-sections a {
-        flex-basis: 100%;
-      }
-
-      .qr-section .qr-images {
-        gap: 20px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .slogan {
-        font-size: 2rem;
-      }
-
-      nav a {
-        font-size: 0.7rem;
-        margin: 0 8px;
-      }
-    }
-
-    /* 加载提示样式 */
-    #loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255, 255, 255, 0.8);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .loading-progress {
-      width: 300px;
-      max-width: 80%;
-      height: 20px;
-      background-color: #f0f0f0;
-      border-radius: 10px;
-      margin-top: 20px;
-      overflow: hidden;
-    }
-
-    .loading-bar {
-      height: 100%;
-      width: 0%;
-      background-color: #10215b;
-      border-radius: 10px;
-      transition: width 0.3s ease;
-    }
-
-    #loading-text {
-      margin-top: 10px;
-      font-size: 1.2rem;
-      color: #10215b;
-    }
-
-    #content {
-      display: none;
-    }
-
-    /* 游戏区域样式 */
-    .game-section {
-      margin-top: 40px;
-      text-align: center;
-    }
-
-    .game-section h2 {
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-    }
-
-    .game-controls {
-      margin-bottom: 20px;
-    }
-
-    .game-controls button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #fff8f2;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      margin: 0 10px;
-    }
-
-    .game-controls button:hover {
-      transform: scale(1.05);
-    }
-
-    .game-stats {
-      margin-bottom: 20px;
-      font-size: 1.2rem;
-    }
-
-    /* 记忆卡片游戏样式 */
-    .memory-game {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-      gap: 10px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .memory-card {
-      aspect-ratio: 1 / 1;
-      background-color: #10215b;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      color: transparent;
-      transition: all 0.3s ease;
-      user-select: none;
-    }
-
-    .memory-card.flipped {
-      background-color: #fff8f2;
-      color: #10215b;
-    }
-
-    .memory-card.matched {
-      background-color: #8bc34a;
-      color: #fff;
-      cursor: default;
-    }
-
-    /* 游戏胜利模态框 */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background-color: #fff8f2;
-      padding: 30px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      max-width: 400px;
-      width: 90%;
-    }
-
-    .modal h3 {
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-    }
-
-    .modal p {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
-
-    .modal button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #10215b;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .modal button:hover {
-      transform: scale(1.05);
-    }
-  </style>
+  <meta property="og:title" content="广州实验中学">
+  <meta property="og:description" content="广州实验中学官网，介绍学校简介、办学条件与办学理念。">
+  <meta property="og:type" content="website">
 </head>
 <body>
-  <!-- 加载提示 -->
-  <div id="loading">
-    <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" style="height: 100px; margin-bottom: 20px;">
-    <p>正在加载...</p>
-    <div class="loading-progress">
-      <div class="loading-bar" id="loading-bar"></div>
+  <!-- 顶部导航区 -->
+  <header>
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="logo">
+        <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
+      </div>
+      <nav>
+        <a href="index.html">首页</a>
+        <a href="about.html">学校简介</a>
+        <a href="condition.html">办学条件</a>
+        <a href="philosophy.html">办学理念</a>
+      </nav>
     </div>
-    <div id="loading-text">准备资源</div>
-  </div>
+    <div class="slogan">
+      <span class="part1">研精覃思</span><span class="space">&nbsp;&nbsp;</span><span class="part2">循真至美</span>
+    </div>
+  </header>
 
-  <!-- 页面内容 -->
-  <div id="content">
-    <!-- 顶部导航区 -->
-    <header>
-      <div class="overlay"></div>
-      <div class="container">
-        <!-- 学校徽标 -->
-        <div class="logo">
-          <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
+  <main>
+    <!-- 欢迎语 -->
+    <section style="margin: 40px 0; text-align: center;">
+      <h2 style="font-size: 2rem; color: #10215b; font-weight: bold;">欢迎访问广州实验中学官网</h2>
+    </section>
+
+    <!-- 三栏内容区块 -->
+    <div class="horizontal-sections">
+      <a href="about.html" aria-label="学校简介">
+        <h2>学校简介</h2>
+        <p>广州实验中学（Guangzhou Experimental Secondary School）坐落于广州市黄埔区……</p>
+      </a>
+      <a href="condition.html" aria-label="办学条件">
+        <h2>办学条件</h2>
+        <p>截止到2024年5月，学校现有专任教师133人，他们师德高尚、业务精湛、结构合理、充满活力……</p>
+      </a>
+      <a href="philosophy.html" aria-label="办学理念">
+        <h2>办学理念</h2>
+        <p>学校希望广实学子成为具有民族情结、家国认同的爱国者。通过开展爱国主义教育活动……</p>
+      </a>
+    </div>
+
+    <!-- 记忆配对卡片游戏 -->
+    <div class="game-section">
+      <h2>记忆配对卡片</h2>
+      <p>翻牌寻找配对的图案，锻炼你的记忆力！</p>
+      <div class="game-controls">
+        <button id="easy-mode">简单模式</button>
+        <button id="medium-mode">中等模式</button>
+        <button id="hard-mode">困难模式</button>
+      </div>
+      <div class="game-stats">
+        <span id="moves">步数: 0</span> |
+        <span id="timer">时间: 0 秒</span>
+      </div>
+      <div class="memory-game" id="memory-game"></div>
+    </div>
+
+    <!-- 游戏胜利模态框 -->
+    <div class="modal" id="win-modal">
+      <div class="modal-content">
+        <h3>恭喜你！</h3>
+        <p>你成功匹配了所有卡片！</p>
+        <p>用时: <span id="final-time">0</span> 秒</p>
+        <p>步数: <span id="final-moves">0</span></p>
+        <button id="play-again">再玩一次</button>
+      </div>
+    </div>
+
+    <!-- 二维码区 -->
+    <div class="qr-section">
+      <div class="title">了解更多</div>
+      <p style="margin-bottom: 30px; font-size: 1.25rem; color: #10215b;">
+        <a href="https://space.bilibili.com/694776231?spm_id_from=333.337.0.0" target="_blank" style="color: #10215b; text-decoration: underline;">B站</a>、微信视频号搜索"广州实验中学"或扫描以下二维码了解更多内容😘
+      </p>
+      <div class="qr-images">
+        <div class="qr-item">
+          <img src="广州实验中学B站二维码.png" alt="广州实验中学 B站二维码" />
+          <span>B站二维码</span>
         </div>
-
-        <!-- 主导航 -->
-        <nav>
-          <a href="index.html">首页</a>
-          <a href="about.html">学校简介</a>
-          <a href="condition.html">办学条件</a>
-          <a href="philosophy.html">办学理念</a>
-        </nav>
-      </div>
-
-      <!-- 校训标语 -->
-      <div class="slogan">
-        <span class="part1">研精覃思</span><span class="space">&nbsp;&nbsp;</span><span class="part2">循真至美</span>
-      </div>
-    </header>
-
-    <main>
-      <!-- 网站首页欢迎语 -->
-      <section style="margin: 40px 0; text-align: center;">
-        <h2 style="font-size: 2rem; color: #10215b; font-weight: bold;">欢迎访问广州实验中学官网</h2>
-      </section>
-
-      <!-- 内容区块：简介、条件、理念 -->
-      <div class="horizontal-sections">
-        <a href="about.html" aria-label="学校简介">
-          <h2>学校简介</h2>
-          <p>广州实验中学（Guangzhou Experimental Secondary School）坐落于广州市黄埔区……</p>
-        </a>
-
-        <a href="condition.html" aria-label="办学条件">
-          <h2>办学条件</h2>
-          <p>截止到2024年5月，学校现有专任教师133人，他们师德高尚、业务精湛、结构合理、充满活力……</p>
-        </a>
-
-        <a href="philosophy.html" aria-label="办学理念">
-          <h2>办学理念</h2>
-          <p>学校希望广实学子成为具有民族情结、家国认同的爱国者。通过开展爱国主义教育活动……</p>
-        </a>
-      </div>
-
-      <!-- 记忆配对卡片游戏 -->
-      <div class="game-section">
-        <h2>记忆配对卡片</h2>
-        <p>翻牌寻找配对的图案，锻炼你的记忆力！</p>
-        
-        <div class="game-controls">
-          <button id="easy-mode">简单模式</button>
-          <button id="medium-mode">中等模式</button>
-          <button id="hard-mode">困难模式</button>
+        <div class="qr-item">
+          <img src="广州实验中学公众号二维码.png" alt="广州实验中学 公众号二维码" />
+          <span>公众号二维码</span>
         </div>
-        
-        <div class="game-stats">
-          <span id="moves">步数: 0</span> | 
-          <span id="timer">时间: 0 秒</span>
-        </div>
-        
-        <div class="memory-game" id="memory-game"></div>
-      </div>
-
-      <!-- 游戏胜利模态框 -->
-      <div class="modal" id="win-modal">
-        <div class="modal-content">
-          <h3>恭喜你！</h3>
-          <p>你成功匹配了所有卡片！</p>
-          <p>用时: <span id="final-time">0</span> 秒</p>
-          <p>步数: <span id="final-moves">0</span></p>
-          <button id="play-again">再玩一次</button>
+        <div class="qr-item">
+          <img src="初升高QQ群.png" alt="广州实验中学 升高QQ群二维码" />
+          <span>升高QQ群二维码</span>
         </div>
       </div>
+    </div>
 
-      <!-- 扫码了解更多信息 -->
-      <div class="qr-section">
-        <div class="title">了解更多</div>
-        <p style="margin-bottom: 30px; font-size: 1.25rem; color: #10215b;">
-          <a href="https://space.bilibili.com/694776231?spm_id_from=333.337.0.0" target="_blank" style="color: #10215b; text-decoration: underline;">B站</a>、微信视频号搜索“广州实验中学”或扫描以下二维码了解更多内容😘
-        </p>
-        <div class="qr-images">
-          <div class="qr-item">
-            <img src="广州实验中学B站二维码.png" alt="广州实验中学 B站二维码" />
-            <span>B站二维码</span>
-          </div>
-          <div class="qr-item">
-            <img src="广州实验中学公众号二维码.png" alt="广州实验中学 公众号二维码" />
-            <span>公众号二维码</span>
-          </div>
-          <div class="qr-item">
-            <img src="初升高QQ群.png" alt="广州实验中学 升高QQ群二维码" />
-            <span>升高QQ群二维码</span>
-          </div>
-        </div>
-      </div>
+    <!-- 无线网络密码提示 -->
+    <p style="text-align: center; color: #10215b; margin-top: 20px;">学校的无线网络密码是GZSYZX2021注意是大写的🥰！</p>
+  </main>
 
-      <!-- 添加无线网络密码提示 -->
-      <p style="text-align: center; color: #10215b; margin-top: 20px;">学校的无线网络密码是GZSYZX2021注意是大写的🥰！</p>
-    </main>
+  <footer>
+    © 2025 广州实验中学 版权所有 | 地址：广州市黄埔区修业路6号
+  </footer>
 
-    <!-- 页脚版权 -->
-    <footer>
-      © 2025 广州实验中学 版权所有 | 地址：广州市黄埔区修业路6号
-    </footer>
-  </div>
-
-  <script>
-    // 加载进度模拟
-    const loadingBar = document.getElementById('loading-bar');
-    const loadingText = document.getElementById('loading-text');
-    let progress = 0;
-    let loadedImages = 0;
-    const totalImages = 2; // 需要预加载的图片总数
-    
-    // 需要预加载的图片列表
-    const imagesToPreload = [
-      '广实鸟瞰图.jpg',
-      '广实足球场.jpeg'
-    ];
-
-    const steps = [
-      { text: "准备资源", progress: 10 },
-      { text: "加载页面结构", progress: 30 },
-      { text: "预加载图片", progress: 80 },
-      { text: "初始化交互", progress: 90 },
-      { text: "完成加载", progress: 100 }
-    ];
-
-    function updateProgress() {
-      if (progress < 100) {
-        // 如果图片全部加载完成，进度直接跳到80%
-        if (loadedImages === totalImages && progress < steps[2].progress) {
-          progress = steps[2].progress;
-          loadingBar.style.width = `${progress}%`;
-          loadingText.textContent = steps[3].text;
-          setTimeout(updateProgress, 300);
-          return;
-        }
-        
-        const currentStep = steps.find(s => s.progress > progress);
-        if (currentStep) {
-          // 随机增加进度，但不超过当前步骤的进度
-          const increment = Math.random() * 5;
-          progress = Math.min(progress + increment, currentStep.progress);
-          loadingBar.style.width = `${progress}%`;
-          loadingText.textContent = currentStep.text;
-        }
-        setTimeout(updateProgress, 300);
-      }
-    }
-
-    // 开始加载动画
-    updateProgress();
-
-    // 预加载图片函数
-    function preloadImages() {
-      return Promise.all(imagesToPreload.map(src => {
-        return new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            loadedImages++;
-            resolve();
-          };
-          img.onerror = () => {
-            loadedImages++;
-            console.error(`图片加载失败: ${src}`);
-            resolve();
-          };
-          img.src = src;
-        });
-      }));
-    }
-
-    // 动态加载字体
-    function loadFont() {
-      const style = document.createElement('style');
-      style.textContent = `
-        @font-face {
-          font-family: '芝加哥正黑体';
-          src: url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff2') format('woff2'),
-               url('https://raw.githubusercontent.com/oooq18/GZSYZX/main/芝加哥正黑体/ChicagoHei.woff') format('woff');
-          font-weight: normal;
-          font-style: normal;
-          font-display: swap;
-        }
-        body {
-          font-family: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
-        }
-      `;
-      document.head.appendChild(style);
-    }
-
-    // 监听页面加载完成事件
-    window.addEventListener('load', function() {
-      // 预加载图片和字体
-      Promise.all([preloadImages(), loadFont()])
-        .then(() => {
-          // 确保进度条达到100%
-          loadingBar.style.width = '100%';
-          loadingText.textContent = '加载完成';
-          
-          // 延迟一点时间再隐藏加载界面，让用户能看到100%的状态
-          setTimeout(function() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-          }, 500);
-        })
-        .catch(error => {
-          console.error('资源加载出错:', error);
-          // 即使出错也继续显示页面
-          loadingBar.style.width = '100%';
-          loadingText.textContent = '加载完成';
-          setTimeout(function() {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-          }, 500);
-        });
-    });
-
-    // 记忆配对卡片游戏逻辑
-    const memoryGame = document.getElementById('memory-game');
-    const movesElement = document.getElementById('moves');
-    const timerElement = document.getElementById('timer');
-    const winModal = document.getElementById('win-modal');
-    const finalTimeElement = document.getElementById('final-time');
-    const finalMovesElement = document.getElementById('final-moves');
-    const playAgainButton = document.getElementById('play-again');
-    const easyModeButton = document.getElementById('easy-mode');
-    const mediumModeButton = document.getElementById('medium-mode');
-    const hardModeButton = document.getElementById('hard-mode');
-
-    // 游戏变量
-    let cards = [];
-    let flippedCards = [];
-    let matchedCards = [];
-    let moves = 0;
-    let timer = 0;
-    let timerInterval;
-    let isPlaying = false;
-    let gameSize = 12; // 默认中等难度
-    let isTimerStarted = false; // 新增变量，用于记录计时器是否已经启动
-
-    // 卡片内容（表情符号）
-    const cardContents = [
-      '📚', '✏️', '🎓', '🎯', '🏫', '🎨',
-      '🔬', '💻', '📝', '🎵', '🏃', '🌍',
-      '🌱', '🌞', '🌙', '⭐', '💡', '📌'
-    ];
-
-    // 初始化游戏
-    function initGame() {
-      // 重置游戏状态
-      resetGame();
-      
-      // 根据难度选择卡片数量
-      let contents = cardContents.slice(0, gameSize / 2);
-      // 创建配对卡片
-      cards = [...contents, ...contents];
-      
-      // 洗牌
-      cards = shuffleArray(cards);
-      
-      // 创建卡片元素
-      memoryGame.innerHTML = '';
-      cards.forEach((content, index) => {
-        const card = document.createElement('div');
-        card.className = 'memory-card';
-        card.dataset.index = index;
-        card.dataset.content = content;
-        card.textContent = content;
-        card.addEventListener('click', handleCardClick);
-        memoryGame.appendChild(card);
-      });
-      
-      // 开始游戏，但不启动计时器
-      isPlaying = true;
-      timer = 0;
-      moves = 0;
-      movesElement.textContent = `步数: ${moves}`;
-      timerElement.textContent = `时间: ${timer} 秒`;
-      isTimerStarted = false;
-    }
-
-    // 洗牌算法
-    function shuffleArray(array) {
-      const newArray = [...array];
-      for (let i = newArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-      }
-      return newArray;
-    }
-
-    // 处理卡片点击
-    function handleCardClick(e) {
-      const card = e.target;
-      
-      // 如果卡片已翻开或已匹配，或者游戏未开始，或者已经翻开两张卡片，则不处理
-      if (
-        card.classList.contains('flipped') ||
-        card.classList.contains('matched') ||
-        !isPlaying ||
-        flippedCards.length >= 2
-      ) {
-        return;
-      }
-      
-      // 如果计时器还未启动，启动计时器
-      if (!isTimerStarted) {
-        timerInterval = setInterval(() => {
-          timer++;
-          timerElement.textContent = `时间: ${timer} 秒`;
-        }, 1000);
-        isTimerStarted = true;
-      }
-      
-      // 翻开卡片
-      card.classList.add('flipped');
-      flippedCards.push(card);
-      
-      // 如果翻开了两张卡片，检查是否匹配
-      if (flippedCards.length === 2) {
-        moves++;
-        movesElement.textContent = `步数: ${moves}`;
-        
-        setTimeout(checkMatch, 500);
-      }
-    }
-
-    // 检查卡片是否匹配
-    function checkMatch() {
-      const [card1, card2] = flippedCards;
-      
-      if (card1.dataset.content === card2.dataset.content) {
-        // 卡片匹配
-        card1.classList.add('matched');
-        card2.classList.add('matched');
-        matchedCards.push(card1, card2);
-        
-        // 检查游戏是否结束
-        if (matchedCards.length === cards.length) {
-          endGame();
-        }
-      } else {
-        // 卡片不匹配，翻回
-        setTimeout(() => {
-          card1.classList.remove('flipped');
-          card2.classList.remove('flipped');
-        }, 500);
-      }
-      
-      // 重置已翻开的卡片
-      flippedCards = [];
-    }
-
-    // 开始游戏
-    function startGame() {
-      isPlaying = true;
-      timer = 0;
-      moves = 0;
-      movesElement.textContent = `步数: ${moves}`;
-      timerElement.textContent = `时间: ${timer} 秒`;
-      
-      // 启动计时器
-      timerInterval = setInterval(() => {
-        timer++;
-        timerElement.textContent = `时间: ${timer} 秒`;
-      }, 1000);
-    }
-
-    // 结束游戏
-    function endGame() {
-      isPlaying = false;
-      clearInterval(timerInterval);
-      
-      // 显示胜利模态框
-      finalTimeElement.textContent = timer;
-      finalMovesElement.textContent = moves;
-      winModal.style.display = 'flex';
-    }
-
-    // 重置游戏
-    function resetGame() {
-      isPlaying = false;
-      clearInterval(timerInterval);
-      flippedCards = [];
-      matchedCards = [];
-      winModal.style.display = 'none';
-      isTimerStarted = false; // 重置计时器启动状态
-    }
-
-    // 事件监听器
-    playAgainButton.addEventListener('click', initGame);
-    easyModeButton.addEventListener('click', () => {
-      gameSize = 8;
-      initGame();
-    });
-    mediumModeButton.addEventListener('click', () => {
-      gameSize = 12;
-      initGame();
-    });
-    hardModeButton.addEventListener('click', () => {
-      gameSize = 16;
-      initGame();
-    });
-
-    // 默认初始化中等难度游戏
-    initGame();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
