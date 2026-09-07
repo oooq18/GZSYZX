@@ -3,260 +3,666 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>调试面板 - 广州实验中学</title>
-  <link rel="stylesheet" href="/style.css?v=19">
+  <title>SYSTEM TERMINAL</title>
   <style>
-    .debug-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 20px;
+    @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --wue-bg: #0a0e1a;
+      --wue-bg2: #0d1424;
+      --wue-panel: rgba(13, 20, 36, 0.85);
+      --wue-border: #1a3a5c;
+      --wue-cyan: #00d4ff;
+      --wue-cyan-dim: #0088aa;
+      --wue-blue: #2a6bb5;
+      --wue-text: #c8e0f0;
+      --wue-text-dim: #5a7a9a;
+      --wue-warn: #ffaa00;
+      --wue-danger: #ff4444;
+      --wue-ok: #00ff88;
+    }
+
+    body {
+      background: var(--wue-bg);
+      color: var(--wue-text);
+      font-family: 'Rajdhani', 'Share Tech Mono', monospace;
       min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
     }
-    .debug-header {
+
+    /* 扫描线背景 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 212, 255, 0.02) 2px,
+        rgba(0, 212, 255, 0.02) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 网格背景 */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== 登录界面 ===== */
+    #loginScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      background: var(--wue-bg);
+    }
+
+    .login-box {
       text-align: center;
+      position: relative;
+      padding: 60px 80px;
+    }
+
+    .login-box::before,
+    .login-box::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-color: var(--wue-cyan);
+      border-style: solid;
+    }
+
+    .login-box::before {
+      top: 0;
+      left: 0;
+      border-width: 2px 0 0 2px;
+    }
+
+    .login-box::after {
+      bottom: 0;
+      right: 0;
+      border-width: 0 2px 2px 0;
+    }
+
+    .login-title {
+      font-size: 0.8rem;
+      letter-spacing: 8px;
+      color: var(--wue-cyan-dim);
       margin-bottom: 40px;
+      text-transform: uppercase;
     }
-    .debug-header h1 {
-      font-family: '江城黑体', '创粗黑', sans-serif;
+
+    .login-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--wue-border);
+      color: var(--wue-cyan);
       font-size: 2rem;
-      color: var(--color-primary);
-      margin-bottom: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 12px;
+      text-align: center;
+      width: 200px;
+      outline: none;
+      padding: 10px 0;
+      transition: border-color 0.3s;
     }
-    .debug-header p {
-      color: var(--color-text-muted);
-      font-size: 0.9rem;
+
+    .login-input:focus {
+      border-bottom-color: var(--wue-cyan);
+      box-shadow: 0 4px 20px -8px var(--wue-cyan);
     }
-    .debug-section {
-      background: #fff;
-      border-radius: 12px;
-      padding: 28px;
+
+    .login-input.error {
+      border-bottom-color: var(--wue-danger);
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    .login-hint {
+      margin-top: 30px;
+      font-size: 0.7rem;
+      color: var(--wue-text-dim);
+      letter-spacing: 2px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .login-hint.show {
+      opacity: 1;
+    }
+
+    /* ===== 主界面 ===== */
+    #mainInterface {
+      display: none;
+      position: relative;
+      z-index: 2;
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--wue-border);
+      margin-bottom: 30px;
+    }
+
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo-mark {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--wue-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--wue-cyan);
+      font-weight: 700;
+    }
+
+    .top-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--wue-cyan);
+      letter-spacing: 3px;
+    }
+
+    .top-subtitle {
+      font-size: 0.7rem;
+      color: var(--wue-text-dim);
+      letter-spacing: 2px;
+    }
+
+    .top-bar-right {
+      text-align: right;
+      font-size: 0.75rem;
+      color: var(--wue-text-dim);
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--wue-ok);
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* 面板 */
+    .panel {
+      background: var(--wue-panel);
+      border: 1px solid var(--wue-border);
       margin-bottom: 24px;
-      box-shadow: 0 4px 16px rgba(16,33,91,0.08);
-      border: 1px solid var(--color-border);
+      position: relative;
+      backdrop-filter: blur(10px);
     }
-    .debug-section h2 {
-      font-size: 1.3rem;
-      color: var(--color-primary);
-      margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 2px solid var(--color-border);
+
+    .panel::before,
+    .panel::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border-color: var(--wue-cyan);
+      border-style: solid;
+    }
+
+    .panel::before {
+      top: -1px;
+      left: -1px;
+      border-width: 2px 0 0 2px;
+    }
+
+    .panel::after {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 2px 2px 0;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--wue-border);
+      background: rgba(0, 212, 255, 0.03);
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--wue-cyan);
+      letter-spacing: 2px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    .debug-section h2::before {
-      content: '';
-      width: 4px;
-      height: 22px;
-      background: var(--color-accent);
-      border-radius: 2px;
+
+    .panel-title::before {
+      content: '▸';
+      color: var(--wue-cyan);
     }
+
+    .panel-badge {
+      font-size: 0.7rem;
+      padding: 3px 10px;
+      border: 1px solid;
+      border-radius: 2px;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 1px;
+    }
+
+    .panel-badge.ok {
+      color: var(--wue-ok);
+      border-color: var(--wue-ok);
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    .panel-badge.warn {
+      color: var(--wue-warn);
+      border-color: var(--wue-warn);
+      background: rgba(255, 170, 0, 0.1);
+    }
+
+    .panel-badge.danger {
+      color: var(--wue-danger);
+      border-color: var(--wue-danger);
+      background: rgba(255, 68, 68, 0.1);
+    }
+
+    .panel-body {
+      padding: 20px;
+    }
+
+    /* 按钮 */
     .btn-row {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
       margin-bottom: 20px;
     }
-    .debug-btn {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.95rem;
+
+    .wue-btn {
+      padding: 10px 22px;
+      background: transparent;
+      border: 1px solid var(--wue-border);
+      color: var(--wue-text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.85rem;
       font-weight: 600;
+      letter-spacing: 2px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: inherit;
+      transition: all 0.2s;
+      position: relative;
+      text-transform: uppercase;
     }
-    .debug-btn.danger {
-      background: #dc3545;
-      color: #fff;
+
+    .wue-btn:hover {
+      border-color: var(--wue-cyan);
+      color: var(--wue-cyan);
+      background: rgba(0, 212, 255, 0.08);
+      box-shadow: 0 0 20px -5px var(--wue-cyan);
     }
-    .debug-btn.danger:hover {
-      background: #c82333;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+
+    .wue-btn.danger {
+      border-color: rgba(255, 68, 68, 0.4);
+      color: var(--wue-danger);
     }
-    .debug-btn.warning {
-      background: var(--color-accent);
-      color: #fff;
+
+    .wue-btn.danger:hover {
+      border-color: var(--wue-danger);
+      background: rgba(255, 68, 68, 0.1);
+      box-shadow: 0 0 20px -5px var(--wue-danger);
     }
-    .debug-btn.warning:hover {
-      background: var(--color-accent-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(194,156,131,0.3);
+
+    .wue-btn.warn {
+      border-color: rgba(255, 170, 0, 0.4);
+      color: var(--wue-warn);
     }
-    .debug-btn.primary {
-      background: var(--color-primary);
-      color: #fff;
+
+    .wue-btn.warn:hover {
+      border-color: var(--wue-warn);
+      background: rgba(255, 170, 0, 0.1);
+      box-shadow: 0 0 20px -5px var(--wue-warn);
     }
-    .debug-btn.primary:hover {
-      background: var(--color-primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(16,33,91,0.3);
-    }
-    .cache-list {
-      font-family: 'Courier New', monospace;
+
+    /* 数据项 */
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(26, 58, 92, 0.5);
       font-size: 0.85rem;
     }
-    .cache-item {
-      padding: 12px 16px;
-      background: var(--color-bg);
-      border-radius: 8px;
-      margin-bottom: 10px;
-      border: 1px solid var(--color-border);
+
+    .data-row:last-child {
+      border-bottom: none;
     }
-    .cache-key {
-      font-weight: bold;
-      color: var(--color-primary);
-      margin-bottom: 6px;
-      word-break: break-all;
+
+    .data-label {
+      color: var(--wue-text-dim);
+      letter-spacing: 1px;
     }
-    .cache-value {
-      color: var(--color-text-secondary);
-      word-break: break-all;
-      max-height: 200px;
-      overflow-y: auto;
-      white-space: pre-wrap;
+
+    .data-value {
+      color: var(--wue-cyan);
+      font-family: 'Share Tech Mono', monospace;
     }
-    .cache-empty {
-      color: var(--color-text-muted);
-      text-align: center;
-      padding: 30px;
-      font-style: italic;
-    }
-    .news-item {
-      padding: 16px;
-      background: var(--color-bg);
-      border-radius: 8px;
+
+    /* 新闻条目 */
+    .news-entry {
+      padding: 14px;
+      border: 1px solid var(--wue-border);
       margin-bottom: 12px;
-      border: 1px solid var(--color-border);
+      background: rgba(0, 0, 0, 0.2);
+      position: relative;
     }
-    .news-item-title {
-      font-weight: bold;
-      color: var(--color-primary);
-      margin-bottom: 8px;
-      font-size: 0.95rem;
+
+    .news-entry::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--wue-cyan);
     }
-    .news-item-meta {
-      font-size: 0.8rem;
-      color: var(--color-text-muted);
+
+    .news-entry-title {
+      color: var(--wue-text);
+      font-weight: 600;
+      font-size: 0.9rem;
       margin-bottom: 6px;
+      padding-left: 10px;
     }
-    .news-item-desc {
-      font-size: 0.85rem;
-      color: var(--color-text-secondary);
+
+    .news-entry-meta {
+      font-size: 0.75rem;
+      color: var(--wue-text-dim);
+      padding-left: 10px;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .news-entry-desc {
+      font-size: 0.8rem;
+      color: var(--wue-text-dim);
+      margin-top: 8px;
+      padding-left: 10px;
       line-height: 1.6;
     }
-    .news-item-thumb {
-      width: 80px;
-      height: 45px;
-      object-fit: cover;
-      border-radius: 4px;
-      float: right;
-      margin-left: 12px;
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--wue-text-dim);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
     }
-    .status-badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 12px;
+
+    /* 缓存列表 */
+    .cache-entry {
+      padding: 12px;
+      border: 1px solid var(--wue-border);
+      margin-bottom: 10px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .cache-key {
+      color: var(--wue-cyan);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+      word-break: break-all;
+    }
+
+    .cache-value {
+      color: var(--wue-text-dim);
       font-size: 0.75rem;
-      font-weight: 600;
-      margin-left: 10px;
+      font-family: 'Share Tech Mono', monospace;
+      max-height: 150px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
     }
-    .status-badge.fresh {
-      background: #d4edda;
-      color: #155724;
-    }
-    .status-badge.stale {
-      background: #fff3cd;
-      color: #856404;
-    }
-    .status-badge.expired {
-      background: #f8d7da;
-      color: #721c24;
-    }
+
+    /* Toast */
     .toast {
       position: fixed;
-      top: 20px;
+      top: 30px;
       left: 50%;
       transform: translateX(-50%);
-      background: var(--color-primary);
-      color: #fff;
-      padding: 12px 28px;
-      border-radius: 8px;
-      font-size: 0.9rem;
+      background: var(--wue-panel);
+      border: 1px solid var(--wue-cyan);
+      color: var(--wue-cyan);
+      padding: 12px 30px;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
       z-index: 9999;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s;
       pointer-events: none;
     }
+
     .toast.show {
       opacity: 1;
     }
-    .back-link {
-      display: inline-block;
-      margin-bottom: 20px;
-      color: var(--color-accent);
-      text-decoration: none;
-      font-size: 0.9rem;
+
+    /* 底部状态栏 */
+    .bottom-bar {
+      margin-top: 30px;
+      padding-top: 15px;
+      border-top: 1px solid var(--wue-border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: var(--wue-text-dim);
+      font-family: 'Share Tech Mono', monospace;
     }
-    .back-link:hover {
-      text-decoration: underline;
+
+    a.back-link {
+      color: var(--wue-cyan-dim);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+    }
+
+    a.back-link:hover {
+      color: var(--wue-cyan);
+    }
+
+    @media (max-width: 600px) {
+      #mainInterface { padding: 15px; }
+      .login-box { padding: 40px 30px; }
+      .login-input { font-size: 1.5rem; width: 160px; }
+      .panel-body { padding: 15px; }
     }
   </style>
 </head>
-<body style="background: var(--color-bg);">
-  <div class="debug-container">
-    <a href="/" class="back-link">← 返回首页</a>
+<body>
 
-    <div class="debug-header">
-      <h1>调试面板</h1>
-      <p>缓存管理与新闻预览</p>
+  <!-- 登录界面 -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div class="login-title">SYSTEM ACCESS</div>
+      <input type="password" class="login-input" id="passInput" maxlength="6" autocomplete="off" autofocus>
+      <div class="login-hint" id="loginHint">ACCESS DENIED</div>
+    </div>
+  </div>
+
+  <!-- 主界面 -->
+  <div id="mainInterface">
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <div class="logo-mark">UEG</div>
+        <div>
+          <div class="top-title">CACHE CONTROL TERMINAL</div>
+          <div class="top-subtitle">GUANGZHOU EXPERIMENTAL MIDDLE SCHOOL</div>
+        </div>
+      </div>
+      <div class="top-bar-right">
+        <div><span class="status-dot"></span>SYSTEM ONLINE</div>
+        <div id="clockDisplay">--:--:--</div>
+      </div>
     </div>
 
-    <!-- 新闻缓存专区 -->
-    <div class="debug-section">
-      <h2>新闻缓存 <span id="newsStatus" class="status-badge">检查中...</span></h2>
-      <div class="btn-row">
-        <button class="debug-btn warning" onclick="clearNewsCache()">清除新闻缓存</button>
-        <button class="debug-btn primary" onclick="refreshNewsPreview()">刷新预览</button>
+    <a href="/" class="back-link">← RETURN TO MAIN</a>
+
+    <!-- 新闻缓存 -->
+    <div class="panel" style="margin-top: 20px;">
+      <div class="panel-header">
+        <div class="panel-title">NEWS CACHE</div>
+        <span class="panel-badge" id="newsBadge">CHECKING</span>
       </div>
-      <div id="newsPreview">
-        <div class="cache-empty">加载中...</div>
+      <div class="panel-body">
+        <div class="btn-row">
+          <button class="wue-btn warn" onclick="clearNewsCache()">PURGE NEWS</button>
+          <button class="wue-btn" onclick="refreshNews()">REFRESH</button>
+        </div>
+        <div id="newsContent">
+          <div class="empty-state">LOADING...</div>
+        </div>
       </div>
     </div>
 
     <!-- Service Worker 缓存 -->
-    <div class="debug-section">
-      <h2>全站缓存（Service Worker） <span id="swStatus" class="status-badge">检查中...</span></h2>
-      <div class="btn-row">
-        <button class="debug-btn danger" onclick="clearSWCache()">清除全站缓存</button>
-        <button class="debug-btn warning" onclick="unregisterSW()">注销Service Worker</button>
-        <button class="debug-btn primary" onclick="refreshSWStatus()">刷新状态</button>
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">SERVICE WORKER</div>
+        <span class="panel-badge" id="swBadge">CHECKING</span>
       </div>
-      <div id="swInfo">
-        <div class="cache-empty">加载中...</div>
+      <div class="panel-body">
+        <div class="btn-row">
+          <button class="wue-btn danger" onclick="clearSWCache()">PURGE ALL CACHE</button>
+          <button class="wue-btn warn" onclick="unregisterSW()">UNREGISTER SW</button>
+          <button class="wue-btn" onclick="refreshSW()">REFRESH</button>
+        </div>
+        <div id="swContent">
+          <div class="empty-state">LOADING...</div>
+        </div>
       </div>
     </div>
 
-    <!-- 全部缓存 -->
-    <div class="debug-section">
-      <h2>LocalStorage缓存 <span id="cacheCount" class="status-badge">0 项</span></h2>
-      <div class="btn-row">
-        <button class="debug-btn danger" onclick="clearAllCache()">一键清除全部缓存</button>
-        <button class="debug-btn primary" onclick="refreshCacheList()">刷新列表</button>
+    <!-- LocalStorage -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">LOCAL STORAGE</div>
+        <span class="panel-badge" id="lsBadge">0 ITEMS</span>
       </div>
-      <div id="cacheList">
-        <div class="cache-empty">加载中...</div>
+      <div class="panel-body">
+        <div class="btn-row">
+          <button class="wue-btn danger" onclick="clearAllLS()">PURGE ALL</button>
+          <button class="wue-btn" onclick="refreshLS()">REFRESH</button>
+        </div>
+        <div id="lsContent">
+          <div class="empty-state">LOADING...</div>
+        </div>
       </div>
+    </div>
+
+    <div class="bottom-bar">
+      <div>UEG CACHE SYSTEM v1.0</div>
+      <div id="buildInfo">BUILD: 2026.09.07</div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
-    const NEWS_CACHE_KEY = 'gzsyzx_news_cache';
-    const CACHE_TTL = 30 * 60 * 1000; // 30分钟
+    // 密码验证：加密存储，非明文
+    // 验证逻辑：输入字符串每个字符charCode与密钥异或后比对
+    const _k = 0x1F;
+    const _p = atob('LyYvJi8m'); // 加密后的密码
+
+    function checkPass(input) {
+      if (input.length !== 6) return false;
+      let enc = '';
+      for (let i = 0; i < input.length; i++) {
+        enc += String.fromCharCode(input.charCodeAt(i) ^ _k);
+      }
+      return enc === _p;
+    }
+
+    const passInput = document.getElementById('passInput');
+    const loginHint = document.getElementById('loginHint');
+
+    passInput.addEventListener('input', (e) => {
+      if (e.target.value.length === 6) {
+        if (checkPass(e.target.value)) {
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('mainInterface').style.display = 'block';
+          initTerminal();
+        } else {
+          passInput.classList.add('error');
+          loginHint.classList.add('show');
+          setTimeout(() => {
+            passInput.value = '';
+            passInput.classList.remove('error');
+            loginHint.classList.remove('show');
+          }, 800);
+        }
+      }
+    });
+
+    // 时钟
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('clockDisplay').textContent = h + ':' + m + ':' + s;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
     function showToast(msg) {
       const t = document.getElementById('toast');
@@ -265,190 +671,172 @@
       setTimeout(() => t.classList.remove('show'), 2000);
     }
 
-    function getNewsCache() {
-      try {
-        const raw = localStorage.getItem(NEWS_CACHE_KEY);
-        if (!raw) return null;
-        return JSON.parse(raw);
-      } catch(e) {
-        return null;
-      }
-    }
-
-    function getCacheStatus(cache) {
-      if (!cache || !cache.time) return { text: '无缓存', cls: 'expired' };
-      const age = Date.now() - cache.time;
-      if (age < CACHE_TTL) return { text: '新鲜', cls: 'fresh' };
-      if (age < CACHE_TTL * 2) return { text: '已过期', cls: 'stale' };
-      return { text: '严重过期', cls: 'expired' };
-    }
+    const NEWS_KEY = 'gzsyzx_news_cache';
+    const CACHE_TTL = 30 * 60 * 1000;
 
     function formatTime(ts) {
-      if (!ts) return '未知';
-      const d = new Date(ts);
-      return d.toLocaleString('zh-CN');
+      if (!ts) return 'UNKNOWN';
+      return new Date(ts).toLocaleString('zh-CN');
     }
 
-    function refreshNewsPreview() {
-      const cache = getNewsCache();
-      const status = getCacheStatus(cache);
-      const badge = document.getElementById('newsStatus');
-      badge.textContent = status.text;
-      badge.className = 'status-badge ' + status.cls;
+    // ===== 新闻缓存 =====
+    function refreshNews() {
+      const badge = document.getElementById('newsBadge');
+      const content = document.getElementById('newsContent');
+      let cache = null;
+      try {
+        cache = JSON.parse(localStorage.getItem(NEWS_KEY));
+      } catch(e) {}
 
-      const container = document.getElementById('newsPreview');
       if (!cache || !cache.articles || cache.articles.length === 0) {
-        container.innerHTML = '<div class="cache-empty">暂无新闻缓存</div>';
+        badge.textContent = 'EMPTY';
+        badge.className = 'panel-badge danger';
+        content.innerHTML = '<div class="empty-state">NO NEWS CACHE</div>';
         return;
       }
 
-      let html = '<div style="margin-bottom:12px;font-size:0.85rem;color:var(--color-text-secondary);">';
-      html += '缓存时间：' + formatTime(cache.time);
-      html += ' | 文章数量：' + cache.articles.length + ' 篇';
-      html += '</div>';
+      const age = Date.now() - (cache.time || 0);
+      if (age < CACHE_TTL) {
+        badge.textContent = 'FRESH';
+        badge.className = 'panel-badge ok';
+      } else if (age < CACHE_TTL * 2) {
+        badge.textContent = 'EXPIRED';
+        badge.className = 'panel-badge warn';
+      } else {
+        badge.textContent = 'STALE';
+        badge.className = 'panel-badge danger';
+      }
+
+      let html = '<div class="data-row"><span class="data-label">CACHE TIME</span><span class="data-value">' + formatTime(cache.time) + '</span></div>';
+      html += '<div class="data-row"><span class="data-label">ARTICLES</span><span class="data-value">' + cache.articles.length + '</span></div>';
+      html += '<div style="height:15px;"></div>';
 
       cache.articles.forEach((item, i) => {
-        html += '<div class="news-item">';
-        if (item.thumbnail) {
-          html += '<img class="news-item-thumb" src="' + item.thumbnail + '" alt="" onerror="this.style.display=\'none\'">';
-        }
-        html += '<div class="news-item-title">' + (i+1) + '. ' + (item.title || '无标题') + '</div>';
-        html += '<div class="news-item-meta">';
-        if (item.pubDate) html += '发布：' + item.pubDate + ' | ';
-        if (item.link) html += '<a href="' + item.link + '" target="_blank" style="color:var(--color-accent);">查看原文</a>';
+        html += '<div class="news-entry">';
+        html += '<div class="news-entry-title">[' + (i+1) + '] ' + (item.title || 'NO TITLE') + '</div>';
+        html += '<div class="news-entry-meta">';
+        if (item.pubDate) html += 'DATE: ' + item.pubDate + ' | ';
+        if (item.link) html += '<a href="' + item.link + '" target="_blank" style="color:var(--wue-cyan-dim);">OPEN</a>';
         html += '</div>';
         if (item.description) {
-          html += '<div class="news-item-desc">' + item.description.substring(0, 150) + (item.description.length > 150 ? '...' : '') + '</div>';
+          html += '<div class="news-entry-desc">' + item.description.substring(0, 120) + (item.description.length > 120 ? '...' : '') + '</div>';
         }
         html += '</div>';
       });
 
-      container.innerHTML = html;
+      content.innerHTML = html;
     }
 
     function clearNewsCache() {
-      localStorage.removeItem(NEWS_CACHE_KEY);
-      showToast('新闻缓存已清除');
-      refreshNewsPreview();
-      refreshCacheList();
+      localStorage.removeItem(NEWS_KEY);
+      showToast('NEWS CACHE PURGED');
+      refreshNews();
+      refreshLS();
     }
 
-    function clearAllCache() {
-      if (!confirm('确定要清除全部缓存吗？此操作不可撤销。')) return;
-      localStorage.clear();
-      showToast('全部缓存已清除');
-      refreshNewsPreview();
-      refreshCacheList();
+    // ===== Service Worker =====
+    async function refreshSW() {
+      const badge = document.getElementById('swBadge');
+      const content = document.getElementById('swContent');
+
+      if (!('serviceWorker' in navigator)) {
+        badge.textContent = 'UNSUPPORTED';
+        badge.className = 'panel-badge danger';
+        content.innerHTML = '<div class="empty-state">SW NOT SUPPORTED</div>';
+        return;
+      }
+
+      const regs = await navigator.serviceWorker.getRegistrations();
+      if (regs.length === 0) {
+        badge.textContent = 'INACTIVE';
+        badge.className = 'panel-badge warn';
+        content.innerHTML = '<div class="empty-state">SW NOT REGISTERED</div>';
+        return;
+      }
+
+      badge.textContent = 'ACTIVE';
+      badge.className = 'panel-badge ok';
+
+      let html = '';
+      regs.forEach((reg, i) => {
+        html += '<div class="data-row"><span class="data-label">SW #' + (i+1) + ' STATUS</span><span class="data-value">' + (reg.active ? 'RUNNING' : 'WAITING') + '</span></div>';
+        html += '<div class="data-row"><span class="data-label">SCOPE</span><span class="data-value" style="font-size:0.7rem;">' + reg.scope + '</span></div>';
+      });
+
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        html += '<div class="data-row"><span class="data-label">CACHE VERSIONS</span><span class="data-value">' + keys.length + '</span></div>';
+        for (const key of keys) {
+          const cache = await caches.open(key);
+          const reqs = await cache.keys();
+          html += '<div class="data-row"><span class="data-label">└ ' + key + '</span><span class="data-value">' + reqs.length + ' ASSETS</span></div>';
+        }
+      }
+
+      content.innerHTML = html;
     }
 
-    function refreshCacheList() {
-      const container = document.getElementById('cacheList');
-      const count = document.getElementById('cacheCount');
-      count.textContent = localStorage.length + ' 项';
+    async function clearSWCache() {
+      if (!confirm('PURGE ALL STATIC CACHE?')) return;
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage('CLEAR_CACHE');
+      }
+      showToast('ALL CACHE PURGED');
+      refreshSW();
+    }
+
+    async function unregisterSW() {
+      if (!confirm('UNREGISTER SERVICE WORKER?')) return;
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+      showToast('SW UNREGISTERED');
+      refreshSW();
+    }
+
+    // ===== LocalStorage =====
+    function refreshLS() {
+      const badge = document.getElementById('lsBadge');
+      const content = document.getElementById('lsContent');
+      badge.textContent = localStorage.length + ' ITEMS';
 
       if (localStorage.length === 0) {
-        container.innerHTML = '<div class="cache-empty">暂无缓存</div>';
+        content.innerHTML = '<div class="empty-state">NO DATA</div>';
         return;
       }
 
       let html = '';
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        const value = localStorage.getItem(key);
-        let displayValue = value;
-        try {
-          const parsed = JSON.parse(value);
-          displayValue = JSON.stringify(parsed, null, 2);
-        } catch(e) {}
-        html += '<div class="cache-item">';
+        const val = localStorage.getItem(key);
+        let display = val;
+        try { display = JSON.stringify(JSON.parse(val), null, 2); } catch(e) {}
+        html += '<div class="cache-entry">';
         html += '<div class="cache-key">' + key + '</div>';
-        html += '<div class="cache-value">' + displayValue.substring(0, 2000) + (displayValue.length > 2000 ? '\n... (截断)' : '') + '</div>';
+        html += '<div class="cache-value">' + display.substring(0, 1500) + (display.length > 1500 ? '\n...TRUNCATED' : '') + '</div>';
         html += '</div>';
       }
-      container.innerHTML = html;
+      content.innerHTML = html;
     }
 
-    // ===== Service Worker 管理 =====
-    async function refreshSWStatus() {
-      const badge = document.getElementById('swStatus');
-      const info = document.getElementById('swInfo');
-
-      if (!('serviceWorker' in navigator)) {
-        badge.textContent = '不支持';
-        badge.className = 'status-badge expired';
-        info.innerHTML = '<div class="cache-empty">当前浏览器不支持Service Worker</div>';
-        return;
-      }
-
-      const regs = await navigator.serviceWorker.getRegistrations();
-      if (regs.length === 0) {
-        badge.textContent = '未激活';
-        badge.className = 'status-badge expired';
-        info.innerHTML = '<div class="cache-empty">Service Worker未注册，刷新页面后自动激活</div>';
-        return;
-      }
-
-      badge.textContent = '已激活';
-      badge.className = 'status-badge fresh';
-
-      let html = '';
-      regs.forEach((reg, i) => {
-        const active = reg.active;
-        html += '<div class="cache-item">';
-        html += '<div class="cache-key">SW #' + (i+1) + '</div>';
-        html += '<div class="cache-value">';
-        html += '状态：' + (active ? '运行中' : '等待中') + '\n';
-        html += '作用域：' + reg.scope + '\n';
-        html += '脚本：' + (active ? active.scriptURL : '未知') + '\n';
-        html += '</div></div>';
-      });
-
-      // 列出缓存版本和大小
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        html += '<div style="margin-top:16px;font-size:0.9rem;color:var(--color-text-secondary);">';
-        html += '缓存版本：' + (keys.length > 0 ? keys.join(', ') : '无') + '</div>';
-
-        // 估算缓存大小
-        let totalSize = 0;
-        for (const key of keys) {
-          const cache = await caches.open(key);
-          const reqs = await cache.keys();
-          html += '<div style="font-size:0.85rem;color:var(--color-text-muted);margin-top:4px;">';
-          html += key + '：' + reqs.length + ' 个资源</div>';
-        }
-      }
-
-      info.innerHTML = html;
+    function clearAllLS() {
+      if (!confirm('PURGE ALL LOCALSTORAGE?')) return;
+      localStorage.clear();
+      showToast('LOCALSTORAGE PURGED');
+      refreshNews();
+      refreshLS();
     }
 
-    async function clearSWCache() {
-      if (!confirm('确定要清除全站缓存吗？包括HTML、CSS、JS、图片等所有静态资源。')) return;
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map((key) => caches.delete(key)));
-      }
-      // 通知SW清除缓存
-      if (navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage('CLEAR_CACHE');
-      }
-      showToast('全站缓存已清除');
-      refreshSWStatus();
+    function initTerminal() {
+      refreshNews();
+      refreshSW();
+      refreshLS();
     }
-
-    async function unregisterSW() {
-      if (!confirm('确定要注销Service Worker吗？注销后全站缓存功能将失效。')) return;
-      const regs = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map((reg) => reg.unregister()));
-      showToast('Service Worker已注销');
-      refreshSWStatus();
-    }
-
-    // 初始化
-    refreshNewsPreview();
-    refreshCacheList();
-    refreshSWStatus();
   </script>
+
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
