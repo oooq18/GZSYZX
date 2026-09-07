@@ -169,10 +169,11 @@ img {
 .brand-header .brand-name {
   display: block;
   font-family: var(--font-title);
-  font-size: 1.2rem;
+  font-size: 1.35rem;
   font-weight: normal;
   color: #fff;
   letter-spacing: 2px;
+  line-height: 1.2;
   transition: color 0.3s ease;
 }
 
@@ -187,6 +188,8 @@ img {
   color: rgba(255,255,255,0.6);
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  line-height: 1.2;
+  margin-top: 1px;
   transition: color 0.3s ease;
 }
 
