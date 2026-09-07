@@ -1163,11 +1163,12 @@ footer::after {
 
 .footer-col h4 {
   color: #fff;
-  font-size: 1.05rem;
+  font-size: 1.35rem;
   margin-bottom: 20px;
   position: relative;
   padding-bottom: 10px;
   letter-spacing: 1px;
+  font-weight: bold;
 }
 
 .footer-col h4::after {
