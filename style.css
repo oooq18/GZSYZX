@@ -405,6 +405,19 @@ img {
   margin: 0 20px;
 }
 
+/* 首页专属：校名和校训放大 */
+.hero-home .hero-title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  letter-spacing: 8px;
+  margin-bottom: 28px;
+}
+
+.hero-home .hero-motto {
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+  letter-spacing: 10px;
+  margin-bottom: 0;
+}
+
 .hero-cta {
   display: inline-flex;
   align-items: center;
@@ -845,7 +858,7 @@ footer {
   flex-shrink: 0;
   background: #fff;
   border-radius: 50%;
-  padding: 6px;
+  padding: 3px;
 }
 
 .footer-brand .footer-brand-text h3 {
@@ -987,6 +1000,10 @@ footer {
 
   .hero-motto {
     letter-spacing: 4px;
+  }
+
+  .hero-home .hero-motto {
+    letter-spacing: 5px;
   }
 
   .hero-subtitle {
