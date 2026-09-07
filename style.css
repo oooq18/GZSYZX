@@ -822,7 +822,7 @@ main {
 
 .news-card-title {
   font-family: var(--font-title);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: var(--color-text);
   line-height: 1.5;
   margin-bottom: 14px;
@@ -833,7 +833,7 @@ main {
 }
 
 .news-card-desc {
-  font-size: 1.15rem;
+  font-size: 0.95rem;
   color: var(--color-text-secondary);
   line-height: 1.6;
   display: -webkit-box;
@@ -864,10 +864,10 @@ main {
     padding: 22px 24px 26px;
   }
   .news-card-title {
-    font-size: 1.35rem;
+    font-size: 1.4rem;
   }
   .news-card-desc {
-    font-size: 1.05rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -918,6 +918,8 @@ main {
   height: 140px;
   border-radius: var(--radius-md);
   box-shadow: 0 8px 24px rgba(16, 33, 91, 0.15);
+  padding: 4px;
+  background: #fff;
   transition: var(--transition);
 }
 
@@ -986,7 +988,7 @@ main {
 }
 
 .content-block h2 {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: var(--color-primary);
   margin-top: 0;
   margin-bottom: 24px;
@@ -1008,7 +1010,7 @@ main {
 
 .content-block p {
   color: var(--color-text-secondary);
-  font-size: 1rem;
+  font-size: 0.95rem;
   line-height: 2.1;
   margin-bottom: 18px;
 }
