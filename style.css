@@ -918,14 +918,10 @@ main {
   height: 140px;
   border-radius: var(--radius-md);
   box-shadow: 0 8px 24px rgba(16, 33, 91, 0.15);
-  padding: 10px;
-  background: #fff;
-  border: 2px solid var(--color-border);
   transition: var(--transition);
 }
 
 .qr-item:hover img {
-  border-color: var(--color-accent);
   box-shadow: 0 12px 32px rgba(194, 156, 131, 0.3);
 }
 
