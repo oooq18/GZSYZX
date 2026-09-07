@@ -42,17 +42,20 @@
 
 /* ===== CSS 变量 ===== */
 :root {
-  --color-primary: #1a365d;
-  --color-primary-dark: #0f2440;
-  --color-primary-light: #2c5282;
-  --color-accent: #c9a96e;
-  --color-accent-light: #e0c99a;
-  --color-bg: #f5f2eb;
+  --color-primary: #10215B;
+  --color-primary-dark: #0A1538;
+  --color-primary-light: #1E3A7A;
+  --color-primary-lighter: #2D4F94;
+  --color-accent: #C29C83;
+  --color-accent-dark: #A8856D;
+  --color-accent-light: #D4B8A3;
+  --color-accent-lighter: #E8D5C7;
+  --color-bg: #F7F3EF;
   --color-card: #ffffff;
-  --color-text: #1a202c;
-  --color-text-secondary: #4a5568;
-  --color-text-muted: #718096;
-  --color-border: #e2e8f0;
+  --color-text: #0F1A35;
+  --color-text-secondary: #3D4A6B;
+  --color-text-muted: #6B7A99;
+  --color-border: #E5E0D8;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -290,12 +293,12 @@ img {
 
 .navbar.scrolled nav a:hover {
   color: var(--color-primary);
-  background: rgba(26, 54, 93, 0.08);
+  background: rgba(16, 33, 91, 0.08);
 }
 
 .navbar nav a.active {
   color: #fff;
-  background: rgba(201, 169, 110, 0.9);
+  background: rgba(194, 156, 131, 0.9);
 }
 
 .navbar.scrolled nav a.active {
@@ -349,9 +352,9 @@ img {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(15, 36, 64, 0.6) 0%,
-    rgba(26, 54, 93, 0.5) 50%,
-    rgba(15, 36, 64, 0.75) 100%
+    rgba(10, 21, 56, 0.6) 0%,
+    rgba(16, 33, 91, 0.5) 50%,
+    rgba(10, 21, 56, 0.75) 100%
   );
 }
 
@@ -436,12 +439,12 @@ img {
   font-size: 1rem;
   font-weight: bold;
   transition: var(--transition);
-  box-shadow: 0 4px 20px rgba(201, 169, 110, 0.4);
+  box-shadow: 0 4px 20px rgba(194, 156, 131, 0.4);
 }
 
 .hero-cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 28px rgba(201, 169, 110, 0.5);
+  box-shadow: 0 6px 28px rgba(194, 156, 131, 0.5);
   background: var(--color-accent-light);
 }
 
@@ -629,7 +632,7 @@ main {
   right: -10%;
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, rgba(201,169,110,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(194,156,131,0.1) 0%, transparent 70%);
   border-radius: 50%;
 }
 
@@ -957,7 +960,7 @@ footer {
 .wifi-notice {
   text-align: center;
   padding: 20px;
-  background: linear-gradient(135deg, rgba(201,169,110,0.1), rgba(201,169,110,0.05));
+  background: linear-gradient(135deg, rgba(194,156,131,0.1), rgba(194,156,131,0.05));
   border-radius: var(--radius-md);
   border: 1px dashed var(--color-accent);
   color: var(--color-primary);
@@ -1173,7 +1176,7 @@ footer {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(transparent, rgba(26,54,93,0.85));
+  background: linear-gradient(transparent, rgba(16,33,91,0.85));
   color: #fff;
   padding: 24px 12px 10px;
   font-size: 0.9rem;
