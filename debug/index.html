@@ -7,172 +7,136 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --wue-bg: #0a0e1a;
-      --wue-bg2: #0d1424;
-      --wue-panel: rgba(13, 20, 36, 0.85);
-      --wue-border: #1a3a5c;
-      --wue-cyan: #00d4ff;
-      --wue-cyan-dim: #0088aa;
-      --wue-blue: #2a6bb5;
-      --wue-text: #c8e0f0;
-      --wue-text-dim: #5a7a9a;
-      --wue-warn: #ffaa00;
-      --wue-danger: #ff4444;
-      --wue-ok: #00ff88;
+      --bg: #0c0b09;
+      --bg2: #141210;
+      --panel: rgba(20, 18, 15, 0.92);
+      --panel-solid: #181613;
+      --border: #3a352e;
+      --border-light: #4a443c;
+      --accent: #d4a054;
+      --accent-bright: #e8b860;
+      --accent-dim: #8a6d3a;
+      --text: #e0d8c8;
+      --text-dim: #8a8275;
+      --text-faint: #5a544a;
+      --ok: #7ab06a;
+      --warn: #c9903a;
+      --danger: #b85a4a;
     }
 
     body {
-      background: var(--wue-bg);
-      color: var(--wue-text);
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Rajdhani', 'Share Tech Mono', monospace;
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* 扫描线背景 */
     body::before {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 212, 255, 0.02) 2px,
-        rgba(0, 212, 255, 0.02) 4px
+        0deg, transparent, transparent 2px,
+        rgba(212, 160, 84, 0.015) 2px, rgba(212, 160, 84, 0.015) 4px
       );
       pointer-events: none;
       z-index: 1;
     }
 
-    /* 网格背景 */
     body::after {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background-image:
-        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
+        linear-gradient(rgba(212, 160, 84, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212, 160, 84, 0.025) 1px, transparent 1px);
+      background-size: 50px 50px;
       pointer-events: none;
       z-index: 0;
     }
 
-    /* ===== 登录界面 ===== */
     #loginScreen {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 100;
-      background: var(--wue-bg);
+      background: var(--bg);
     }
 
     .login-box {
       text-align: center;
       position: relative;
-      padding: 60px 80px;
+      padding: 70px 90px;
     }
 
-    .login-box::before,
-    .login-box::after {
+    .login-box::before, .login-box::after {
       content: '';
       position: absolute;
-      width: 30px;
-      height: 30px;
-      border-color: var(--wue-cyan);
+      width: 24px; height: 24px;
+      border-color: var(--accent);
       border-style: solid;
     }
-
-    .login-box::before {
-      top: 0;
-      left: 0;
-      border-width: 2px 0 0 2px;
-    }
-
-    .login-box::after {
-      bottom: 0;
-      right: 0;
-      border-width: 0 2px 2px 0;
-    }
+    .login-box::before { top: 0; left: 0; border-width: 1px 0 0 1px; }
+    .login-box::after { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
 
     .login-title {
-      font-size: 0.8rem;
-      letter-spacing: 8px;
-      color: var(--wue-cyan-dim);
-      margin-bottom: 40px;
+      font-size: 0.7rem;
+      letter-spacing: 10px;
+      color: var(--accent-dim);
+      margin-bottom: 50px;
       text-transform: uppercase;
+      font-weight: 500;
     }
 
     .login-input {
       background: transparent;
       border: none;
-      border-bottom: 1px solid var(--wue-border);
-      color: var(--wue-cyan);
-      font-size: 2rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--accent-bright);
+      font-size: 2.2rem;
       font-family: 'Share Tech Mono', monospace;
-      letter-spacing: 12px;
+      letter-spacing: 14px;
       text-align: center;
-      width: 200px;
+      width: 220px;
       outline: none;
-      padding: 10px 0;
+      padding: 12px 0;
       transition: border-color 0.3s;
+      caret-color: var(--accent);
     }
-
-    .login-input:focus {
-      border-bottom-color: var(--wue-cyan);
-      box-shadow: 0 4px 20px -8px var(--wue-cyan);
-    }
-
+    .login-input:focus { border-bottom-color: var(--accent); }
     .login-input.error {
-      border-bottom-color: var(--wue-danger);
+      border-bottom-color: var(--danger);
       animation: shake 0.3s;
     }
-
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
+      0%,100% { transform: translateX(0); }
       25% { transform: translateX(-8px); }
       75% { transform: translateX(8px); }
     }
 
     .login-hint {
-      margin-top: 30px;
-      font-size: 0.7rem;
-      color: var(--wue-text-dim);
-      letter-spacing: 2px;
+      margin-top: 35px;
+      font-size: 0.65rem;
+      color: var(--danger);
+      letter-spacing: 4px;
       opacity: 0;
       transition: opacity 0.3s;
     }
+    .login-hint.show { opacity: 1; }
 
-    .login-hint.show {
-      opacity: 1;
-    }
-
-    /* ===== 主界面 ===== */
     #mainInterface {
       display: none;
       position: relative;
       z-index: 2;
       padding: 30px;
-      max-width: 1200px;
+      max-width: 1100px;
       margin: 0 auto;
     }
 
@@ -180,357 +144,255 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--wue-border);
-      margin-bottom: 30px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
     }
-
-    .top-bar-left {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
+    .top-bar-left { display: flex; align-items: center; gap: 14px; }
     .logo-mark {
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--wue-cyan);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      color: var(--wue-cyan);
+      width: 38px; height: 38px;
+      border: 1px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem;
+      color: var(--accent);
       font-weight: 700;
+      letter-spacing: 1px;
     }
-
     .top-title {
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: 600;
-      color: var(--wue-cyan);
+      color: var(--accent-bright);
       letter-spacing: 3px;
     }
-
     .top-subtitle {
-      font-size: 0.7rem;
-      color: var(--wue-text-dim);
+      font-size: 0.65rem;
+      color: var(--text-faint);
       letter-spacing: 2px;
+      margin-top: 2px;
     }
-
     .top-bar-right {
       text-align: right;
-      font-size: 0.75rem;
-      color: var(--wue-text-dim);
+      font-size: 0.7rem;
+      color: var(--text-dim);
       font-family: 'Share Tech Mono', monospace;
+      line-height: 1.8;
     }
-
     .status-dot {
       display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: var(--wue-ok);
+      width: 6px; height: 6px;
+      background: var(--ok);
       border-radius: 50%;
       margin-right: 6px;
       animation: pulse 2s infinite;
     }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    /* 面板 */
     .panel {
-      background: var(--wue-panel);
-      border: 1px solid var(--wue-border);
-      margin-bottom: 24px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      margin-bottom: 22px;
       position: relative;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
     }
-
-    .panel::before,
-    .panel::after {
+    .panel::before, .panel::after {
       content: '';
       position: absolute;
-      width: 15px;
-      height: 15px;
-      border-color: var(--wue-cyan);
+      width: 12px; height: 12px;
+      border-color: var(--accent-dim);
       border-style: solid;
     }
-
-    .panel::before {
-      top: -1px;
-      left: -1px;
-      border-width: 2px 0 0 2px;
-    }
-
-    .panel::after {
-      bottom: -1px;
-      right: -1px;
-      border-width: 0 2px 2px 0;
-    }
+    .panel::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+    .panel::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
 
     .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--wue-border);
-      background: rgba(0, 212, 255, 0.03);
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(212, 160, 84, 0.03);
     }
-
     .panel-title {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: var(--wue-cyan);
-      letter-spacing: 2px;
+      color: var(--accent);
+      letter-spacing: 3px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      text-transform: uppercase;
     }
-
     .panel-title::before {
       content: '▸';
-      color: var(--wue-cyan);
-    }
-
-    .panel-badge {
+      color: var(--accent-dim);
       font-size: 0.7rem;
-      padding: 3px 10px;
+    }
+    .panel-badge {
+      font-size: 0.65rem;
+      padding: 2px 8px;
       border: 1px solid;
-      border-radius: 2px;
       font-family: 'Share Tech Mono', monospace;
       letter-spacing: 1px;
     }
+    .panel-badge.ok { color: var(--ok); border-color: var(--ok); background: rgba(122,176,106,0.08); }
+    .panel-badge.warn { color: var(--warn); border-color: var(--warn); background: rgba(201,144,58,0.08); }
+    .panel-badge.danger { color: var(--danger); border-color: var(--danger); background: rgba(184,90,74,0.08); }
 
-    .panel-badge.ok {
-      color: var(--wue-ok);
-      border-color: var(--wue-ok);
-      background: rgba(0, 255, 136, 0.1);
-    }
+    .panel-body { padding: 18px; }
 
-    .panel-badge.warn {
-      color: var(--wue-warn);
-      border-color: var(--wue-warn);
-      background: rgba(255, 170, 0, 0.1);
-    }
-
-    .panel-badge.danger {
-      color: var(--wue-danger);
-      border-color: var(--wue-danger);
-      background: rgba(255, 68, 68, 0.1);
-    }
-
-    .panel-body {
-      padding: 20px;
-    }
-
-    /* 按钮 */
     .btn-row {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
-
     .wue-btn {
-      padding: 10px 22px;
+      padding: 8px 20px;
       background: transparent;
-      border: 1px solid var(--wue-border);
-      color: var(--wue-text);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
       font-family: 'Rajdhani', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 2px;
       cursor: pointer;
       transition: all 0.2s;
-      position: relative;
       text-transform: uppercase;
     }
-
     .wue-btn:hover {
-      border-color: var(--wue-cyan);
-      color: var(--wue-cyan);
-      background: rgba(0, 212, 255, 0.08);
-      box-shadow: 0 0 20px -5px var(--wue-cyan);
+      border-color: var(--accent);
+      color: var(--accent-bright);
+      background: rgba(212, 160, 84, 0.06);
     }
+    .wue-btn.danger { border-color: rgba(184,90,74,0.4); color: var(--danger); }
+    .wue-btn.danger:hover { border-color: var(--danger); background: rgba(184,90,74,0.08); }
+    .wue-btn.warn { border-color: rgba(201,144,58,0.4); color: var(--warn); }
+    .wue-btn.warn:hover { border-color: var(--warn); background: rgba(201,144,58,0.08); }
 
-    .wue-btn.danger {
-      border-color: rgba(255, 68, 68, 0.4);
-      color: var(--wue-danger);
-    }
-
-    .wue-btn.danger:hover {
-      border-color: var(--wue-danger);
-      background: rgba(255, 68, 68, 0.1);
-      box-shadow: 0 0 20px -5px var(--wue-danger);
-    }
-
-    .wue-btn.warn {
-      border-color: rgba(255, 170, 0, 0.4);
-      color: var(--wue-warn);
-    }
-
-    .wue-btn.warn:hover {
-      border-color: var(--wue-warn);
-      background: rgba(255, 170, 0, 0.1);
-      box-shadow: 0 0 20px -5px var(--wue-warn);
-    }
-
-    /* 数据项 */
     .data-row {
       display: flex;
       justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px dashed rgba(26, 58, 92, 0.5);
-      font-size: 0.85rem;
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(58,53,46,0.5);
+      font-size: 0.8rem;
     }
+    .data-row:last-child { border-bottom: none; }
+    .data-label { color: var(--text-dim); letter-spacing: 1px; }
+    .data-value { color: var(--accent); font-family: 'Share Tech Mono', monospace; }
 
-    .data-row:last-child {
-      border-bottom: none;
-    }
-
-    .data-label {
-      color: var(--wue-text-dim);
-      letter-spacing: 1px;
-    }
-
-    .data-value {
-      color: var(--wue-cyan);
-      font-family: 'Share Tech Mono', monospace;
-    }
-
-    /* 新闻条目 */
     .news-entry {
-      padding: 14px;
-      border: 1px solid var(--wue-border);
-      margin-bottom: 12px;
-      background: rgba(0, 0, 0, 0.2);
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      background: rgba(0,0,0,0.2);
       position: relative;
     }
-
     .news-entry::before {
       content: '';
       position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: var(--wue-cyan);
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--accent-dim);
     }
-
     .news-entry-title {
-      color: var(--wue-text);
+      color: var(--text);
       font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 6px;
-      padding-left: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+      padding-left: 8px;
     }
-
     .news-entry-meta {
-      font-size: 0.75rem;
-      color: var(--wue-text-dim);
-      padding-left: 10px;
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      padding-left: 8px;
       font-family: 'Share Tech Mono', monospace;
     }
-
     .news-entry-desc {
-      font-size: 0.8rem;
-      color: var(--wue-text-dim);
-      margin-top: 8px;
-      padding-left: 10px;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 6px;
+      padding-left: 8px;
       line-height: 1.6;
     }
 
     .empty-state {
       text-align: center;
-      padding: 40px;
-      color: var(--wue-text-dim);
-      font-size: 0.85rem;
+      padding: 35px;
+      color: var(--text-faint);
+      font-size: 0.8rem;
       letter-spacing: 2px;
     }
 
-    /* 缓存列表 */
     .cache-entry {
-      padding: 12px;
-      border: 1px solid var(--wue-border);
-      margin-bottom: 10px;
-      background: rgba(0, 0, 0, 0.2);
-    }
-
-    .cache-key {
-      color: var(--wue-cyan);
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 0.8rem;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
       margin-bottom: 8px;
+      background: rgba(0,0,0,0.2);
+    }
+    .cache-key {
+      color: var(--accent);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      margin-bottom: 6px;
       word-break: break-all;
     }
-
     .cache-value {
-      color: var(--wue-text-dim);
-      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-size: 0.7rem;
       font-family: 'Share Tech Mono', monospace;
-      max-height: 150px;
+      max-height: 120px;
       overflow-y: auto;
       white-space: pre-wrap;
       word-break: break-all;
     }
 
-    /* Toast */
     .toast {
       position: fixed;
-      top: 30px;
+      top: 25px;
       left: 50%;
       transform: translateX(-50%);
-      background: var(--wue-panel);
-      border: 1px solid var(--wue-cyan);
-      color: var(--wue-cyan);
-      padding: 12px 30px;
-      font-size: 0.85rem;
+      background: var(--panel-solid);
+      border: 1px solid var(--accent);
+      color: var(--accent-bright);
+      padding: 10px 26px;
+      font-size: 0.8rem;
       letter-spacing: 2px;
       z-index: 9999;
       opacity: 0;
       transition: opacity 0.3s;
       pointer-events: none;
     }
+    .toast.show { opacity: 1; }
 
-    .toast.show {
-      opacity: 1;
-    }
-
-    /* 底部状态栏 */
     .bottom-bar {
-      margin-top: 30px;
-      padding-top: 15px;
-      border-top: 1px solid var(--wue-border);
+      margin-top: 25px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
-      font-size: 0.7rem;
-      color: var(--wue-text-dim);
+      font-size: 0.65rem;
+      color: var(--text-faint);
       font-family: 'Share Tech Mono', monospace;
     }
 
     a.back-link {
-      color: var(--wue-cyan-dim);
+      color: var(--text-dim);
       text-decoration: none;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       letter-spacing: 1px;
     }
-
-    a.back-link:hover {
-      color: var(--wue-cyan);
-    }
+    a.back-link:hover { color: var(--accent); }
 
     @media (max-width: 600px) {
       #mainInterface { padding: 15px; }
-      .login-box { padding: 40px 30px; }
-      .login-input { font-size: 1.5rem; width: 160px; }
-      .panel-body { padding: 15px; }
+      .login-box { padding: 50px 30px; }
+      .login-input { font-size: 1.6rem; width: 170px; letter-spacing: 10px; }
+      .panel-body { padding: 14px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 登录界面 -->
   <div id="loginScreen">
     <div class="login-box">
       <div class="login-title">SYSTEM ACCESS</div>
@@ -539,7 +401,6 @@
     </div>
   </div>
 
-  <!-- 主界面 -->
   <div id="mainInterface">
     <div class="top-bar">
       <div class="top-bar-left">
@@ -557,8 +418,7 @@
 
     <a href="/" class="back-link">← RETURN TO MAIN</a>
 
-    <!-- 新闻缓存 -->
-    <div class="panel" style="margin-top: 20px;">
+    <div class="panel" style="margin-top: 18px;">
       <div class="panel-header">
         <div class="panel-title">NEWS CACHE</div>
         <span class="panel-badge" id="newsBadge">CHECKING</span>
@@ -568,13 +428,10 @@
           <button class="wue-btn warn" onclick="clearNewsCache()">PURGE NEWS</button>
           <button class="wue-btn" onclick="refreshNews()">REFRESH</button>
         </div>
-        <div id="newsContent">
-          <div class="empty-state">LOADING...</div>
-        </div>
+        <div id="newsContent"><div class="empty-state">LOADING...</div></div>
       </div>
     </div>
 
-    <!-- Service Worker 缓存 -->
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title">SERVICE WORKER</div>
@@ -586,13 +443,10 @@
           <button class="wue-btn warn" onclick="unregisterSW()">UNREGISTER SW</button>
           <button class="wue-btn" onclick="refreshSW()">REFRESH</button>
         </div>
-        <div id="swContent">
-          <div class="empty-state">LOADING...</div>
-        </div>
+        <div id="swContent"><div class="empty-state">LOADING...</div></div>
       </div>
     </div>
 
-    <!-- LocalStorage -->
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title">LOCAL STORAGE</div>
@@ -603,25 +457,21 @@
           <button class="wue-btn danger" onclick="clearAllLS()">PURGE ALL</button>
           <button class="wue-btn" onclick="refreshLS()">REFRESH</button>
         </div>
-        <div id="lsContent">
-          <div class="empty-state">LOADING...</div>
-        </div>
+        <div id="lsContent"><div class="empty-state">LOADING...</div></div>
       </div>
     </div>
 
     <div class="bottom-bar">
       <div>UEG CACHE SYSTEM v1.0</div>
-      <div id="buildInfo">BUILD: 2026.09.07</div>
+      <div>BUILD: 2026.09.07</div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
-    // 密码验证：加密存储，非明文
-    // 验证逻辑：输入字符串每个字符charCode与密钥异或后比对
     const _k = 0x1F;
-    const _p = atob('LyYvJi8m'); // 加密后的密码
+    const _p = atob('LyYvJi8m');
 
     function checkPass(input) {
       if (input.length !== 6) return false;
@@ -653,13 +503,12 @@
       }
     });
 
-    // 时钟
     function updateClock() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('clockDisplay').textContent = h + ':' + m + ':' + s;
+      const n = new Date();
+      document.getElementById('clockDisplay').textContent =
+        String(n.getHours()).padStart(2,'0') + ':' +
+        String(n.getMinutes()).padStart(2,'0') + ':' +
+        String(n.getSeconds()).padStart(2,'0');
     }
     setInterval(updateClock, 1000);
     updateClock();
@@ -679,14 +528,11 @@
       return new Date(ts).toLocaleString('zh-CN');
     }
 
-    // ===== 新闻缓存 =====
     function refreshNews() {
       const badge = document.getElementById('newsBadge');
       const content = document.getElementById('newsContent');
       let cache = null;
-      try {
-        cache = JSON.parse(localStorage.getItem(NEWS_KEY));
-      } catch(e) {}
+      try { cache = JSON.parse(localStorage.getItem(NEWS_KEY)); } catch(e) {}
 
       if (!cache || !cache.articles || cache.articles.length === 0) {
         badge.textContent = 'EMPTY';
@@ -696,34 +542,26 @@
       }
 
       const age = Date.now() - (cache.time || 0);
-      if (age < CACHE_TTL) {
-        badge.textContent = 'FRESH';
-        badge.className = 'panel-badge ok';
-      } else if (age < CACHE_TTL * 2) {
-        badge.textContent = 'EXPIRED';
-        badge.className = 'panel-badge warn';
-      } else {
-        badge.textContent = 'STALE';
-        badge.className = 'panel-badge danger';
-      }
+      if (age < CACHE_TTL) { badge.textContent = 'FRESH'; badge.className = 'panel-badge ok'; }
+      else if (age < CACHE_TTL * 2) { badge.textContent = 'EXPIRED'; badge.className = 'panel-badge warn'; }
+      else { badge.textContent = 'STALE'; badge.className = 'panel-badge danger'; }
 
       let html = '<div class="data-row"><span class="data-label">CACHE TIME</span><span class="data-value">' + formatTime(cache.time) + '</span></div>';
       html += '<div class="data-row"><span class="data-label">ARTICLES</span><span class="data-value">' + cache.articles.length + '</span></div>';
-      html += '<div style="height:15px;"></div>';
+      html += '<div style="height:12px;"></div>';
 
       cache.articles.forEach((item, i) => {
         html += '<div class="news-entry">';
         html += '<div class="news-entry-title">[' + (i+1) + '] ' + (item.title || 'NO TITLE') + '</div>';
         html += '<div class="news-entry-meta">';
         if (item.pubDate) html += 'DATE: ' + item.pubDate + ' | ';
-        if (item.link) html += '<a href="' + item.link + '" target="_blank" style="color:var(--wue-cyan-dim);">OPEN</a>';
+        if (item.link) html += '<a href="' + item.link + '" target="_blank" style="color:var(--accent-dim);">OPEN</a>';
         html += '</div>';
         if (item.description) {
           html += '<div class="news-entry-desc">' + item.description.substring(0, 120) + (item.description.length > 120 ? '...' : '') + '</div>';
         }
         html += '</div>';
       });
-
       content.innerHTML = html;
     }
 
@@ -734,7 +572,6 @@
       refreshLS();
     }
 
-    // ===== Service Worker =====
     async function refreshSW() {
       const badge = document.getElementById('swBadge');
       const content = document.getElementById('swContent');
@@ -760,7 +597,7 @@
       let html = '';
       regs.forEach((reg, i) => {
         html += '<div class="data-row"><span class="data-label">SW #' + (i+1) + ' STATUS</span><span class="data-value">' + (reg.active ? 'RUNNING' : 'WAITING') + '</span></div>';
-        html += '<div class="data-row"><span class="data-label">SCOPE</span><span class="data-value" style="font-size:0.7rem;">' + reg.scope + '</span></div>';
+        html += '<div class="data-row"><span class="data-label">SCOPE</span><span class="data-value" style="font-size:0.65rem;">' + reg.scope + '</span></div>';
       });
 
       if ('caches' in window) {
@@ -772,7 +609,6 @@
           html += '<div class="data-row"><span class="data-label">└ ' + key + '</span><span class="data-value">' + reqs.length + ' ASSETS</span></div>';
         }
       }
-
       content.innerHTML = html;
     }
 
@@ -797,7 +633,6 @@
       refreshSW();
     }
 
-    // ===== LocalStorage =====
     function refreshLS() {
       const badge = document.getElementById('lsBadge');
       const content = document.getElementById('lsContent');
