@@ -65,7 +65,6 @@
       }
       newsGrid.innerHTML = articles.map(a => `
         <a href="${a.link}" target="_blank" rel="noopener" class="news-card">
-          ${a.thumb ? `<img class="news-card-thumb" src="${a.thumb}" alt="${a.title}" loading="lazy" onerror="this.style.display='none'" />` : ''}
           <div class="news-card-body">
             ${a.date ? `<div class="news-card-date">${a.date}</div>` : ''}
             <h3 class="news-card-title">${a.title}</h3>
