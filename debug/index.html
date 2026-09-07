@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>调试面板 - 广州实验中学</title>
+  <link rel="stylesheet" href="/style.css?v=19">
+  <style>
+    .debug-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+    .debug-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .debug-header h1 {
+      font-family: '江城黑体', '创粗黑', sans-serif;
+      font-size: 2rem;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+    .debug-header p {
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+    }
+    .debug-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(16,33,91,0.08);
+      border: 1px solid var(--color-border);
+    }
+    .debug-section h2 {
+      font-size: 1.3rem;
+      color: var(--color-primary);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .debug-section h2::before {
+      content: '';
+      width: 4px;
+      height: 22px;
+      background: var(--color-accent);
+      border-radius: 2px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .debug-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    .debug-btn.danger {
+      background: #dc3545;
+      color: #fff;
+    }
+    .debug-btn.danger:hover {
+      background: #c82333;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(220,53,69,0.3);
+    }
+    .debug-btn.warning {
+      background: var(--color-accent);
+      color: #fff;
+    }
+    .debug-btn.warning:hover {
+      background: var(--color-accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(194,156,131,0.3);
+    }
+    .debug-btn.primary {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .debug-btn.primary:hover {
+      background: var(--color-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16,33,91,0.3);
+    }
+    .cache-list {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+    .cache-item {
+      padding: 12px 16px;
+      background: var(--color-bg);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid var(--color-border);
+    }
+    .cache-key {
+      font-weight: bold;
+      color: var(--color-primary);
+      margin-bottom: 6px;
+      word-break: break-all;
+    }
+    .cache-value {
+      color: var(--color-text-secondary);
+      word-break: break-all;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .cache-empty {
+      color: var(--color-text-muted);
+      text-align: center;
+      padding: 30px;
+      font-style: italic;
+    }
+    .news-item {
+      padding: 16px;
+      background: var(--color-bg);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border: 1px solid var(--color-border);
+    }
+    .news-item-title {
+      font-weight: bold;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    .news-item-meta {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 6px;
+    }
+    .news-item-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+    .news-item-thumb {
+      width: 80px;
+      height: 45px;
+      object-fit: cover;
+      border-radius: 4px;
+      float: right;
+      margin-left: 12px;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    .status-badge.fresh {
+      background: #d4edda;
+      color: #155724;
+    }
+    .status-badge.stale {
+      background: #fff3cd;
+      color: #856404;
+    }
+    .status-badge.expired {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: var(--color-accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body style="background: var(--color-bg);">
+  <div class="debug-container">
+    <a href="/" class="back-link">← 返回首页</a>
+
+    <div class="debug-header">
+      <h1>调试面板</h1>
+      <p>缓存管理与新闻预览</p>
+    </div>
+
+    <!-- 新闻缓存专区 -->
+    <div class="debug-section">
+      <h2>新闻缓存 <span id="newsStatus" class="status-badge">检查中...</span></h2>
+      <div class="btn-row">
+        <button class="debug-btn warning" onclick="clearNewsCache()">清除新闻缓存</button>
+        <button class="debug-btn primary" onclick="refreshNewsPreview()">刷新预览</button>
+      </div>
+      <div id="newsPreview">
+        <div class="cache-empty">加载中...</div>
+      </div>
+    </div>
+
+    <!-- 全部缓存 -->
+    <div class="debug-section">
+      <h2>全部缓存 <span id="cacheCount" class="status-badge">0 项</span></h2>
+      <div class="btn-row">
+        <button class="debug-btn danger" onclick="clearAllCache()">一键清除全部缓存</button>
+        <button class="debug-btn primary" onclick="refreshCacheList()">刷新列表</button>
+      </div>
+      <div id="cacheList">
+        <div class="cache-empty">加载中...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const NEWS_CACHE_KEY = 'gzsyzx_news_cache';
+    const CACHE_TTL = 30 * 60 * 1000; // 30分钟
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    function getNewsCache() {
+      try {
+        const raw = localStorage.getItem(NEWS_CACHE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch(e) {
+        return null;
+      }
+    }
+
+    function getCacheStatus(cache) {
+      if (!cache || !cache.timestamp) return { text: '无缓存', cls: 'expired' };
+      const age = Date.now() - cache.timestamp;
+      if (age < CACHE_TTL) return { text: '新鲜', cls: 'fresh' };
+      if (age < CACHE_TTL * 2) return { text: '已过期', cls: 'stale' };
+      return { text: '严重过期', cls: 'expired' };
+    }
+
+    function formatTime(ts) {
+      if (!ts) return '未知';
+      const d = new Date(ts);
+      return d.toLocaleString('zh-CN');
+    }
+
+    function refreshNewsPreview() {
+      const cache = getNewsCache();
+      const status = getCacheStatus(cache);
+      const badge = document.getElementById('newsStatus');
+      badge.textContent = status.text;
+      badge.className = 'status-badge ' + status.cls;
+
+      const container = document.getElementById('newsPreview');
+      if (!cache || !cache.articles || cache.articles.length === 0) {
+        container.innerHTML = '<div class="cache-empty">暂无新闻缓存</div>';
+        return;
+      }
+
+      let html = '<div style="margin-bottom:12px;font-size:0.85rem;color:var(--color-text-secondary);">';
+      html += '缓存时间：' + formatTime(cache.timestamp);
+      html += ' | 文章数量：' + cache.articles.length + ' 篇';
+      html += '</div>';
+
+      cache.articles.forEach((item, i) => {
+        html += '<div class="news-item">';
+        if (item.thumbnail) {
+          html += '<img class="news-item-thumb" src="' + item.thumbnail + '" alt="" onerror="this.style.display=\'none\'">';
+        }
+        html += '<div class="news-item-title">' + (i+1) + '. ' + (item.title || '无标题') + '</div>';
+        html += '<div class="news-item-meta">';
+        if (item.pubDate) html += '发布：' + item.pubDate + ' | ';
+        if (item.link) html += '<a href="' + item.link + '" target="_blank" style="color:var(--color-accent);">查看原文</a>';
+        html += '</div>';
+        if (item.description) {
+          html += '<div class="news-item-desc">' + item.description.substring(0, 150) + (item.description.length > 150 ? '...' : '') + '</div>';
+        }
+        html += '</div>';
+      });
+
+      container.innerHTML = html;
+    }
+
+    function clearNewsCache() {
+      localStorage.removeItem(NEWS_CACHE_KEY);
+      showToast('新闻缓存已清除');
+      refreshNewsPreview();
+      refreshCacheList();
+    }
+
+    function clearAllCache() {
+      if (!confirm('确定要清除全部缓存吗？此操作不可撤销。')) return;
+      localStorage.clear();
+      showToast('全部缓存已清除');
+      refreshNewsPreview();
+      refreshCacheList();
+    }
+
+    function refreshCacheList() {
+      const container = document.getElementById('cacheList');
+      const count = document.getElementById('cacheCount');
+      count.textContent = localStorage.length + ' 项';
+
+      if (localStorage.length === 0) {
+        container.innerHTML = '<div class="cache-empty">暂无缓存</div>';
+        return;
+      }
+
+      let html = '';
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+        let displayValue = value;
+        try {
+          const parsed = JSON.parse(value);
+          displayValue = JSON.stringify(parsed, null, 2);
+        } catch(e) {}
+        html += '<div class="cache-item">';
+        html += '<div class="cache-key">' + key + '</div>';
+        html += '<div class="cache-value">' + displayValue.substring(0, 2000) + (displayValue.length > 2000 ? '\n... (截断)' : '') + '</div>';
+        html += '</div>';
+      }
+      container.innerHTML = html;
+    }
+
+    // 初始化
+    refreshNewsPreview();
+    refreshCacheList();
+  </script>
+</body>
+</html>
