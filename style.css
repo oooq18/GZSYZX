@@ -40,6 +40,15 @@
   font-display: swap;
 }
 
+/* 首页大标题：江城黑体 900W */
+@font-face {
+  font-family: '江城黑体';
+  src: url('fonts/江城黑体 900W.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ===== CSS 变量 ===== */
 :root {
   --color-primary: #10215B;
@@ -415,10 +424,12 @@ img {
 
 /* 首页专属：校名和校训放大 */
 .hero-home .hero-title {
+  font-family: '江城黑体', '创粗黑', '微软雅黑', sans-serif;
   font-size: clamp(2.2rem, 7vw, 6rem);
   letter-spacing: clamp(4px, 1.5vw, 8px);
   margin-bottom: 28px;
   white-space: nowrap;
+  font-weight: 900;
 }
 
 .hero-home .hero-motto {
