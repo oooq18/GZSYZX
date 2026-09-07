@@ -13,6 +13,39 @@
   font-display: swap;
 }
 
+/* 流浪地球2字体方案 */
+@font-face {
+  font-family: '创粗黑';
+  src: url('fonts/字魂59号-创粗黑.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '创细黑';
+  src: url('fonts/字魂57号-创细黑.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('fonts/Rajdhani Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DIN1451';
+  src: url('fonts/DIN 1451 LT W06 Mittelschrift.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ===== CSS 变量 ===== */
 :root {
   --color-primary: #1a365d;
@@ -33,6 +66,11 @@
   --radius-md: 12px;
   --radius-lg: 20px;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-title: '创粗黑', '芝加哥正黑体', sans-serif;
+  --font-subtitle: '创细黑', '芝加哥正黑体', sans-serif;
+  --font-english: 'Rajdhani', 'DIN1451', sans-serif;
+  --font-number: 'DIN1451', 'Rajdhani', sans-serif;
+  --font-body: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
 }
 
 /* ===== 全局重置 ===== */
@@ -47,11 +85,30 @@ html {
 }
 
 body {
-  font-family: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   background-color: var(--color-bg);
   color: var(--color-text);
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
+}
+
+/* 标题统一用创粗黑（流浪地球2中文主力字体） */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-title);
+  font-weight: normal;
+}
+
+/* 英文标签用Rajdhani（流浪地球2英文主力字体） */
+.section-label,
+.hero-subtitle,
+.brand-ename,
+.hero-scroll-hint {
+  font-family: var(--font-english);
+}
+
+/* 数字用DIN 1451（流浪地球2倒计时字体） */
+.stat-number {
+  font-family: var(--font-number);
 }
 
 a {
@@ -75,6 +132,64 @@ img {
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ===== 校标头部（仅logo） ===== */
+.brand-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 16px 32px;
+  transition: var(--transition);
+  background: transparent;
+}
+
+.brand-header.scrolled {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+  padding: 10px 32px;
+}
+
+.brand-header .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-header .brand img {
+  height: 44px;
+  width: auto;
+}
+
+.brand-header .brand-name {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.brand-header.scrolled .brand-name {
+  color: var(--color-primary);
+}
+
+.brand-header .brand-ename {
+  display: block;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.brand-header.scrolled .brand-ename {
+  color: var(--color-text-muted);
 }
 
 /* ===== 顶部导航栏 ===== */

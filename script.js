@@ -4,6 +4,27 @@
 (function () {
   'use strict';
 
+  /* ===== 校标头部滚动效果 ===== */
+  const brandHeader = document.querySelector('.brand-header');
+  if (brandHeader) {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 50) {
+            brandHeader.classList.add('scrolled');
+          } else {
+            brandHeader.classList.remove('scrolled');
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
   /* ===== 滚动渐入动画 ===== */
   const revealElements = document.querySelectorAll('.reveal');
   if (revealElements.length > 0 && 'IntersectionObserver' in window) {
