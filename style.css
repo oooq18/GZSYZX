@@ -502,6 +502,60 @@ main {
   position: relative;
 }
 
+/* ===== 校训展示 ===== */
+.motto-display {
+  text-align: center;
+  margin-bottom: 48px;
+  padding: 48px 32px;
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.motto-display::before,
+.motto-display::after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 2px;
+  background: var(--color-accent);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.motto-display::before { left: 8%; }
+.motto-display::after { right: 8%; }
+
+.motto-display .motto-text {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: var(--color-primary);
+  font-weight: bold;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+  position: relative;
+  white-space: nowrap;
+}
+
+.motto-display .motto-label {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .motto-display::before,
+  .motto-display::after {
+    display: none;
+  }
+  .motto-display .motto-text {
+    letter-spacing: 2px;
+    white-space: normal;
+  }
+}
+
 /* ===== 游戏区 ===== */
 .game-section {
   background: var(--color-card);
