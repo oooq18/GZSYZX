@@ -68,9 +68,8 @@ img {
 /* ===== 滚动动画 ===== */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 1s ease-out, transform 1s ease-out;
-  will-change: opacity, transform;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .reveal.visible {
@@ -219,11 +218,12 @@ img {
   background-image: url('广实鸟瞰图.jpg');
   background-size: cover;
   background-position: center;
-  animation: heroZoom 25s ease-out forwards;
+  transform: scale(1.05);
+  animation: heroZoom 20s ease-out forwards;
 }
 
 @keyframes heroZoom {
-  from { transform: scale(1.08); }
+  from { transform: scale(1.1); }
   to { transform: scale(1.0); }
 }
 
@@ -232,9 +232,9 @@ img {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(15, 36, 64, 0.6) 0%,
-    rgba(26, 54, 93, 0.5) 50%,
-    rgba(15, 36, 64, 0.75) 100%
+    rgba(15, 36, 64, 0.7) 0%,
+    rgba(26, 54, 93, 0.6) 50%,
+    rgba(15, 36, 64, 0.85) 100%
   );
 }
 
@@ -244,13 +244,13 @@ img {
   text-align: center;
   color: #fff;
   padding: 0 24px;
-  animation: fadeInUp 1.2s ease-out 0.2s both;
+  animation: fadeInUp 1s ease-out 0.3s both;
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(40px);
   }
   to {
     opacity: 1;
@@ -317,16 +317,15 @@ img {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
-  color: rgba(255,255,255,0.5);
-  font-size: 0.75rem;
-  letter-spacing: 3px;
-  opacity: 0;
-  animation: fadeIn 1.5s ease-out 1.5s forwards;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  animation: bounce 2s infinite;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
 }
 
 /* 子页面 Hero（较小） */
@@ -408,8 +407,8 @@ main {
 }
 
 .feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
 }
 
 .feature-card:hover::before {
