@@ -642,53 +642,18 @@ main {
 /* ===== 欢迎区 ===== */
 .welcome-section {
   text-align: center;
-  margin-bottom: 100px;
-  padding: 72px 48px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 20px 60px rgba(16, 33, 91, 0.25);
+  margin-bottom: 80px;
+  padding: 20px 0;
   position: relative;
-  overflow: hidden;
-}
-
-.welcome-section::before {
-  content: '';
-  position: absolute;
-  top: -80px;
-  right: -80px;
-  width: 280px;
-  height: 280px;
-  background: radial-gradient(circle, rgba(194,156,131,0.15) 0%, transparent 70%);
-  border-radius: 50%;
-}
-
-.welcome-section::after {
-  content: '';
-  position: absolute;
-  bottom: -60px;
-  left: -60px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(194,156,131,0.1) 0%, transparent 70%);
-  border-radius: 50%;
 }
 
 .welcome-section h2 {
-  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-  color: #fff;
-  margin-bottom: 18px;
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  color: var(--color-primary);
+  margin-bottom: 0;
   position: relative;
-  letter-spacing: 3px;
-}
-
-.welcome-section p {
-  color: rgba(255,255,255,0.75);
-  font-size: 1.05rem;
-  max-width: 640px;
-  margin: 0 auto;
-  text-indent: 0;
-  position: relative;
-  line-height: 2;
+  letter-spacing: 4px;
+  font-weight: bold;
 }
 
 /* ===== 校训展示 ===== */
@@ -1484,8 +1449,8 @@ footer::after {
     padding: 64px 20px;
   }
   .welcome-section {
-    padding: 48px 24px;
-    margin-bottom: 64px;
+    padding: 12px 0;
+    margin-bottom: 48px;
   }
   .feature-grid {
     gap: 20px;
