@@ -50,9 +50,9 @@
   const newsGrid = document.getElementById('newsGrid');
   if (newsGrid) {
     const RSS_SOURCES = [
-      'https://rsshub.app/wechat/ce/Mzg2Nzc1MTgyNA==',
-      'https://rss.shab.fun/wechat/ce/Mzg2Nzc1MTgyNA==',
-      'https://rsshub.rssforever.com/wechat/ce/Mzg2Nzc1MTgyNA=='
+      'https://rsshub.app/wechat/ce/MzkyNTc0Nzk5MA==',
+      'https://rss.shab.fun/wechat/ce/MzkyNTc0Nzk5MA==',
+      'https://rsshub.rssforever.com/wechat/ce/MzkyNTc0Nzk5MA=='
     ];
     const MAX_ARTICLES = 6;
 

@@ -10,7 +10,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime
 
-BIZ = "Mzg2Nzc1MTgyNA=="
+BIZ = "MzkyNTc0Nzk5MA=="
 RSS_SOURCES = [
     f"https://rsshub.app/wechat/ce/{BIZ}",
     f"https://rss.shab.fun/wechat/ce/{BIZ}",
