@@ -226,9 +226,22 @@
       </div>
     </div>
 
+    <!-- Service Worker 缓存 -->
+    <div class="debug-section">
+      <h2>全站缓存（Service Worker） <span id="swStatus" class="status-badge">检查中...</span></h2>
+      <div class="btn-row">
+        <button class="debug-btn danger" onclick="clearSWCache()">清除全站缓存</button>
+        <button class="debug-btn warning" onclick="unregisterSW()">注销Service Worker</button>
+        <button class="debug-btn primary" onclick="refreshSWStatus()">刷新状态</button>
+      </div>
+      <div id="swInfo">
+        <div class="cache-empty">加载中...</div>
+      </div>
+    </div>
+
     <!-- 全部缓存 -->
     <div class="debug-section">
-      <h2>全部缓存 <span id="cacheCount" class="status-badge">0 项</span></h2>
+      <h2>LocalStorage缓存 <span id="cacheCount" class="status-badge">0 项</span></h2>
       <div class="btn-row">
         <button class="debug-btn danger" onclick="clearAllCache()">一键清除全部缓存</button>
         <button class="debug-btn primary" onclick="refreshCacheList()">刷新列表</button>
@@ -355,9 +368,93 @@
       container.innerHTML = html;
     }
 
+    // ===== Service Worker 管理 =====
+    async function refreshSWStatus() {
+      const badge = document.getElementById('swStatus');
+      const info = document.getElementById('swInfo');
+
+      if (!('serviceWorker' in navigator)) {
+        badge.textContent = '不支持';
+        badge.className = 'status-badge expired';
+        info.innerHTML = '<div class="cache-empty">当前浏览器不支持Service Worker</div>';
+        return;
+      }
+
+      const regs = await navigator.serviceWorker.getRegistrations();
+      if (regs.length === 0) {
+        badge.textContent = '未激活';
+        badge.className = 'status-badge expired';
+        info.innerHTML = '<div class="cache-empty">Service Worker未注册，刷新页面后自动激活</div>';
+        return;
+      }
+
+      badge.textContent = '已激活';
+      badge.className = 'status-badge fresh';
+
+      let html = '';
+      regs.forEach((reg, i) => {
+        const active = reg.active;
+        html += '<div class="cache-item">';
+        html += '<div class="cache-key">SW #' + (i+1) + '</div>';
+        html += '<div class="cache-value">';
+        html += '状态：' + (active ? '运行中' : '等待中') + '\n';
+        html += '作用域：' + reg.scope + '\n';
+        html += '脚本：' + (active ? active.scriptURL : '未知') + '\n';
+        html += '</div></div>';
+      });
+
+      // 列出缓存版本和大小
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        html += '<div style="margin-top:16px;font-size:0.9rem;color:var(--color-text-secondary);">';
+        html += '缓存版本：' + (keys.length > 0 ? keys.join(', ') : '无') + '</div>';
+
+        // 估算缓存大小
+        let totalSize = 0;
+        for (const key of keys) {
+          const cache = await caches.open(key);
+          const reqs = await cache.keys();
+          html += '<div style="font-size:0.85rem;color:var(--color-text-muted);margin-top:4px;">';
+          html += key + '：' + reqs.length + ' 个资源</div>';
+        }
+      }
+
+      info.innerHTML = html;
+    }
+
+    async function clearSWCache() {
+      if (!confirm('确定要清除全站缓存吗？包括HTML、CSS、JS、图片等所有静态资源。')) return;
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((key) => caches.delete(key)));
+      }
+      // 通知SW清除缓存
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage('CLEAR_CACHE');
+      }
+      showToast('全站缓存已清除');
+      refreshSWStatus();
+    }
+
+    async function unregisterSW() {
+      if (!confirm('确定要注销Service Worker吗？注销后全站缓存功能将失效。')) return;
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((reg) => reg.unregister()));
+      showToast('Service Worker已注销');
+      refreshSWStatus();
+    }
+
     // 初始化
     refreshNewsPreview();
     refreshCacheList();
+    refreshSWStatus();
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js").catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>
