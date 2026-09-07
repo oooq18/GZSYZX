@@ -3,17 +3,8 @@
    主色：深海军蓝 + 金色点缀 + 米白背景
    ============================================ */
 
-/* ===== 字体定义 ===== */
-@font-face {
-  font-family: '芝加哥正黑体';
-  src: url('芝加哥正黑体/ChicagoHei.woff2') format('woff2'),
-       url('芝加哥正黑体/ChicagoHei.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* 流浪地球2字体方案 */
+/* ===== 字体定义（流浪地球2方案） ===== */
+/* 中文主力：字魂创粗黑 */
 @font-face {
   font-family: '创粗黑';
   src: url('fonts/字魂59号-创粗黑.ttf') format('truetype');
@@ -22,6 +13,7 @@
   font-display: swap;
 }
 
+/* 中文细体：字魂创细黑 */
 @font-face {
   font-family: '创细黑';
   src: url('fonts/字魂57号-创细黑.ttf') format('truetype');
@@ -30,6 +22,7 @@
   font-display: swap;
 }
 
+/* 英文&数字主力：Rajdhani Medium */
 @font-face {
   font-family: 'Rajdhani';
   src: url('fonts/Rajdhani Medium.otf') format('opentype');
@@ -38,6 +31,7 @@
   font-display: swap;
 }
 
+/* 倒计时数字：DIN 1451 */
 @font-face {
   font-family: 'DIN1451';
   src: url('fonts/DIN 1451 LT W06 Mittelschrift.otf') format('opentype');
@@ -66,11 +60,11 @@
   --radius-md: 12px;
   --radius-lg: 20px;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --font-title: '创粗黑', '芝加哥正黑体', sans-serif;
-  --font-subtitle: '创细黑', '芝加哥正黑体', sans-serif;
-  --font-english: 'Rajdhani', 'DIN1451', sans-serif;
-  --font-number: 'DIN1451', 'Rajdhani', sans-serif;
-  --font-body: '芝加哥正黑体', "Helvetica Neue", Arial, sans-serif;
+  --font-title: '创粗黑', '微软雅黑', 'Microsoft YaHei', sans-serif;
+  --font-subtitle: '创细黑', '微软雅黑', 'Microsoft YaHei', sans-serif;
+  --font-english: 'Rajdhani', 'DIN1451', 'Microsoft YaHei', sans-serif;
+  --font-number: 'DIN1451', 'Rajdhani', 'Microsoft YaHei', sans-serif;
+  --font-body: '微软雅黑', 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* ===== 全局重置 ===== */
