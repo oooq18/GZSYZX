@@ -56,44 +56,6 @@
     ];
     const MAX_ARTICLES = 6;
 
-    async function fetchRSS(url) {
-      const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
-      if (!text || text.includes('<error>') || text.length < 200) throw new Error('empty response');
-      return text;
-    }
-
-    function parseRSS(xmlText) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(xmlText, 'text/xml');
-      const items = doc.querySelectorAll('item');
-      const articles = [];
-      items.forEach((item, i) => {
-        if (i >= MAX_ARTICLES) return;
-        const title = item.querySelector('title')?.textContent?.trim() || '';
-        const link = item.querySelector('link')?.textContent?.trim() || '';
-        const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
-        const descRaw = item.querySelector('description')?.textContent || '';
-        // 提取封面图
-        let thumb = '';
-        const imgMatch = descRaw.match(/<img[^>]+src="([^"]+)"/);
-        if (imgMatch) thumb = imgMatch[1];
-        // 清理描述文本
-        const desc = descRaw.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().substring(0, 80);
-        // 格式化日期
-        let dateStr = '';
-        if (pubDate) {
-          const d = new Date(pubDate);
-          if (!isNaN(d)) {
-            dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-          }
-        }
-        articles.push({ title, link, date: dateStr, desc, thumb });
-      });
-      return articles;
-    }
-
     function renderNews(articles) {
       if (articles.length === 0) {
         newsGrid.innerHTML = '<div class="news-error">暂无文章</div>';
@@ -111,11 +73,60 @@
       `).join('');
     }
 
+    async function fetchFromJSON() {
+      const res = await fetch('news.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if (data && data.articles && data.articles.length > 0) {
+        return data.articles.slice(0, MAX_ARTICLES);
+      }
+      throw new Error('empty articles');
+    }
+
+    async function fetchFromRSS(url) {
+      const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      if (!text || text.includes('<error>') || text.length < 200) throw new Error('empty response');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/xml');
+      const items = doc.querySelectorAll('item');
+      const articles = [];
+      items.forEach((item, i) => {
+        if (i >= MAX_ARTICLES) return;
+        const title = item.querySelector('title')?.textContent?.trim() || '';
+        const link = item.querySelector('link')?.textContent?.trim() || '';
+        const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
+        const descRaw = item.querySelector('description')?.textContent || '';
+        let thumb = '';
+        const imgMatch = descRaw.match(/<img[^>]+src="([^"]+)"/);
+        if (imgMatch) thumb = imgMatch[1];
+        const desc = descRaw.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().substring(0, 80);
+        let dateStr = '';
+        if (pubDate) {
+          const d = new Date(pubDate);
+          if (!isNaN(d)) {
+            dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+          }
+        }
+        if (title && link) articles.push({ title, link, date: dateStr, desc, thumb });
+      });
+      return articles;
+    }
+
     async function loadNews() {
+      // 优先读取 GitHub Actions 预生成的 news.json
+      try {
+        const articles = await fetchFromJSON();
+        renderNews(articles);
+        return;
+      } catch (e) {
+        console.warn('news.json读取失败，降级到RSSHub实时抓取:', e.message);
+      }
+      // 降级：直接请求RSSHub
       for (const url of RSS_SOURCES) {
         try {
-          const xml = await fetchRSS(url);
-          const articles = parseRSS(xml);
+          const articles = await fetchFromRSS(url);
           if (articles.length > 0) {
             renderNews(articles);
             return;
