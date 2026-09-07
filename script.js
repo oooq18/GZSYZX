@@ -85,21 +85,20 @@
       throw new Error('empty articles');
     }
 
-    async function fetchFromRSS(url) {
-      const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
-      if (!text || text.includes('<error>') || text.length < 200) throw new Error('empty response');
+    function parseFeed(text) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, 'text/xml');
-      const items = doc.querySelectorAll('item');
+      // 同时支持 RSS (<item>) 和 Atom (<entry>)
+      const items = doc.querySelectorAll('item, entry');
       const articles = [];
       items.forEach((item, i) => {
         if (i >= MAX_ARTICLES) return;
         const title = item.querySelector('title')?.textContent?.trim() || '';
-        const link = item.querySelector('link')?.textContent?.trim() || '';
-        const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
-        const descRaw = item.querySelector('description')?.textContent || '';
+        // RSS用<link>文本，Atom用<link href=>
+        let link = item.querySelector('link')?.textContent?.trim() || '';
+        if (!link) link = item.querySelector('link')?.getAttribute('href') || '';
+        const pubDate = item.querySelector('pubDate, published, updated')?.textContent?.trim() || '';
+        const descRaw = item.querySelector('description, summary, content')?.textContent || '';
         let thumb = '';
         const imgMatch = descRaw.match(/<img[^>]+src="([^"]+)"/);
         if (imgMatch) thumb = imgMatch[1];
@@ -116,34 +115,22 @@
       return articles;
     }
 
+    async function fetchFromRSS(url) {
+      const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      if (!text || text.length < 200) throw new Error('empty response');
+      const articles = parseFeed(text);
+      if (articles.length === 0) throw new Error('no articles parsed');
+      return articles;
+    }
+
     async function fetchFromWorker(url) {
       const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const text = await res.text();
-      if (!text || text.includes('<error>') || text.length < 200) throw new Error('empty response');
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, 'text/xml');
-      const items = doc.querySelectorAll('item');
-      const articles = [];
-      items.forEach((item, i) => {
-        if (i >= MAX_ARTICLES) return;
-        const title = item.querySelector('title')?.textContent?.trim() || '';
-        const link = item.querySelector('link')?.textContent?.trim() || '';
-        const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
-        const descRaw = item.querySelector('description')?.textContent || '';
-        let thumb = '';
-        const imgMatch = descRaw.match(/<img[^>]+src="([^"]+)"/);
-        if (imgMatch) thumb = imgMatch[1];
-        const desc = descRaw.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().substring(0, 80);
-        let dateStr = '';
-        if (pubDate) {
-          const d = new Date(pubDate);
-          if (!isNaN(d)) {
-            dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-          }
-        }
-        if (title && link) articles.push({ title, link, date: dateStr, desc, thumb });
-      });
+      if (!text || text.length < 200) throw new Error('empty response');
+      const articles = parseFeed(text);
       if (articles.length === 0) throw new Error('no articles parsed');
       return articles;
     }
