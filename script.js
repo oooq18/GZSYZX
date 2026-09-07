@@ -63,15 +63,18 @@
         newsGrid.innerHTML = '<div class="news-error">暂无文章</div>';
         return;
       }
-      newsGrid.innerHTML = articles.map(a => `
+      newsGrid.innerHTML = articles.map(a => {
+        const thumbUrl = a.thumb ? WORKER_URL + 'image?url=' + encodeURIComponent(a.thumb) : '';
+        return `
         <a href="${a.link}" target="_blank" rel="noopener" class="news-card">
+          ${thumbUrl ? `<img class="news-card-thumb" src="${thumbUrl}" alt="${a.title}" loading="lazy" onerror="this.style.display='none'" />` : ''}
           <div class="news-card-body">
             ${a.date ? `<div class="news-card-date">${a.date}</div>` : ''}
             <h3 class="news-card-title">${a.title}</h3>
             ${a.desc ? `<p class="news-card-desc">${a.desc}</p>` : ''}
           </div>
-        </a>
-      `).join('');
+        </a>`;
+      }).join('');
     }
 
     async function fetchFromJSON() {
