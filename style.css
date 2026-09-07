@@ -843,6 +843,9 @@ footer {
   height: 56px;
   width: 56px;
   flex-shrink: 0;
+  background: #fff;
+  border-radius: 50%;
+  padding: 6px;
 }
 
 .footer-brand .footer-brand-text h3 {
@@ -986,6 +989,11 @@ footer {
     letter-spacing: 4px;
   }
 
+  .hero-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+  }
+
   .hero-motto .divider {
     width: 24px;
     margin: 0 12px;
@@ -1027,8 +1035,8 @@ footer {
   }
 
   .hero-subtitle {
-    font-size: 0.9rem;
-    letter-spacing: 3px;
+    font-size: 0.58rem;
+    letter-spacing: 1px;
   }
 
   .qr-item img {
