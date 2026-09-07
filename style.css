@@ -704,50 +704,23 @@ main {
 .motto-display {
   text-align: center;
   margin-bottom: 56px;
-  padding: 56px 32px;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 16px 48px rgba(16, 33, 91, 0.2);
+  padding: 20px 0;
   position: relative;
-  overflow: hidden;
-}
-
-.motto-display::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  left: -60px;
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(194,156,131,0.15) 0%, transparent 70%);
-  border-radius: 50%;
-}
-
-.motto-display::after {
-  content: '';
-  position: absolute;
-  bottom: -40px;
-  right: -40px;
-  width: 160px;
-  height: 160px;
-  background: radial-gradient(circle, rgba(194,156,131,0.1) 0%, transparent 70%);
-  border-radius: 50%;
 }
 
 .motto-display .motto-text {
   font-family: '江城黑体', '创粗黑', '微软雅黑', sans-serif;
   font-size: clamp(1.4rem, 4vw, 2rem);
-  color: #fff;
+  color: var(--color-primary);
   font-weight: 900;
   letter-spacing: 6px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   position: relative;
   white-space: nowrap;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
 }
 
 .motto-display .motto-label {
-  color: rgba(255,255,255,0.5);
+  color: var(--color-text-muted);
   font-size: 0.85rem;
   letter-spacing: 3px;
   position: relative;
