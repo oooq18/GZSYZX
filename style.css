@@ -607,7 +607,7 @@ main {
 }
 
 .feature-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   color: var(--color-primary);
   margin-bottom: 16px;
   font-weight: bold;
@@ -617,7 +617,7 @@ main {
 
 .feature-card p {
   color: var(--color-text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   line-height: 2;
   text-indent: 2em;
   transition: color 0.4s ease;
@@ -822,7 +822,7 @@ main {
 
 .news-card-title {
   font-family: var(--font-title);
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: var(--color-text);
   line-height: 1.5;
   margin-bottom: 14px;
@@ -833,7 +833,7 @@ main {
 }
 
 .news-card-desc {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--color-text-secondary);
   line-height: 1.6;
   display: -webkit-box;
@@ -864,10 +864,10 @@ main {
     padding: 22px 24px 26px;
   }
   .news-card-title {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
   }
   .news-card-desc {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 }
 
@@ -920,11 +920,13 @@ main {
   box-shadow: 0 8px 24px rgba(16, 33, 91, 0.15);
   padding: 4px;
   background: #fff;
+  border: 2px solid var(--color-accent);
   transition: var(--transition);
 }
 
 .qr-item:hover img {
-  box-shadow: 0 12px 32px rgba(194, 156, 131, 0.3);
+  box-shadow: 0 12px 32px rgba(194, 156, 131, 0.4);
+  border-color: var(--color-accent-dark);
 }
 
 .qr-item span {
@@ -988,7 +990,7 @@ main {
 }
 
 .content-block h2 {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: var(--color-primary);
   margin-top: 0;
   margin-bottom: 24px;
