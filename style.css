@@ -157,21 +157,22 @@ img {
 .brand-header .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   text-decoration: none;
 }
 
 .brand-header .brand img {
-  height: 44px;
+  height: 38px;
   width: auto;
 }
 
 .brand-header .brand-name {
   display: block;
-  font-size: 1.15rem;
-  font-weight: bold;
+  font-family: var(--font-title);
+  font-size: 1.2rem;
+  font-weight: normal;
   color: #fff;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   transition: color 0.3s ease;
 }
 
@@ -181,9 +182,10 @@ img {
 
 .brand-header .brand-ename {
   display: block;
-  font-size: 0.6rem;
-  color: rgba(255,255,255,0.7);
-  letter-spacing: 1.5px;
+  font-family: var(--font-english);
+  font-size: 0.58rem;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 3px;
   text-transform: uppercase;
   transition: color 0.3s ease;
 }
