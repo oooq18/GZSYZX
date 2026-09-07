@@ -78,7 +78,7 @@
     }
 
     async function fetchFromJSON() {
-      const res = await fetch('news.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
+      const res = await fetch('/news.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       if (data && data.articles && data.articles.length > 0) {
