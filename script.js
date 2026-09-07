@@ -294,41 +294,34 @@
       // 先禁用过渡，瞬间放到小图位置
       lightboxImg.style.transition = 'none';
       applyRect(originRect);
-      // 强制reflow
       void lightboxImg.offsetWidth;
-      // 恢复过渡
       lightboxImg.style.transition = '';
 
+      // 同时启动：背景模糊 + 图片放大
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
-
-      // 下一帧放大到全屏
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const target = getFullscreenRect();
-          applyRect(target);
-          setTimeout(() => { isAnimating = false; }, 350);
-        });
-      });
+      const target = getFullscreenRect();
+      applyRect(target);
+      setTimeout(() => { isAnimating = false; }, 350);
     }
 
     function close() {
       if (isAnimating || !originRect) return;
       isAnimating = true;
+      // 同时启动：图片缩回 + 背景变清晰
       applyRect(originRect);
+      overlay.classList.remove('active');
       setTimeout(() => {
-        overlay.classList.remove('active');
         document.body.style.overflow = '';
         window.scrollTo(0, scrollPos);
         lightboxImg.src = '';
-        // 重置位置，避免下次打开时残留
         lightboxImg.style.left = '';
         lightboxImg.style.top = '';
         lightboxImg.style.width = '';
         lightboxImg.style.height = '';
         originRect = null;
         isAnimating = false;
-      }, 320);
+      }, 350);
     }
 
     overlay.addEventListener('click', () => close());
