@@ -156,18 +156,20 @@ img {
 }
 
 .brand-header .brand img {
-  height: 42px;
+  height: clamp(32px, 7vw, 42px);
   width: auto;
+  flex-shrink: 0;
 }
 
 .brand-header .brand-name {
   display: block;
   font-family: var(--font-title);
-  font-size: 1.35rem;
+  font-size: clamp(0.95rem, 2.8vw, 1.35rem);
   font-weight: normal;
   color: #fff;
   letter-spacing: 2px;
   line-height: 1.2;
+  white-space: nowrap;
   transition: color 0.3s ease;
 }
 
@@ -178,12 +180,13 @@ img {
 .brand-header .brand-ename {
   display: block;
   font-family: var(--font-english);
-  font-size: 0.42rem;
+  font-size: clamp(0.3rem, 0.85vw, 0.42rem);
   color: rgba(255,255,255,0.6);
   letter-spacing: 0.5px;
   text-transform: uppercase;
   line-height: 1.2;
   margin-top: 1px;
+  white-space: nowrap;
   transition: color 0.3s ease;
 }
 
@@ -394,28 +397,31 @@ img {
   letter-spacing: 8px;
   margin-bottom: 40px;
   font-weight: 300;
+  white-space: nowrap;
 }
 
 .hero-motto .divider {
   display: inline-block;
-  width: 40px;
+  width: clamp(20px, 5vw, 40px);
   height: 1px;
   background: var(--color-accent);
   vertical-align: middle;
-  margin: 0 20px;
+  margin: 0 clamp(8px, 3vw, 20px);
 }
 
 /* 首页专属：校名和校训放大 */
 .hero-home .hero-title {
-  font-size: clamp(3rem, 8vw, 6rem);
-  letter-spacing: 8px;
+  font-size: clamp(2.2rem, 7vw, 6rem);
+  letter-spacing: clamp(4px, 1.5vw, 8px);
   margin-bottom: 28px;
+  white-space: nowrap;
 }
 
 .hero-home .hero-motto {
-  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
-  letter-spacing: 10px;
+  font-size: clamp(1rem, 2.8vw, 2.5rem);
+  letter-spacing: clamp(3px, 1.2vw, 10px);
   margin-bottom: 0;
+  white-space: nowrap;
 }
 
 .hero-cta {
@@ -1000,10 +1006,6 @@ footer {
 
   .hero-motto {
     letter-spacing: 4px;
-  }
-
-  .hero-home .hero-motto {
-    letter-spacing: 5px;
   }
 
   .hero-subtitle {

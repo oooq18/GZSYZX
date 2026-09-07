@@ -29,7 +29,11 @@ python3 -m http.server 8000
 
 ## 部署
 
-推送到 `main` 分支后，在 GitHub 仓库 Settings → Pages 中选择 `main` 分支根目录即可自动部署。
+推送到 `main` 分支后自动部署到 GitHub Pages。
+
+**自定义域名**：gzsyzx.l.cd（通过 CNAME 文件配置）
+
+DNS 需添加 CNAME 记录指向 `oooq18.github.io`。
 
 ## 校训
 
