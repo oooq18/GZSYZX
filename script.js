@@ -236,4 +236,50 @@
 
     loadNews();
   }
+
+  /* ===== 图片点击放大预览 ===== */
+  (function initLightbox() {
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    overlay.innerHTML = '<img class="lightbox-img" src="" alt="" /><span class="lightbox-close">×</span>';
+    document.body.appendChild(overlay);
+
+    const lightboxImg = overlay.querySelector('.lightbox-img');
+    const lightboxClose = overlay.querySelector('.lightbox-close');
+
+    function open(src, alt) {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+      setTimeout(() => { lightboxImg.src = ''; }, 300);
+    }
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target === lightboxClose) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) close();
+    });
+
+    // 给内容区所有图片绑定点击（排除校标、二维码、图标）
+    function bindImages() {
+      document.querySelectorAll('main img, .content-block img, .campus-gallery img, .facility-grid img, .split-image img').forEach(img => {
+        if (img.dataset.lightboxBound) return;
+        img.dataset.lightboxBound = '1';
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', () => open(img.src, img.alt));
+      });
+    }
+
+    bindImages();
+    // 动态内容（新闻图片）加载后再绑定
+    setTimeout(bindImages, 2000);
+  })();
 })();
