@@ -6,46 +6,114 @@
   <title>学校简介 - 广州实验中学</title>
   <link rel="icon" type="image/svg+xml" href="G校标修改.svg" />
   <link rel="stylesheet" href="style.css" />
-
-  <!-- SEO -->
   <meta name="description" content="广州实验中学学校简介：公办完全中学，广州实验教育集团旗舰校，黄埔区核心校，总投资超15亿元。">
   <meta name="keywords" content="广州实验中学, 学校简介, 黄埔区中学, 公办完全中学, 广州实验教育集团">
 </head>
 <body>
-  <header>
-    <div class="overlay"></div>
+  <!-- 固定导航栏 -->
+  <header class="navbar" id="navbar">
     <div class="container">
-      <div class="logo">
+      <a href="index.html" class="brand">
         <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
-      </div>
-      <nav>
+        <div class="brand-text">
+          <span class="brand-name">广州实验中学</span>
+          <span class="brand-ename">GUANGZHOU EXPERIMENTAL SECONDARY SCHOOL</span>
+        </div>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-label="菜单">☰</button>
+      <nav id="mainNav">
         <a href="index.html">首页</a>
-        <a href="about.html">学校简介</a>
+        <a href="about.html" class="active">学校简介</a>
         <a href="condition.html">办学条件</a>
         <a href="philosophy.html">办学理念</a>
       </nav>
     </div>
-    <div class="slogan">
-      <span class="part1">研精覃思</span><span class="space">&nbsp;&nbsp;</span><span class="part2">循真至美</span>
-    </div>
   </header>
 
+  <!-- 子页面 Hero -->
+  <section class="hero hero-page">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-subtitle">About Us</p>
+      <h1 class="hero-title">学校简介</h1>
+    </div>
+  </section>
+
   <main>
-    <h1>学校简介</h1>
-    <div class="content-wrapper">
-      <div class="text">
-        <p>广州实验中学（Guangzhou Experimental Secondary School）坐落于广州市黄埔区，这里教育资源丰富，文化氛围浓厚，为学校的发展提供了得天独厚的环境。它是广州市教育局与广州市黄埔区人民政府共建、由广州市教育研究院与广州市黄埔区教育局共管的一所公办完全中学，是广东省义务教育标准化学校。学校严格遵循教育规律和人才成长规律，全面贯彻党的教育方针，积极落实立德树人的根本任务。</p>
-        <p>学校创办于2021年，虽办学历史不长，但发展势头迅猛。作为广州实验教育集团旗舰校，同时也是黄埔广州实验中学教育集团核心校，学校充分发挥集团化办学的优势，整合优质教育资源，实现资源共享、优势互补、共同发展。在集团的引领下，学校积极探索创新教育模式，不断提升教育教学质量。</p>
-        <p>项目总投资超15亿元，定位为国家级示范性高中和广州市示范性高中，用地面积103000㎡（约154亩）。校园布局合理，建筑风格现代大气，充满人文气息。项目建成后开设初中30个班，高中60个班，能容纳4500名学生。学校致力于打造智能化、现代化的校园环境，为师生提供舒适、便捷的学习和工作条件。</p>
+    <div class="page-header reveal">
+      <h1>学校简介</h1>
+      <div class="page-line"></div>
+    </div>
+
+    <div class="content-block reveal">
+      <div class="content-split">
+        <div class="split-text">
+          <h2>学校概况</h2>
+          <p>广州实验中学（Guangzhou Experimental Secondary School）坐落于广州市黄埔区，这里教育资源丰富，文化氛围浓厚，为学校的发展提供了得天独厚的环境。它是广州市教育局与广州市黄埔区人民政府共建、由广州市教育研究院与广州市黄埔区教育局共管的一所公办完全中学，是广东省义务教育标准化学校。学校严格遵循教育规律和人才成长规律，全面贯彻党的教育方针，积极落实立德树人的根本任务。</p>
+          <p>学校创办于2021年，虽办学历史不长，但发展势头迅猛。作为广州实验教育集团旗舰校，同时也是黄埔广州实验中学教育集团核心校，学校充分发挥集团化办学的优势，整合优质教育资源，实现资源共享、优势互补、共同发展。在集团的引领下，学校积极探索创新教育模式，不断提升教育教学质量。</p>
+        </div>
+        <div class="split-image">
+          <img src="广实鸟瞰图.jpg" alt="广州实验中学鸟瞰图" />
+        </div>
       </div>
-      <div class="image">
-        <img src="广实鸟瞰图.jpg" alt="广州实验中学鸟瞰图" />
+    </div>
+
+    <div class="content-block reveal">
+      <h2>办学规模</h2>
+      <p>项目总投资超15亿元，定位为国家级示范性高中和广州市示范性高中，用地面积103000㎡（约154亩）。校园布局合理，建筑风格现代大气，充满人文气息。项目建成后开设初中30个班，高中60个班，能容纳4500名学生。学校致力于打造智能化、现代化的校园环境，为师生提供舒适、便捷的学习和工作条件。</p>
+    </div>
+
+    <!-- 数据统计 -->
+    <div class="stats-bar reveal">
+      <div class="stat-item">
+        <div class="stat-number">15<span class="unit">亿+</span></div>
+        <div class="stat-label">总投资</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">154<span class="unit">亩</span></div>
+        <div class="stat-label">用地面积</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">90<span class="unit">个班</span></div>
+        <div class="stat-label">初中30+高中60</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">4500<span class="unit">人</span></div>
+        <div class="stat-label">学生容量</div>
       </div>
     </div>
   </main>
 
+  <!-- 页脚 -->
   <footer>
-    © 2025 广州实验中学 版权所有 | 地址：广州市黄埔区修业路6号
+    <div class="footer-content">
+      <div class="footer-brand">
+        <img src="广州实验中学加校标.svg" alt="校徽" />
+        <div class="footer-brand-text">
+          <h3>广州实验中学</h3>
+          <p>广州市教育局与黄埔区人民政府共建<br>公办完全中学 · 广东省义务教育标准化学校</p>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>快速导航</h4>
+        <a href="index.html">首页</a>
+        <a href="about.html">学校简介</a>
+        <a href="condition.html">办学条件</a>
+        <a href="philosophy.html">办学理念</a>
+      </div>
+      <div class="footer-col">
+        <h4>联系我们</h4>
+        <p>📍 广州市黄埔区修业路6号</p>
+        <p>🏫 公办完全中学</p>
+        <p>📅 创办于2021年</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 广州实验中学 版权所有 | 校训：研精覃思 · 循真至美
+    </div>
   </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

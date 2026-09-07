@@ -15,50 +15,75 @@
   <meta property="og:type" content="website">
 </head>
 <body>
-  <!-- 顶部导航区 -->
-  <header>
-    <div class="overlay"></div>
+  <!-- 固定导航栏 -->
+  <header class="navbar" id="navbar">
     <div class="container">
-      <div class="logo">
+      <a href="index.html" class="brand">
         <img src="广州实验中学加校标.svg" alt="广州实验中学徽标" />
-      </div>
-      <nav>
-        <a href="index.html">首页</a>
+        <div class="brand-text">
+          <span class="brand-name">广州实验中学</span>
+          <span class="brand-ename">GUANGZHOU EXPERIMENTAL SECONDARY SCHOOL</span>
+        </div>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-label="菜单">☰</button>
+      <nav id="mainNav">
+        <a href="index.html" class="active">首页</a>
         <a href="about.html">学校简介</a>
         <a href="condition.html">办学条件</a>
         <a href="philosophy.html">办学理念</a>
       </nav>
     </div>
-    <div class="slogan">
-      <span class="part1">研精覃思</span><span class="space">&nbsp;&nbsp;</span><span class="part2">循真至美</span>
-    </div>
   </header>
 
+  <!-- Hero 大图区域 -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-subtitle">Guangzhou Experimental Secondary School</p>
+      <h1 class="hero-title">广州实验中学</h1>
+      <p class="hero-motto">研精覃思<span class="divider"></span>循真至美</p>
+      <a href="#welcome" class="hero-cta">了解学校 ↓</a>
+    </div>
+    <div class="hero-scroll-hint">SCROLL</div>
+  </section>
+
   <main>
-    <!-- 欢迎语 -->
-    <section style="margin: 40px 0; text-align: center;">
-      <h2 style="font-size: 2rem; color: #10215b; font-weight: bold;">欢迎访问广州实验中学官网</h2>
+    <!-- 欢迎区 -->
+    <section class="welcome-section reveal" id="welcome">
+      <h2>欢迎访问广州实验中学官网</h2>
+      <p>广州市教育局与黄埔区人民政府共建，广州市教育研究院与黄埔区教育局共管的公办完全中学</p>
     </section>
 
-    <!-- 三栏内容区块 -->
-    <div class="horizontal-sections">
-      <a href="about.html" aria-label="学校简介">
-        <h2>学校简介</h2>
-        <p>广州实验中学（Guangzhou Experimental Secondary School）坐落于广州市黄埔区……</p>
+    <!-- 三栏内容卡片 -->
+    <div class="feature-grid">
+      <a href="about.html" class="feature-card reveal" aria-label="学校简介">
+        <div class="card-icon">🏫</div>
+        <h3>学校简介</h3>
+        <p>广州实验中学坐落于广州市黄埔区，是广州市教育局与黄埔区人民政府共建的公办完全中学，广东省义务教育标准化学校。</p>
+        <span class="card-link">了解更多 →</span>
       </a>
-      <a href="condition.html" aria-label="办学条件">
-        <h2>办学条件</h2>
-        <p>截止到2024年5月，学校现有专任教师133人，他们师德高尚、业务精湛、结构合理、充满活力……</p>
+      <a href="condition.html" class="feature-card reveal" aria-label="办学条件">
+        <div class="card-icon">📚</div>
+        <h3>办学条件</h3>
+        <p>现有专任教师133人，毕业于985和211大学人数55人，区级以上骨干教师24人，设施设备齐全先进。</p>
+        <span class="card-link">了解更多 →</span>
       </a>
-      <a href="philosophy.html" aria-label="办学理念">
-        <h2>办学理念</h2>
-        <p>学校希望广实学子成为具有民族情结、家国认同的爱国者。通过开展爱国主义教育活动……</p>
+      <a href="philosophy.html" class="feature-card reveal" aria-label="办学理念">
+        <div class="card-icon">💡</div>
+        <h3>办学理念</h3>
+        <p>希望广实学子成为具有民族情结、家国认同的爱国者，报效国家、服务社会的奉献者，独立思想的探索者。</p>
+        <span class="card-link">了解更多 →</span>
       </a>
     </div>
 
     <!-- 记忆配对卡片游戏 -->
-    <div class="game-section">
-      <h2>记忆配对卡片</h2>
+    <section class="game-section reveal">
+      <div class="section-header">
+        <span class="section-label">Interactive</span>
+        <h2>记忆配对卡片</h2>
+        <div class="section-line"></div>
+      </div>
       <p>翻牌寻找配对的图案，锻炼你的记忆力！</p>
       <div class="game-controls">
         <button id="easy-mode">简单模式</button>
@@ -66,16 +91,16 @@
         <button id="hard-mode">困难模式</button>
       </div>
       <div class="game-stats">
-        <span id="moves">步数: 0</span> |
+        <span id="moves">步数: 0</span>
         <span id="timer">时间: 0 秒</span>
       </div>
       <div class="memory-game" id="memory-game"></div>
-    </div>
+    </section>
 
     <!-- 游戏胜利模态框 -->
     <div class="modal" id="win-modal">
       <div class="modal-content">
-        <h3>恭喜你！</h3>
+        <h3>🎉 恭喜你！</h3>
         <p>你成功匹配了所有卡片！</p>
         <p>用时: <span id="final-time">0</span> 秒</p>
         <p>步数: <span id="final-moves">0</span></p>
@@ -84,10 +109,14 @@
     </div>
 
     <!-- 二维码区 -->
-    <div class="qr-section">
-      <div class="title">了解更多</div>
-      <p style="margin-bottom: 30px; font-size: 1.25rem; color: #10215b;">
-        <a href="https://space.bilibili.com/694776231?spm_id_from=333.337.0.0" target="_blank" style="color: #10215b; text-decoration: underline;">B站</a>、微信视频号搜索"广州实验中学"或扫描以下二维码了解更多内容😘
+    <section class="qr-section reveal">
+      <div class="section-header">
+        <span class="section-label">Follow Us</span>
+        <h2>了解更多</h2>
+        <div class="section-line"></div>
+      </div>
+      <p style="color: var(--color-text-secondary); text-indent: 0;">
+        B站、微信视频号搜索"广州实验中学"，或扫描以下二维码
       </p>
       <div class="qr-images">
         <div class="qr-item">
@@ -100,17 +129,42 @@
         </div>
         <div class="qr-item">
           <img src="初升高QQ群.png" alt="广州实验中学 升高QQ群二维码" />
-          <span>升高QQ群二维码</span>
+          <span>升高QQ群</span>
         </div>
       </div>
-    </div>
-
-    <!-- 无线网络密码提示 -->
-    <p style="text-align: center; color: #10215b; margin-top: 20px;">学校的无线网络密码是GZSYZX2021注意是大写的🥰！</p>
+      <div class="wifi-notice">
+        学校无线网络密码：<strong>GZSYZX2021</strong>（注意大写）
+      </div>
+    </section>
   </main>
 
+  <!-- 页脚 -->
   <footer>
-    © 2025 广州实验中学 版权所有 | 地址：广州市黄埔区修业路6号
+    <div class="footer-content">
+      <div class="footer-brand">
+        <img src="广州实验中学加校标.svg" alt="校徽" />
+        <div class="footer-brand-text">
+          <h3>广州实验中学</h3>
+          <p>广州市教育局与黄埔区人民政府共建<br>公办完全中学 · 广东省义务教育标准化学校</p>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>快速导航</h4>
+        <a href="index.html">首页</a>
+        <a href="about.html">学校简介</a>
+        <a href="condition.html">办学条件</a>
+        <a href="philosophy.html">办学理念</a>
+      </div>
+      <div class="footer-col">
+        <h4>联系我们</h4>
+        <p>📍 广州市黄埔区修业路6号</p>
+        <p>🏫 公办完全中学</p>
+        <p>📅 创办于2021年</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 广州实验中学 版权所有 | 校训：研精覃思 · 循真至美
+    </div>
   </footer>
 
   <script src="script.js"></script>
