@@ -246,7 +246,10 @@
 
     const lightboxImg = overlay.querySelector('.lightbox-img');
 
+    let scrollPos = 0;
+
     function open(src, alt) {
+      scrollPos = window.scrollY || window.pageYOffset;
       lightboxImg.src = src;
       lightboxImg.alt = alt || '';
       overlay.classList.add('active');
@@ -256,6 +259,7 @@
     function close() {
       overlay.classList.remove('active');
       document.body.style.overflow = '';
+      window.scrollTo(0, scrollPos);
       setTimeout(() => { lightboxImg.src = ''; }, 300);
     }
 
