@@ -647,13 +647,44 @@ main {
   position: relative;
 }
 
+.welcome-label {
+  display: block;
+  font-family: var(--font-english);
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  letter-spacing: 8px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
 .welcome-section h2 {
   font-size: clamp(1.5rem, 3.5vw, 2rem);
   color: var(--color-primary);
-  margin-bottom: 0;
+  margin-bottom: 16px;
   position: relative;
   letter-spacing: 4px;
   font-weight: bold;
+}
+
+.welcome-line {
+  width: 50px;
+  height: 3px;
+  background: var(--color-accent);
+  margin: 0 auto;
+  border-radius: 2px;
+  position: relative;
+}
+
+.welcome-line::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: var(--color-primary);
+  border-radius: 50%;
 }
 
 /* ===== 校训展示 ===== */
@@ -1119,12 +1150,12 @@ footer::after {
 }
 
 .footer-brand img {
-  height: 60px;
-  width: 60px;
+  height: 56px;
+  width: 56px;
   flex-shrink: 0;
   background: #fff;
   border-radius: 50%;
-  padding: 4px;
+  padding: 2px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
@@ -1451,6 +1482,10 @@ footer::after {
   .welcome-section {
     padding: 12px 0;
     margin-bottom: 48px;
+  }
+  .welcome-label {
+    font-size: 0.7rem;
+    letter-spacing: 5px;
   }
   .feature-grid {
     gap: 20px;
