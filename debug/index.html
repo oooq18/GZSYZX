@@ -76,25 +76,6 @@
       padding: 70px 90px;
     }
 
-    .login-box::before, .login-box::after {
-      content: '';
-      position: absolute;
-      width: 24px; height: 24px;
-      border-color: var(--accent);
-      border-style: solid;
-    }
-    .login-box::before { top: 0; left: 0; border-width: 1px 0 0 1px; }
-    .login-box::after { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
-
-    .login-title {
-      font-size: 0.7rem;
-      letter-spacing: 10px;
-      color: var(--accent-dim);
-      margin-bottom: 50px;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-
     .login-input {
       background: transparent;
       border: none;
@@ -395,7 +376,6 @@
 
   <div id="loginScreen">
     <div class="login-box">
-      <div class="login-title">系统验证</div>
       <input type="password" class="login-input" id="passInput" maxlength="6" autocomplete="off" autofocus>
       <div class="login-hint" id="loginHint">验证失败</div>
     </div>
