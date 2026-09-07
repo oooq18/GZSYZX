@@ -475,10 +475,8 @@
           passInput.classList.add('error');
           loginHint.classList.add('show');
           setTimeout(() => {
-            passInput.value = '';
-            passInput.classList.remove('error');
-            loginHint.classList.remove('show');
-          }, 800);
+            window.location.href = '/';
+          }, 600);
         }
       }
     });
