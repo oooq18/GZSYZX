@@ -49,6 +49,8 @@
   /* ===== 新闻动态：自动加载公众号最新文章 ===== */
   const newsGrid = document.getElementById('newsGrid');
   if (newsGrid) {
+    // Cloudflare Worker 代理地址（部署后替换为你的Worker URL）
+    const WORKER_URL = '';
     const RSS_SOURCES = [
       'https://rsshub.app/wechat/ce/MzkyNTc0Nzk5MA==',
       'https://rss.shab.fun/wechat/ce/MzkyNTc0Nzk5MA==',
@@ -114,16 +116,36 @@
       return articles;
     }
 
+    async function fetchFromWorker(url) {
+      const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if (data && data.articles && data.articles.length > 0) {
+        return data.articles.slice(0, MAX_ARTICLES);
+      }
+      throw new Error('empty articles');
+    }
+
     async function loadNews() {
-      // 优先读取 GitHub Actions 预生成的 news.json
+      // 1. 优先读取 GitHub Actions 预生成的 news.json
       try {
         const articles = await fetchFromJSON();
         renderNews(articles);
         return;
       } catch (e) {
-        console.warn('news.json读取失败，降级到RSSHub实时抓取:', e.message);
+        console.warn('news.json读取失败:', e.message);
       }
-      // 降级：直接请求RSSHub
+      // 2. Cloudflare Worker 代理（国内访问稳定）
+      if (WORKER_URL) {
+        try {
+          const articles = await fetchFromWorker(WORKER_URL);
+          renderNews(articles);
+          return;
+        } catch (e) {
+          console.warn('Worker代理失败:', e.message);
+        }
+      }
+      // 3. 降级：直接请求RSSHub
       for (const url of RSS_SOURCES) {
         try {
           const articles = await fetchFromRSS(url);
