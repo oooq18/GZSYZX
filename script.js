@@ -56,7 +56,7 @@
       'https://rss.shab.fun/wechat/ce/MzkyNTc0Nzk5MA==',
       'https://rsshub.rssforever.com/wechat/ce/MzkyNTc0Nzk5MA=='
     ];
-    const MAX_ARTICLES = 3;
+    const MAX_ARTICLES = 1;
 
     function renderNews(articles) {
       if (articles.length === 0) {
