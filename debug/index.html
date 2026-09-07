@@ -395,9 +395,9 @@
 
   <div id="loginScreen">
     <div class="login-box">
-      <div class="login-title">SYSTEM ACCESS</div>
+      <div class="login-title">系统验证</div>
       <input type="password" class="login-input" id="passInput" maxlength="6" autocomplete="off" autofocus>
-      <div class="login-hint" id="loginHint">ACCESS DENIED</div>
+      <div class="login-hint" id="loginHint">验证失败</div>
     </div>
   </div>
 
@@ -406,64 +406,64 @@
       <div class="top-bar-left">
         <div class="logo-mark">UEG</div>
         <div>
-          <div class="top-title">CACHE CONTROL TERMINAL</div>
-          <div class="top-subtitle">GUANGZHOU EXPERIMENTAL MIDDLE SCHOOL</div>
+          <div class="top-title">缓存控制终端</div>
+          <div class="top-subtitle">广州实验中学</div>
         </div>
       </div>
       <div class="top-bar-right">
-        <div><span class="status-dot"></span>SYSTEM ONLINE</div>
+        <div><span class="status-dot"></span>系统在线</div>
         <div id="clockDisplay">--:--:--</div>
       </div>
     </div>
 
-    <a href="/" class="back-link">← RETURN TO MAIN</a>
+    <a href="/" class="back-link">← 返回首页</a>
 
     <div class="panel" style="margin-top: 18px;">
       <div class="panel-header">
-        <div class="panel-title">NEWS CACHE</div>
-        <span class="panel-badge" id="newsBadge">CHECKING</span>
+        <div class="panel-title">新闻缓存</div>
+        <span class="panel-badge" id="newsBadge">检查中</span>
       </div>
       <div class="panel-body">
         <div class="btn-row">
-          <button class="wue-btn warn" onclick="clearNewsCache()">PURGE NEWS</button>
-          <button class="wue-btn" onclick="refreshNews()">REFRESH</button>
+          <button class="wue-btn warn" onclick="clearNewsCache()">清除新闻</button>
+          <button class="wue-btn" onclick="refreshNews()">刷新</button>
         </div>
-        <div id="newsContent"><div class="empty-state">LOADING...</div></div>
+        <div id="newsContent"><div class="empty-state">加载中...</div></div>
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-header">
-        <div class="panel-title">SERVICE WORKER</div>
-        <span class="panel-badge" id="swBadge">CHECKING</span>
+        <div class="panel-title">服务工作进程</div>
+        <span class="panel-badge" id="swBadge">检查中</span>
       </div>
       <div class="panel-body">
         <div class="btn-row">
-          <button class="wue-btn danger" onclick="clearSWCache()">PURGE ALL CACHE</button>
-          <button class="wue-btn warn" onclick="unregisterSW()">UNREGISTER SW</button>
-          <button class="wue-btn" onclick="refreshSW()">REFRESH</button>
+          <button class="wue-btn danger" onclick="clearSWCache()">清除全部缓存</button>
+          <button class="wue-btn warn" onclick="unregisterSW()">注销服务</button>
+          <button class="wue-btn" onclick="refreshSW()">刷新</button>
         </div>
-        <div id="swContent"><div class="empty-state">LOADING...</div></div>
+        <div id="swContent"><div class="empty-state">加载中...</div></div>
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-header">
-        <div class="panel-title">LOCAL STORAGE</div>
-        <span class="panel-badge" id="lsBadge">0 ITEMS</span>
+        <div class="panel-title">本地存储</div>
+        <span class="panel-badge" id="lsBadge">0 项</span>
       </div>
       <div class="panel-body">
         <div class="btn-row">
-          <button class="wue-btn danger" onclick="clearAllLS()">PURGE ALL</button>
-          <button class="wue-btn" onclick="refreshLS()">REFRESH</button>
+          <button class="wue-btn danger" onclick="clearAllLS()">清除全部</button>
+          <button class="wue-btn" onclick="refreshLS()">刷新</button>
         </div>
-        <div id="lsContent"><div class="empty-state">LOADING...</div></div>
+        <div id="lsContent"><div class="empty-state">加载中...</div></div>
       </div>
     </div>
 
     <div class="bottom-bar">
-      <div>UEG CACHE SYSTEM v1.0</div>
-      <div>BUILD: 2026.09.07</div>
+      <div>UEG 缓存系统 v1.0</div>
+      <div>构建: 2026.09.07</div>
     </div>
   </div>
 
@@ -524,7 +524,7 @@
     const CACHE_TTL = 30 * 60 * 1000;
 
     function formatTime(ts) {
-      if (!ts) return 'UNKNOWN';
+      if (!ts) return '未知';
       return new Date(ts).toLocaleString('zh-CN');
     }
 
@@ -535,27 +535,27 @@
       try { cache = JSON.parse(localStorage.getItem(NEWS_KEY)); } catch(e) {}
 
       if (!cache || !cache.articles || cache.articles.length === 0) {
-        badge.textContent = 'EMPTY';
+        badge.textContent = '空';
         badge.className = 'panel-badge danger';
-        content.innerHTML = '<div class="empty-state">NO NEWS CACHE</div>';
+        content.innerHTML = '<div class="empty-state">无新闻缓存</div>';
         return;
       }
 
       const age = Date.now() - (cache.time || 0);
-      if (age < CACHE_TTL) { badge.textContent = 'FRESH'; badge.className = 'panel-badge ok'; }
-      else if (age < CACHE_TTL * 2) { badge.textContent = 'EXPIRED'; badge.className = 'panel-badge warn'; }
-      else { badge.textContent = 'STALE'; badge.className = 'panel-badge danger'; }
+      if (age < CACHE_TTL) { badge.textContent = '新鲜'; badge.className = 'panel-badge ok'; }
+      else if (age < CACHE_TTL * 2) { badge.textContent = '已过期'; badge.className = 'panel-badge warn'; }
+      else { badge.textContent = '过期'; badge.className = 'panel-badge danger'; }
 
-      let html = '<div class="data-row"><span class="data-label">CACHE TIME</span><span class="data-value">' + formatTime(cache.time) + '</span></div>';
-      html += '<div class="data-row"><span class="data-label">ARTICLES</span><span class="data-value">' + cache.articles.length + '</span></div>';
+      let html = '<div class="data-row"><span class="data-label">缓存时间</span><span class="data-value">' + formatTime(cache.time) + '</span></div>';
+      html += '<div class="data-row"><span class="data-label">文章数量</span><span class="data-value">' + cache.articles.length + '</span></div>';
       html += '<div style="height:12px;"></div>';
 
       cache.articles.forEach((item, i) => {
         html += '<div class="news-entry">';
-        html += '<div class="news-entry-title">[' + (i+1) + '] ' + (item.title || 'NO TITLE') + '</div>';
+        html += '<div class="news-entry-title">[' + (i+1) + '] ' + (item.title || '无标题') + '</div>';
         html += '<div class="news-entry-meta">';
-        if (item.pubDate) html += 'DATE: ' + item.pubDate + ' | ';
-        if (item.link) html += '<a href="' + item.link + '" target="_blank" style="color:var(--accent-dim);">OPEN</a>';
+        if (item.pubDate) html += '发布: ' + item.pubDate + ' | ';
+        if (item.link) html += '<a href="' + item.link + '" target="_blank" style="color:var(--accent-dim);">查看原文</a>';
         html += '</div>';
         if (item.description) {
           html += '<div class="news-entry-desc">' + item.description.substring(0, 120) + (item.description.length > 120 ? '...' : '') + '</div>';
@@ -567,7 +567,7 @@
 
     function clearNewsCache() {
       localStorage.removeItem(NEWS_KEY);
-      showToast('NEWS CACHE PURGED');
+      showToast('新闻缓存已清除');
       refreshNews();
       refreshLS();
     }
@@ -577,43 +577,43 @@
       const content = document.getElementById('swContent');
 
       if (!('serviceWorker' in navigator)) {
-        badge.textContent = 'UNSUPPORTED';
+        badge.textContent = '不支持';
         badge.className = 'panel-badge danger';
-        content.innerHTML = '<div class="empty-state">SW NOT SUPPORTED</div>';
+        content.innerHTML = '<div class="empty-state">浏览器不支持服务工作进程</div>';
         return;
       }
 
       const regs = await navigator.serviceWorker.getRegistrations();
       if (regs.length === 0) {
-        badge.textContent = 'INACTIVE';
+        badge.textContent = '未激活';
         badge.className = 'panel-badge warn';
-        content.innerHTML = '<div class="empty-state">SW NOT REGISTERED</div>';
+        content.innerHTML = '<div class="empty-state">服务未注册</div>';
         return;
       }
 
-      badge.textContent = 'ACTIVE';
+      badge.textContent = '已激活';
       badge.className = 'panel-badge ok';
 
       let html = '';
       regs.forEach((reg, i) => {
-        html += '<div class="data-row"><span class="data-label">SW #' + (i+1) + ' STATUS</span><span class="data-value">' + (reg.active ? 'RUNNING' : 'WAITING') + '</span></div>';
-        html += '<div class="data-row"><span class="data-label">SCOPE</span><span class="data-value" style="font-size:0.65rem;">' + reg.scope + '</span></div>';
+        html += '<div class="data-row"><span class="data-label">服务 #' + (i+1) + ' 状态</span><span class="data-value">' + (reg.active ? '运行中' : '等待中') + '</span></div>';
+        html += '<div class="data-row"><span class="data-label">作用域</span><span class="data-value" style="font-size:0.65rem;">' + reg.scope + '</span></div>';
       });
 
       if ('caches' in window) {
         const keys = await caches.keys();
-        html += '<div class="data-row"><span class="data-label">CACHE VERSIONS</span><span class="data-value">' + keys.length + '</span></div>';
+        html += '<div class="data-row"><span class="data-label">缓存版本</span><span class="data-value">' + keys.length + '</span></div>';
         for (const key of keys) {
           const cache = await caches.open(key);
           const reqs = await cache.keys();
-          html += '<div class="data-row"><span class="data-label">└ ' + key + '</span><span class="data-value">' + reqs.length + ' ASSETS</span></div>';
+          html += '<div class="data-row"><span class="data-label">└ ' + key + '</span><span class="data-value">' + reqs.length + ' 个资源</span></div>';
         }
       }
       content.innerHTML = html;
     }
 
     async function clearSWCache() {
-      if (!confirm('PURGE ALL STATIC CACHE?')) return;
+      if (!confirm('确定清除全部静态缓存？')) return;
       if ('caches' in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(k => caches.delete(k)));
@@ -621,25 +621,25 @@
       if (navigator.serviceWorker.controller) {
         navigator.serviceWorker.controller.postMessage('CLEAR_CACHE');
       }
-      showToast('ALL CACHE PURGED');
+      showToast('全部缓存已清除');
       refreshSW();
     }
 
     async function unregisterSW() {
-      if (!confirm('UNREGISTER SERVICE WORKER?')) return;
+      if (!confirm('确定注销服务工作进程？')) return;
       const regs = await navigator.serviceWorker.getRegistrations();
       await Promise.all(regs.map(r => r.unregister()));
-      showToast('SW UNREGISTERED');
+      showToast('服务已注销');
       refreshSW();
     }
 
     function refreshLS() {
       const badge = document.getElementById('lsBadge');
       const content = document.getElementById('lsContent');
-      badge.textContent = localStorage.length + ' ITEMS';
+      badge.textContent = localStorage.length + ' 项';
 
       if (localStorage.length === 0) {
-        content.innerHTML = '<div class="empty-state">NO DATA</div>';
+        content.innerHTML = '<div class="empty-state">无数据</div>';
         return;
       }
 
@@ -651,16 +651,16 @@
         try { display = JSON.stringify(JSON.parse(val), null, 2); } catch(e) {}
         html += '<div class="cache-entry">';
         html += '<div class="cache-key">' + key + '</div>';
-        html += '<div class="cache-value">' + display.substring(0, 1500) + (display.length > 1500 ? '\n...TRUNCATED' : '') + '</div>';
+        html += '<div class="cache-value">' + display.substring(0, 1500) + (display.length > 1500 ? '\n...已截断' : '') + '</div>';
         html += '</div>';
       }
       content.innerHTML = html;
     }
 
     function clearAllLS() {
-      if (!confirm('PURGE ALL LOCALSTORAGE?')) return;
+      if (!confirm('确定清除全部本地存储？')) return;
       localStorage.clear();
-      showToast('LOCALSTORAGE PURGED');
+      showToast('本地存储已清除');
       refreshNews();
       refreshLS();
     }
