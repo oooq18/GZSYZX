@@ -563,66 +563,15 @@ main {
   border: 1px solid var(--color-border);
 }
 
-.feature-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: 0;
-}
-
-.feature-card::after {
-  content: '';
-  position: absolute;
-  top: 28px;
-  right: 28px;
-  width: 48px;
-  height: 48px;
-  border: 2px solid var(--color-accent);
-  border-radius: 50%;
-  opacity: 0.3;
-  transition: all 0.4s ease;
-  z-index: 1;
-}
-
 .feature-card > * {
   position: relative;
   z-index: 1;
 }
 
 .feature-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 50px rgba(16, 33, 91, 0.2);
-  border-color: transparent;
-}
-
-.feature-card:hover::before {
-  opacity: 1;
-}
-
-.feature-card:hover::after {
-  opacity: 0.6;
-  transform: scale(1.2);
-  border-color: var(--color-accent-light);
-}
-
-.feature-card:hover h3,
-.feature-card:hover p,
-.feature-card:hover .card-link {
-  color: #fff;
-}
-
-.feature-card:hover p {
-  color: rgba(255,255,255,0.75);
-}
-
-.feature-card:hover .card-link {
-  color: var(--color-accent-light);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(16, 33, 91, 0.15);
+  border-color: var(--color-accent);
 }
 
 .feature-card .card-image {
@@ -846,28 +795,10 @@ main {
   border: 1px solid var(--color-border);
 }
 
-.news-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 5px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--color-accent), var(--color-primary));
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.4s ease;
-  z-index: 2;
-}
-
 .news-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 16px 48px rgba(16, 33, 91, 0.18);
-  border-color: transparent;
-}
-
-.news-card:hover::before {
-  transform: scaleY(1);
+  border-color: var(--color-accent);
 }
 
 .news-card-thumb {
@@ -1055,22 +986,11 @@ main {
   border: 1px solid var(--color-border);
   position: relative;
   overflow: hidden;
+  transition: var(--transition);
 }
 
-.content-block::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--color-accent), var(--color-primary));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.content-block:hover::before {
-  opacity: 1;
+.content-block:hover {
+  box-shadow: 0 12px 36px rgba(16, 33, 91, 0.12);
 }
 
 .content-block h2 {
@@ -1160,25 +1080,10 @@ main {
   overflow: hidden;
 }
 
-.stat-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--color-accent), var(--color-primary));
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
 .stat-item:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 32px rgba(16, 33, 91, 0.15);
-}
-
-.stat-item:hover::before {
-  transform: scaleX(1);
+  border-color: var(--color-accent);
 }
 
 .stat-item .stat-number {
