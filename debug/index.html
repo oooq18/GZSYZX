@@ -263,8 +263,8 @@
     }
 
     function getCacheStatus(cache) {
-      if (!cache || !cache.timestamp) return { text: '无缓存', cls: 'expired' };
-      const age = Date.now() - cache.timestamp;
+      if (!cache || !cache.time) return { text: '无缓存', cls: 'expired' };
+      const age = Date.now() - cache.time;
       if (age < CACHE_TTL) return { text: '新鲜', cls: 'fresh' };
       if (age < CACHE_TTL * 2) return { text: '已过期', cls: 'stale' };
       return { text: '严重过期', cls: 'expired' };
@@ -290,7 +290,7 @@
       }
 
       let html = '<div style="margin-bottom:12px;font-size:0.85rem;color:var(--color-text-secondary);">';
-      html += '缓存时间：' + formatTime(cache.timestamp);
+      html += '缓存时间：' + formatTime(cache.time);
       html += ' | 文章数量：' + cache.articles.length + ' 篇';
       html += '</div>';
 
