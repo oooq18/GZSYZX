@@ -49,8 +49,8 @@
   /* ===== 新闻动态：自动加载公众号最新文章 ===== */
   const newsGrid = document.getElementById('newsGrid');
   if (newsGrid) {
-    // Cloudflare Worker 代理地址（部署后替换为你的Worker URL）
-    const WORKER_URL = '';
+    // Cloudflare Worker 代理地址
+    const WORKER_URL = 'https://gzsyzx-news.lca313.workers.dev/';
     const RSS_SOURCES = [
       'https://rsshub.app/wechat/ce/MzkyNTc0Nzk5MA==',
       'https://rss.shab.fun/wechat/ce/MzkyNTc0Nzk5MA==',
@@ -119,23 +119,37 @@
     async function fetchFromWorker(url) {
       const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      if (data && data.articles && data.articles.length > 0) {
-        return data.articles.slice(0, MAX_ARTICLES);
-      }
-      throw new Error('empty articles');
+      const text = await res.text();
+      if (!text || text.includes('<error>') || text.length < 200) throw new Error('empty response');
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/xml');
+      const items = doc.querySelectorAll('item');
+      const articles = [];
+      items.forEach((item, i) => {
+        if (i >= MAX_ARTICLES) return;
+        const title = item.querySelector('title')?.textContent?.trim() || '';
+        const link = item.querySelector('link')?.textContent?.trim() || '';
+        const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
+        const descRaw = item.querySelector('description')?.textContent || '';
+        let thumb = '';
+        const imgMatch = descRaw.match(/<img[^>]+src="([^"]+)"/);
+        if (imgMatch) thumb = imgMatch[1];
+        const desc = descRaw.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().substring(0, 80);
+        let dateStr = '';
+        if (pubDate) {
+          const d = new Date(pubDate);
+          if (!isNaN(d)) {
+            dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+          }
+        }
+        if (title && link) articles.push({ title, link, date: dateStr, desc, thumb });
+      });
+      if (articles.length === 0) throw new Error('no articles parsed');
+      return articles;
     }
 
     async function loadNews() {
-      // 1. 优先读取 GitHub Actions 预生成的 news.json
-      try {
-        const articles = await fetchFromJSON();
-        renderNews(articles);
-        return;
-      } catch (e) {
-        console.warn('news.json读取失败:', e.message);
-      }
-      // 2. Cloudflare Worker 代理（国内访问稳定）
+      // 1. 优先 Cloudflare Worker 代理（最新文章）
       if (WORKER_URL) {
         try {
           const articles = await fetchFromWorker(WORKER_URL);
@@ -145,7 +159,15 @@
           console.warn('Worker代理失败:', e.message);
         }
       }
-      // 3. 降级：直接请求RSSHub
+      // 2. 降级读取预生成的 news.json
+      try {
+        const articles = await fetchFromJSON();
+        renderNews(articles);
+        return;
+      } catch (e) {
+        console.warn('news.json读取失败:', e.message);
+      }
+      // 3. 最后降级：直接请求RSSHub
       for (const url of RSS_SOURCES) {
         try {
           const articles = await fetchFromRSS(url);
