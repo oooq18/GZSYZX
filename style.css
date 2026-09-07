@@ -332,7 +332,7 @@ img {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('广实鸟瞰图.jpg');
+  background-image: url('images/广实鸟瞰图.jpg');
   background-size: cover;
   background-position: center;
   transform: scale(1.05);
