@@ -441,6 +441,20 @@
       </div>
     </div>
 
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">系统诊断</div>
+        <span class="panel-badge" id="diagBadge">正常</span>
+      </div>
+      <div class="panel-body">
+        <div class="btn-row">
+          <button class="wue-btn" onclick="runDiagnostics()">运行诊断</button>
+          <button class="wue-btn warn" onclick="location.reload()">强制刷新页面</button>
+        </div>
+        <div id="diagContent"><div class="empty-state">点击"运行诊断"检查系统状态</div></div>
+      </div>
+    </div>
+
     <div class="bottom-bar">
       <div>UEG 缓存系统 v1.0</div>
       <div>构建: 2026.09.07</div>
@@ -511,12 +525,20 @@
       const badge = document.getElementById('newsBadge');
       const content = document.getElementById('newsContent');
       let cache = null;
-      try { cache = JSON.parse(localStorage.getItem(NEWS_KEY)); } catch(e) {}
+      try {
+        const raw = localStorage.getItem(NEWS_KEY);
+        if (raw) cache = JSON.parse(raw);
+      } catch(e) {
+        content.innerHTML = '<div class="empty-state" style="color:var(--danger);">缓存解析失败: ' + e.message + '</div>';
+        badge.textContent = '错误';
+        badge.className = 'panel-badge danger';
+        return;
+      }
 
       if (!cache || !cache.articles || cache.articles.length === 0) {
         badge.textContent = '空';
         badge.className = 'panel-badge danger';
-        content.innerHTML = '<div class="empty-state">无新闻缓存</div>';
+        content.innerHTML = '<div class="empty-state">无新闻缓存<br><span style="font-size:0.7rem;">请先访问首页加载新闻</span></div>';
         return;
       }
 
@@ -643,6 +665,79 @@
       refreshNews();
       refreshLS();
     }
+
+    function runDiagnostics() {
+      const badge = document.getElementById('diagBadge');
+      const content = document.getElementById('diagContent');
+      let html = '';
+      let hasError = false;
+
+      // 1. 检查localStorage
+      html += '<div class="data-row"><span class="data-label">localStorage 可用</span><span class="data-value">' + (typeof localStorage !== 'undefined' ? '是' : '否') + '</span></div>';
+      html += '<div class="data-row"><span class="data-label">localStorage 条目数</span><span class="data-value">' + localStorage.length + '</span></div>';
+
+      // 2. 列出所有key
+      html += '<div style="height:10px;"></div>';
+      html += '<div class="data-label" style="margin-bottom:8px;">所有存储键：</div>';
+      if (localStorage.length === 0) {
+        html += '<div class="empty-state" style="padding:15px;">无任何存储</div>';
+      } else {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const val = localStorage.getItem(key);
+          html += '<div class="cache-entry">';
+          html += '<div class="cache-key">' + key + '</div>';
+          html += '<div class="cache-value">长度: ' + val.length + ' 字符 | 前200字符: ' + val.substring(0, 200) + '</div>';
+          html += '</div>';
+        }
+      }
+
+      // 3. 检查新闻缓存
+      html += '<div style="height:10px;"></div>';
+      const raw = localStorage.getItem('gzsyzx_news_cache');
+      html += '<div class="data-row"><span class="data-label">新闻缓存原始值</span><span class="data-value">' + (raw ? '存在 (' + raw.length + '字符)' : '不存在') + '</span></div>';
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          html += '<div class="data-row"><span class="data-label">JSON解析</span><span class="data-value" style="color:var(--ok);">成功</span></div>';
+          html += '<div class="data-row"><span class="data-label">articles字段</span><span class="data-value">' + (parsed.articles ? '存在 (' + parsed.articles.length + '篇)' : '不存在') + '</span></div>';
+          html += '<div class="data-row"><span class="data-label">time字段</span><span class="data-value">' + (parsed.time ? parsed.time + ' (' + new Date(parsed.time).toLocaleString() + ')' : '不存在') + '</span></div>';
+        } catch(e) {
+          hasError = true;
+          html += '<div class="data-row"><span class="data-label">JSON解析</span><span class="data-value" style="color:var(--danger);">失败: ' + e.message + '</span></div>';
+        }
+      }
+
+      // 4. 检查Service Worker
+      html += '<div style="height:10px;"></div>';
+      html += '<div class="data-row"><span class="data-label">Service Worker 支持</span><span class="data-value">' + ('serviceWorker' in navigator ? '是' : '否') + '</span></div>';
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          const swInfo = document.getElementById('swDiagInfo');
+          if (swInfo) swInfo.textContent = regs.length + ' 个已注册';
+        });
+      }
+
+      // 5. 检查当前页面URL
+      html += '<div style="height:10px;"></div>';
+      html += '<div class="data-row"><span class="data-label">当前页面URL</span><span class="data-value" style="font-size:0.65rem;word-break:break-all;">' + window.location.href + '</span></div>';
+      html += '<div class="data-row"><span class="data-label">当前源(origin)</span><span class="data-value" style="font-size:0.65rem;">' + window.location.origin + '</span></div>';
+      html += '<div class="data-row"><span class="data-label">协议</span><span class="data-value">' + window.location.protocol + '</span></div>';
+
+      if (hasError) {
+        badge.textContent = '有错误';
+        badge.className = 'panel-badge danger';
+      } else {
+        badge.textContent = '正常';
+        badge.className = 'panel-badge ok';
+      }
+      content.innerHTML = html;
+    }
+
+    // 全局错误捕获
+    window.addEventListener('error', function(e) {
+      console.error('页面错误:', e.message, e.filename, e.lineno);
+    });
 
     function initTerminal() {
       refreshNews();
