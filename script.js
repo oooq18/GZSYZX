@@ -291,8 +291,14 @@
       lightboxImg.src = imgEl.src;
       lightboxImg.alt = imgEl.alt || '';
 
-      // 先放到小图位置
+      // 先禁用过渡，瞬间放到小图位置
+      lightboxImg.style.transition = 'none';
       applyRect(originRect);
+      // 强制reflow
+      void lightboxImg.offsetWidth;
+      // 恢复过渡
+      lightboxImg.style.transition = '';
+
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
 
@@ -309,13 +315,17 @@
     function close() {
       if (isAnimating || !originRect) return;
       isAnimating = true;
-      // 缩回小图位置
       applyRect(originRect);
       setTimeout(() => {
         overlay.classList.remove('active');
         document.body.style.overflow = '';
         window.scrollTo(0, scrollPos);
         lightboxImg.src = '';
+        // 重置位置，避免下次打开时残留
+        lightboxImg.style.left = '';
+        lightboxImg.style.top = '';
+        lightboxImg.style.width = '';
+        lightboxImg.style.height = '';
         originRect = null;
         isAnimating = false;
       }, 320);
