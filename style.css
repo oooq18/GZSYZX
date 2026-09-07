@@ -915,6 +915,12 @@ footer {
   padding-left: 4px;
 }
 
+.footer-col a.active {
+  color: var(--color-accent);
+  font-weight: 600;
+  padding-left: 4px;
+}
+
 .footer-bottom {
   max-width: 1280px;
   margin: 0 auto;
