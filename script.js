@@ -241,11 +241,10 @@
   (function initLightbox() {
     const overlay = document.createElement('div');
     overlay.className = 'lightbox-overlay';
-    overlay.innerHTML = '<img class="lightbox-img" src="" alt="" /><span class="lightbox-close">×</span>';
+    overlay.innerHTML = '<img class="lightbox-img" src="" alt="" />';
     document.body.appendChild(overlay);
 
     const lightboxImg = overlay.querySelector('.lightbox-img');
-    const lightboxClose = overlay.querySelector('.lightbox-close');
 
     function open(src, alt) {
       lightboxImg.src = src;
@@ -260,9 +259,7 @@
       setTimeout(() => { lightboxImg.src = ''; }, 300);
     }
 
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay || e.target === lightboxClose) close();
-    });
+    overlay.addEventListener('click', () => close());
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && overlay.classList.contains('active')) close();
@@ -270,11 +267,16 @@
 
     // 给内容区所有图片绑定点击（排除校标、二维码、图标）
     function bindImages() {
-      document.querySelectorAll('main img, .content-block img, .campus-gallery img, .facility-grid img, .split-image img').forEach(img => {
-        if (img.dataset.lightboxBound) return;
-        img.dataset.lightboxBound = '1';
-        img.style.cursor = 'zoom-in';
-        img.addEventListener('click', () => open(img.src, img.alt));
+      document.querySelectorAll('main img, .content-block img, .campus-gallery img, .facility-grid img, .split-image img, .facility-item').forEach(el => {
+        if (el.dataset.lightboxBound) return;
+        el.dataset.lightboxBound = '1';
+        const img = el.tagName === 'IMG' ? el : el.querySelector('img');
+        if (!img) return;
+        el.style.cursor = 'zoom-in';
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          open(img.src, img.alt);
+        });
       });
     }
 
