@@ -137,31 +137,42 @@
       return articles;
     }
 
-    async function loadNews() {
-      // 1. 优先 Cloudflare Worker 代理（最新文章）
-      if (WORKER_URL) {
-        try {
-          const articles = await fetchFromWorker(WORKER_URL);
-          renderNews(articles);
-          return;
-        } catch (e) {
-          console.warn('Worker代理失败:', e.message);
+    function mergeArticles(...lists) {
+      const seen = new Set();
+      const result = [];
+      for (const list of lists) {
+        for (const a of list) {
+          if (a.link && !seen.has(a.link)) {
+            seen.add(a.link);
+            result.push(a);
+          }
         }
       }
-      // 2. 降级读取预生成的 news.json
-      try {
-        const articles = await fetchFromJSON();
-        renderNews(articles);
-        return;
-      } catch (e) {
-        console.warn('news.json读取失败:', e.message);
+      return result.slice(0, MAX_ARTICLES);
+    }
+
+    async function loadNews() {
+      let workerArticles = [];
+      let jsonArticles = [];
+      // 并行加载 Worker 和 news.json
+      const tasks = [];
+      if (WORKER_URL) {
+        tasks.push(fetchFromWorker(WORKER_URL).then(r => { workerArticles = r; }).catch(e => console.warn('Worker:', e.message)));
       }
-      // 3. 最后降级：直接请求RSSHub
+      tasks.push(fetchFromJSON().then(r => { jsonArticles = r; }).catch(e => console.warn('JSON:', e.message)));
+      await Promise.allSettled(tasks);
+      // 合并去重，Worker优先
+      const merged = mergeArticles(workerArticles, jsonArticles);
+      if (merged.length > 0) {
+        renderNews(merged);
+        return;
+      }
+      // 最后降级：直接请求RSSHub
       for (const url of RSS_SOURCES) {
         try {
           const articles = await fetchFromRSS(url);
           if (articles.length > 0) {
-            renderNews(articles);
+            renderNews(articles.slice(0, MAX_ARTICLES));
             return;
           }
         } catch (e) {
