@@ -137,6 +137,36 @@
       return articles;
     }
 
+    const CACHE_KEY = 'gzsyzx_news_cache';
+    const CACHE_EXPIRE = 30 * 60 * 1000; // 30分钟
+
+    function getCache() {
+      try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        if (!data.articles || !data.time) return null;
+        return data;
+      } catch (e) { return null; }
+    }
+
+    function setCache(articles) {
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({
+          articles: articles,
+          time: Date.now()
+        }));
+      } catch (e) {}
+    }
+
+    function isSameArticles(a, b) {
+      if (!a || !b || a.length !== b.length) return false;
+      for (let i = 0; i < a.length; i++) {
+        if (a[i].link !== b[i].link) return false;
+      }
+      return true;
+    }
+
     function mergeArticles(...lists) {
       const seen = new Set();
       const result = [];
@@ -151,35 +181,57 @@
       return result.slice(0, MAX_ARTICLES);
     }
 
-    async function loadNews() {
+    async function fetchLatest() {
       let workerArticles = [];
       let jsonArticles = [];
-      // 并行加载 Worker 和 news.json
       const tasks = [];
       if (WORKER_URL) {
         tasks.push(fetchFromWorker(WORKER_URL).then(r => { workerArticles = r; }).catch(e => console.warn('Worker:', e.message)));
       }
       tasks.push(fetchFromJSON().then(r => { jsonArticles = r; }).catch(e => console.warn('JSON:', e.message)));
       await Promise.allSettled(tasks);
-      // 合并去重，Worker优先
-      const merged = mergeArticles(workerArticles, jsonArticles);
-      if (merged.length > 0) {
-        renderNews(merged);
-        return;
-      }
-      // 最后降级：直接请求RSSHub
-      for (const url of RSS_SOURCES) {
-        try {
-          const articles = await fetchFromRSS(url);
-          if (articles.length > 0) {
-            renderNews(articles.slice(0, MAX_ARTICLES));
-            return;
+      let merged = mergeArticles(workerArticles, jsonArticles);
+      if (merged.length === 0) {
+        for (const url of RSS_SOURCES) {
+          try {
+            const articles = await fetchFromRSS(url);
+            if (articles.length > 0) {
+              merged = articles.slice(0, MAX_ARTICLES);
+              break;
+            }
+          } catch (e) {
+            console.warn('RSS源失败:', url, e.message);
           }
-        } catch (e) {
-          console.warn('RSS源失败:', url, e.message);
         }
       }
-      newsGrid.innerHTML = '<div class="news-error">文章加载失败，请稍后刷新重试</div>';
+      return merged;
+    }
+
+    async function loadNews() {
+      const cache = getCache();
+      // 有缓存：先立即显示缓存
+      if (cache && cache.articles.length > 0) {
+        renderNews(cache.articles);
+      } else {
+        newsGrid.innerHTML = '<div class="news-loading">正在加载最新文章...</div>';
+      }
+      // 后台获取最新文章
+      try {
+        const latest = await fetchLatest();
+        if (latest.length > 0) {
+          // 和缓存对比，有变化才更新
+          if (!isSameArticles(latest, cache?.articles)) {
+            renderNews(latest);
+            setCache(latest);
+          }
+        }
+      } catch (e) {
+        console.warn('新闻更新失败:', e.message);
+        // 获取失败但有缓存的话保持缓存显示，不报错
+        if (!cache || cache.articles.length === 0) {
+          newsGrid.innerHTML = '<div class="news-error">文章加载失败，请稍后刷新重试</div>';
+        }
+      }
     }
 
     loadNews();
