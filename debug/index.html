@@ -787,12 +787,21 @@
       content.innerHTML = html;
     }
 
-    function clearAllLS() {
-      if (!confirm('确定清除全部本地存储？')) return;
+    async function clearAllLS() {
+      if (!confirm('确定清除全部缓存？包括本地存储和图片缓存。')) return;
       localStorage.clear();
-      showToast('本地存储已清除');
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage('CLEAR_CACHE');
+      }
+      showToast('全部缓存已清除');
       refreshNews();
       refreshLS();
+      refreshSW();
+      refreshCachedImages();
     }
 
     const ALL_IMAGES = [
