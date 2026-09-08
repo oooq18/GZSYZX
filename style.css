@@ -757,6 +757,10 @@ main {
   position: relative;
 }
 
+.news-section .section-header {
+  margin-bottom: 30px;
+}
+
 .news-section::before {
   content: 'NEWS';
   position: absolute;
