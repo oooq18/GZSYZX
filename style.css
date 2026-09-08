@@ -1682,6 +1682,7 @@ footer::after {
   line-height: 1.3;
   text-align: left;
   align-self: flex-start;
+  letter-spacing: -0.5px;
 }
 .we-stage-role-top-right {
   font-family: '字魂59号-创粗黑';
