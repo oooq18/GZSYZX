@@ -388,18 +388,37 @@
       }
 
       const hDate = new Date(nextHoliday.date + 'T00:00:00');
-      const diffDays = Math.ceil((hDate - today) / (1000 * 60 * 60 * 24));
-      const isEn = document.documentElement.lang === 'en';
+      const diffMs = hDate - now;
+
+      // 根据时间差自动切换单位：天 → 小时 → 分钟
+      let value, unit, enUnit;
+      if (diffMs >= 86400000) {
+        value = Math.ceil(diffMs / 86400000);
+        unit = '天';
+        enUnit = 'DAYS';
+      } else if (diffMs >= 3600000) {
+        value = Math.ceil(diffMs / 3600000);
+        unit = '小时';
+        enUnit = 'HOURS';
+      } else {
+        value = Math.max(0, Math.ceil(diffMs / 60000));
+        unit = '分钟';
+        enUnit = 'MINUTES';
+      }
 
       const eventEl = document.getElementById('countdownEvent');
       const daysEl = document.getElementById('countdownDays');
+      const unitEl = document.getElementById('countdownUnit');
       const enEventEl = document.getElementById('countdownEnEvent');
       const enDaysEl = document.getElementById('countdownEnDays');
+      const enUnitEl = document.getElementById('countdownEnUnit');
 
       if (eventEl) eventEl.textContent = '距' + nextHoliday.name;
-      if (daysEl) daysEl.textContent = diffDays;
+      if (daysEl) daysEl.textContent = value;
+      if (unitEl) unitEl.textContent = unit;
       if (enEventEl) enEventEl.textContent = 'THE ' + nextHoliday.en.toUpperCase() + ' WILL COME';
-      if (enDaysEl) enDaysEl.textContent = diffDays;
+      if (enDaysEl) enDaysEl.textContent = value;
+      if (enUnitEl) enUnitEl.textContent = enUnit;
 
       alignCountdown();
     }
