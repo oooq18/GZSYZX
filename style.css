@@ -684,6 +684,7 @@ main {
 }
 
 .welcome-section h2 {
+  font-family: '江城黑体', '创粗黑', '微软雅黑', sans-serif;
   font-size: clamp(1.5rem, 3.5vw, 2rem);
   color: var(--color-primary);
   margin-bottom: 16px;
