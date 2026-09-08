@@ -412,7 +412,6 @@
         const a = remainSpan.getBoundingClientRect().left;
         const b = role.getBoundingClientRect().left;
         bottom.style.marginLeft = (a - b) + 'px';
-        remainSpan.style.lineHeight = remainSpan.offsetHeight + 'px';
       }
     }
 
