@@ -349,13 +349,13 @@
     setTimeout(bindImages, 2000);
   })();
 
-  /* ===== 节假日倒计时 ===== */
+  /* ===== 节假日倒计时（免费API + 写死兜底） ===== */
   (function initHolidayCountdown() {
     const container = document.getElementById('holidayCountdown');
     if (!container) return;
 
-    // 2026-2027年节假日（写死，稳定可靠）
-    const holidays = [
+    // 兜底数据（API加载失败时用）
+    const fallbackHolidays = [
       { name: '中秋节', en: 'Mid-Autumn Festival', date: '2026-09-25' },
       { name: '国庆节', en: 'National Day', date: '2026-10-01' },
       { name: '元旦', en: "New Year's Day", date: '2027-01-01' },
@@ -367,11 +367,12 @@
       { name: '国庆节', en: 'National Day', date: '2027-10-01' },
     ];
 
-    function updateCountdown() {
+    let currentHolidays = fallbackHolidays;
+
+    function render(holidays) {
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-      // 找到下一个节假日
       let nextHoliday = null;
       for (const h of holidays) {
         const hDate = new Date(h.date + 'T00:00:00');
@@ -400,7 +401,6 @@
       if (enEventEl) enEventEl.textContent = nextHoliday.en.toUpperCase();
       if (enDaysEl) enDaysEl.textContent = diffDays;
 
-      // 对齐：底部英文红竖线和"还剩"红竖线左对齐（复刻原项目逻辑）
       alignCountdown();
     }
 
@@ -415,15 +415,74 @@
       }
     }
 
-    updateCountdown();
+    // 先用兜底数据立即显示
+    render(fallbackHolidays);
+
+    // 从免费CDN加载节假日数据（holiday-calendar项目，jsDelivr，无需key）
+    const cacheKey = 'gzsyzx_holidays_2026';
+    const now = Date.now();
+    const cached = localStorage.getItem(cacheKey);
+
+    function loadFromAPI() {
+      const year = new Date().getFullYear();
+      const url = 'https://cdn.jsdelivr.net/gh/cg-zhou/holiday-calendar@main/data/CN/' + year + '.json';
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          // 提取每个假期的第一天（去重）
+          const seen = {};
+          const apiHolidays = [];
+          for (const d of data.dates) {
+            if (d.type === 'public_holiday' && !seen[d.name_cn]) {
+              seen[d.name_cn] = true;
+              apiHolidays.push({ name: d.name_cn, en: d.name_en, date: d.date });
+            }
+          }
+          // 加上2027年兜底
+          if (year === 2026) {
+            apiHolidays.push(
+              { name: '元旦', en: "New Year's Day", date: '2027-01-01' },
+              { name: '春节', en: 'Spring Festival', date: '2027-02-06' },
+              { name: '清明节', en: 'Qingming Festival', date: '2027-04-05' },
+              { name: '劳动节', en: 'Labour Day', date: '2027-05-01' },
+              { name: '端午节', en: 'Dragon Boat Festival', date: '2027-06-09' },
+              { name: '中秋节', en: 'Mid-Autumn Festival', date: '2027-09-15' },
+              { name: '国庆节', en: 'National Day', date: '2027-10-01' }
+            );
+          }
+          currentHolidays = apiHolidays;
+          localStorage.setItem(cacheKey, JSON.stringify({ data: apiHolidays, time: now }));
+          render(apiHolidays);
+        })
+        .catch(() => {
+          // 加载失败用兜底，不处理
+        });
+    }
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        // 缓存1天
+        if (now - parsed.time < 86400000) {
+          currentHolidays = parsed.data;
+          render(parsed.data);
+        } else {
+          loadFromAPI();
+        }
+      } catch (e) {
+        loadFromAPI();
+      }
+    } else {
+      loadFromAPI();
+    }
+
     window.addEventListener('resize', alignCountdown);
     window.addEventListener('load', alignCountdown);
-    // 字体加载完成后重新对齐（只对齐一次，避免多次移动）
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(alignCountdown);
     }
     // 每分钟更新一次
-    setInterval(updateCountdown, 60000);
+    setInterval(() => render(currentHolidays), 60000);
   })();
 
   /* ===== 语言切换 ===== */
