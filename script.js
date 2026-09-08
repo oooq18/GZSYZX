@@ -396,7 +396,7 @@
       const enEventEl = document.getElementById('countdownEnEvent');
       const enDaysEl = document.getElementById('countdownEnDays');
 
-      if (eventEl) eventEl.textContent = isEn ? nextHoliday.en : '距' + nextHoliday.name;
+      if (eventEl) eventEl.textContent = '距' + nextHoliday.name;
       if (daysEl) daysEl.textContent = diffDays;
       if (enEventEl) enEventEl.textContent = 'THE ' + nextHoliday.en.toUpperCase() + ' WILL COME';
       if (enDaysEl) enDaysEl.textContent = diffDays;
