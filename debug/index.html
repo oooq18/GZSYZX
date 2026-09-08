@@ -479,7 +479,7 @@
 
   <div id="loginScreen">
     <div class="login-box">
-      <input type="password" class="login-input" id="passInput" maxlength="6" autocomplete="off" autofocus inputmode="numeric">
+      <input type="password" class="login-input" id="passInput" maxlength="6" autocomplete="off" autofocus inputmode="numeric" oninput="checkLogin()">
     </div>
   </div>
 
@@ -595,25 +595,20 @@
   <script>
     const _p = 'MDkwOTA5';
 
-    function checkPass(input) {
-      return input.length === 6 && btoa(input) === _p;
-    }
-
-    const passInput = document.getElementById('passInput');
-
-    setInterval(() => {
-      if (!passInput) return;
-      const val = passInput.value;
+    function checkLogin() {
+      const input = document.getElementById('passInput');
+      if (!input) return;
+      const val = input.value;
       if (val.length === 6) {
-        if (checkPass(val)) {
+        if (btoa(val) === _p) {
           document.getElementById('loginScreen').style.display = 'none';
           document.getElementById('mainInterface').style.display = 'block';
           initTerminal();
         } else {
-          passInput.value = '';
+          input.value = '';
         }
       }
-    }, 150);
+    }
 
     function updateClock() {
       const n = new Date();
