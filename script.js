@@ -332,7 +332,7 @@
     });
 
     function bindImages() {
-      document.querySelectorAll('main img, .content-block img, .campus-gallery img, .facility-grid img, .split-image img, .facility-item').forEach(el => {
+      document.querySelectorAll('main img, .content-block img, .campus-gallery img, .facility-grid img, .split-image, .facility-item, .feature-card').forEach(el => {
         if (el.dataset.lightboxBound) return;
         el.dataset.lightboxBound = '1';
         const img = el.tagName === 'IMG' ? el : el.querySelector('img');
