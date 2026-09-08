@@ -1648,7 +1648,7 @@ footer::after {
   flex-direction: column;
   font-size: 200%;
   user-select: none;
-  line-height: 1.1;
+  line-height: 1;
 }
 .we-stage-role-top {
   display: flex;
@@ -1692,8 +1692,8 @@ footer::after {
 .we-stage-role-top-left-top {
   font-family: '字魂59号-创粗黑';
   white-space: nowrap;
-  line-height: 1.1;
-  margin-bottom: 2px;
+  line-height: 1;
+  margin-bottom: 0;
 }
 @media (max-width: 768px) {
   .we-stage {
