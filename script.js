@@ -388,15 +388,17 @@
 
       const hDate = new Date(nextHoliday.date + 'T00:00:00');
       const diffDays = Math.ceil((hDate - today) / (1000 * 60 * 60 * 24));
+      const isEn = document.documentElement.lang === 'en';
 
       const daysEl = document.getElementById('countdownDays');
-      const holidayEl = document.getElementById('countdownHoliday');
+      const nameEl = document.getElementById('countdownName');
+      const enNameEl = document.getElementById('countdownEnName');
+      const enDaysEl = document.getElementById('countdownEnDays');
 
-      if (daysEl) daysEl.textContent = diffDays === 0 ? '0' : diffDays;
-      if (holidayEl) {
-        const isEn = document.documentElement.lang === 'en';
-        holidayEl.textContent = isEn ? nextHoliday.en : nextHoliday.name;
-      }
+      if (daysEl) daysEl.textContent = diffDays;
+      if (nameEl) nameEl.textContent = isEn ? nextHoliday.en : nextHoliday.name;
+      if (enNameEl) enNameEl.textContent = nextHoliday.en.toUpperCase();
+      if (enDaysEl) enDaysEl.textContent = diffDays;
     }
 
     updateCountdown();
