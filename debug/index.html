@@ -897,7 +897,7 @@
     }
 
     async function clearFontCache() {
-      if (!confirm('确定清除字体缓存？清除后需重新加载字体文件。')) return;
+      if (!confirm('确定清除字体缓存？清除后页面将自动刷新。')) return;
       const keys = await caches.keys();
       let deleted = 0;
       for (const key of keys) {
@@ -911,8 +911,8 @@
           }
         }
       }
-      showToast('已清除 ' + deleted + ' 个字体缓存');
-      refreshSW();
+      showToast('已清除 ' + deleted + ' 个字体缓存，正在刷新...');
+      setTimeout(() => location.reload(), 800);
     }
 
     function initFontPreview() {
