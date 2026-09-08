@@ -57,21 +57,25 @@
       <span class="welcome-label">WELCOME</span>
       <h2 data-en="Welcome to GZESS Official Website">欢迎访问广州实验中学官网</h2>
       <div class="welcome-line"></div>
-      <!-- 节假日倒计时（流浪地球风格） -->
+      <!-- 节假日倒计时（流浪地球2风格） -->
       <div class="holiday-countdown" id="holidayCountdown">
-        <div class="countdown-row">
-          <span class="countdown-prefix" data-en="NEXT">距</span>
-          <span class="countdown-name" id="countdownName">--</span>
+        <div class="countdown-top">
+          <div class="countdown-top-left">
+            <div class="countdown-event" id="countdownEvent">距--</div>
+            <div class="countdown-remain-wrap">
+              <span data-en="IN">还剩</span>
+            </div>
+          </div>
+          <div class="countdown-number" id="countdownDays">--</div>
+          <div class="countdown-unit" data-en="DAYS">天</div>
         </div>
-        <div class="countdown-row countdown-big">
-          <span class="countdown-remain" data-en="IN">还剩</span>
-          <span class="countdown-days" id="countdownDays">--</span>
-          <span class="countdown-unit" data-en="DAYS">天</span>
-        </div>
-        <div class="countdown-en">
-          <span class="countdown-en-name" id="countdownEnName">--</span>
-          <span class="countdown-en-sep">·</span>
-          <span>IN <span id="countdownEnDays">--</span> DAYS</span>
+        <div class="countdown-bottom">
+          <div class="countdown-en-event" id="countdownEnEvent">--</div>
+          <div class="countdown-en-remain">
+            <span>IN</span>
+            <span id="countdownEnDays">--</span>
+            <span>DAYS</span>
+          </div>
         </div>
       </div>
     </section>
