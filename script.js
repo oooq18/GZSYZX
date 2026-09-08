@@ -67,7 +67,7 @@
         const thumbUrl = a.thumb ? WORKER_URL + 'image?url=' + encodeURIComponent(a.thumb) : '';
         return `
         <a href="${a.link}" target="_blank" rel="noopener" class="news-card">
-          ${thumbUrl ? `<img class="news-card-thumb" src="${thumbUrl}" alt="${a.title}" loading="lazy" onerror="this.style.display='none'" />` : ''}
+          ${thumbUrl ? `<img class="news-card-thumb" data-src="${thumbUrl}" alt="${a.title}" loading="lazy" />` : ''}
           <div class="news-card-body">
             ${a.date ? `<div class="news-card-date">${a.date}</div>` : ''}
             <h3 class="news-card-title">${a.title}</h3>
@@ -75,6 +75,22 @@
           </div>
         </a>`;
       }).join('');
+      loadNewsImages();
+    }
+
+    async function loadNewsImages() {
+      const imgs = newsGrid.querySelectorAll('.news-card-thumb[data-src]');
+      for (const img of imgs) {
+        const url = img.dataset.src;
+        try {
+          const res = await fetch(url, { cache: 'force-cache' });
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const blob = await res.blob();
+          img.src = URL.createObjectURL(blob);
+        } catch (e) {
+          img.style.display = 'none';
+        }
+      }
     }
 
     async function fetchFromJSON() {
