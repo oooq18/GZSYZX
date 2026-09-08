@@ -348,4 +348,56 @@
     bindImages();
     setTimeout(bindImages, 2000);
   })();
+
+  /* ===== 语言切换 ===== */
+  (function initLangSwitch() {
+    const LANG_KEY = 'gzsyzx_lang';
+    let currentLang = localStorage.getItem(LANG_KEY) || 'zh';
+
+    // 创建切换按钮
+    const switcher = document.createElement('div');
+    switcher.className = 'lang-switch';
+    switcher.innerHTML = '<button data-lang="zh" class="' + (currentLang === 'zh' ? 'active' : '') + '">中</button><button data-lang="en" class="' + (currentLang === 'en' ? 'active' : '') + '">EN</button>';
+    document.body.appendChild(switcher);
+
+    function applyLang(lang) {
+      currentLang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+      document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+      // 更新按钮状态
+      switcher.querySelectorAll('button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+
+      // 替换所有带data-en的元素
+      document.querySelectorAll('[data-en]').forEach(el => {
+        if (lang === 'en') {
+          if (!el.dataset.zh) el.dataset.zh = el.innerHTML;
+          el.innerHTML = el.dataset.en;
+        } else {
+          if (el.dataset.zh) el.innerHTML = el.dataset.zh;
+        }
+      });
+
+      // 更新页面title
+      const titleEn = document.querySelector('title')?.dataset.en;
+      if (titleEn) {
+        document.title = lang === 'en' ? titleEn : (document.querySelector('title').dataset.zh || document.title);
+      }
+    }
+
+    // 绑定按钮事件
+    switcher.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (btn && btn.dataset.lang) {
+        applyLang(btn.dataset.lang);
+      }
+    });
+
+    // 页面加载时应用语言
+    if (currentLang === 'en') {
+      applyLang('en');
+    }
+  })();
 })();

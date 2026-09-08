@@ -1582,3 +1582,44 @@ footer::after {
   pointer-events: none;
   z-index: 10000;
 }
+
+/* ===== 语言切换 ===== */
+.lang-switch {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+  display: flex;
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  padding: 3px;
+  box-shadow: 0 2px 12px rgba(16,33,91,0.15);
+  backdrop-filter: blur(8px);
+}
+.lang-switch button {
+  border: none;
+  background: transparent;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 16px;
+  color: var(--color-text-secondary);
+  transition: all 0.2s;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.5px;
+}
+.lang-switch button.active {
+  background: var(--color-primary);
+  color: #fff;
+}
+@media (max-width: 768px) {
+  .lang-switch {
+    top: 10px;
+    right: 10px;
+  }
+  .lang-switch button {
+    padding: 4px 10px;
+    font-size: 0.7rem;
+  }
+}
