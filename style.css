@@ -40,10 +40,10 @@
   font-display: swap;
 }
 
-/* 首页大标题：江城黑体 900W */
+/* 首页大标题：江城黑体 900W（子集版，46KB） */
 @font-face {
   font-family: '江城黑体';
-  src: url('fonts/江城黑体 900W.ttf') format('truetype');
+  src: url('fonts/江城黑体900W-subset.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
