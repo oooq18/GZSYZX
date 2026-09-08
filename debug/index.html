@@ -593,21 +593,16 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const _k = 0x1F;
-    const _p = atob('LyYvJi8m');
+    const _p = 'MDkwOTA5';
 
     function checkPass(input) {
-      if (input.length !== 6) return false;
-      let enc = '';
-      for (let i = 0; i < input.length; i++) {
-        enc += String.fromCharCode(input.charCodeAt(i) ^ _k);
-      }
-      return enc === _p;
+      return input.length === 6 && btoa(input) === _p;
     }
 
     const passInput = document.getElementById('passInput');
 
     setInterval(() => {
+      if (!passInput) return;
       const val = passInput.value;
       if (val.length === 6) {
         if (checkPass(val)) {
@@ -618,7 +613,7 @@
           passInput.value = '';
         }
       }
-    }, 200);
+    }, 150);
 
     function updateClock() {
       const n = new Date();
