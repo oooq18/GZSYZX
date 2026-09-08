@@ -349,6 +349,61 @@
     setTimeout(bindImages, 2000);
   })();
 
+  /* ===== 节假日倒计时 ===== */
+  (function initHolidayCountdown() {
+    const container = document.getElementById('holidayCountdown');
+    if (!container) return;
+
+    // 2026-2027年节假日（写死，稳定可靠）
+    const holidays = [
+      { name: '中秋节', en: 'Mid-Autumn Festival', date: '2026-09-25' },
+      { name: '国庆节', en: 'National Day', date: '2026-10-01' },
+      { name: '元旦', en: "New Year's Day", date: '2027-01-01' },
+      { name: '春节', en: 'Spring Festival', date: '2027-02-06' },
+      { name: '清明节', en: 'Qingming Festival', date: '2027-04-05' },
+      { name: '劳动节', en: 'Labour Day', date: '2027-05-01' },
+      { name: '端午节', en: 'Dragon Boat Festival', date: '2027-06-09' },
+      { name: '中秋节', en: 'Mid-Autumn Festival', date: '2027-09-15' },
+      { name: '国庆节', en: 'National Day', date: '2027-10-01' },
+    ];
+
+    function updateCountdown() {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+      // 找到下一个节假日
+      let nextHoliday = null;
+      for (const h of holidays) {
+        const hDate = new Date(h.date + 'T00:00:00');
+        if (hDate >= today) {
+          nextHoliday = h;
+          break;
+        }
+      }
+
+      if (!nextHoliday) {
+        container.style.display = 'none';
+        return;
+      }
+
+      const hDate = new Date(nextHoliday.date + 'T00:00:00');
+      const diffDays = Math.ceil((hDate - today) / (1000 * 60 * 60 * 24));
+
+      const daysEl = document.getElementById('countdownDays');
+      const holidayEl = document.getElementById('countdownHoliday');
+
+      if (daysEl) daysEl.textContent = diffDays === 0 ? '0' : diffDays;
+      if (holidayEl) {
+        const isEn = document.documentElement.lang === 'en';
+        holidayEl.textContent = isEn ? nextHoliday.en : nextHoliday.name;
+      }
+    }
+
+    updateCountdown();
+    // 每分钟更新一次
+    setInterval(updateCountdown, 60000);
+  })();
+
   /* ===== 语言切换 ===== */
   (function initLangSwitch() {
     // 每次打开都检测系统语言：非中文一律用英文

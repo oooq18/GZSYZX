@@ -1621,3 +1621,79 @@ footer::after {
   font-size: 0.75rem;
   color: rgba(255,255,255,0.5);
 }
+
+/* ===== 节假日倒计时（流浪地球风格） ===== */
+.holiday-countdown {
+  margin-top: 36px;
+  padding: 28px 40px;
+  background: linear-gradient(135deg, #0c0b09 0%, #1a1815 100%);
+  border: 1px solid rgba(212, 160, 84, 0.3);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.holiday-countdown::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #d4a054, transparent);
+}
+.holiday-countdown::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #d4a054, transparent);
+}
+.countdown-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  color: rgba(212, 160, 84, 0.7);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.countdown-main {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.countdown-days {
+  font-family: 'DIN1451', 'Rajdhani', monospace;
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: bold;
+  color: #e8b860;
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(232, 184, 96, 0.4);
+  letter-spacing: 2px;
+}
+.countdown-unit {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.2rem;
+  color: rgba(212, 160, 84, 0.8);
+  letter-spacing: 2px;
+}
+.countdown-holiday {
+  font-family: '创粗黑', '微软雅黑', sans-serif;
+  font-size: 1.1rem;
+  color: rgba(224, 216, 200, 0.9);
+  letter-spacing: 2px;
+}
+@media (max-width: 768px) {
+  .holiday-countdown {
+    padding: 20px 24px;
+  }
+  .countdown-label {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+  }
+  .countdown-holiday {
+    font-size: 0.9rem;
+  }
+}
