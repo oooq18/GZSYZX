@@ -16,6 +16,13 @@ addEventListener('fetch', event => {
 });
 
 async function handleRequest(request) {
+  const url = new URL(request.url);
+
+  // 图片代理路由：/image?url=xxx
+  if (url.pathname === '/image' || url.pathname.endsWith('/image')) {
+    return proxyImage(url.searchParams.get('url'));
+  }
+
   // CORS 头
   const headers = {
     'Content-Type': 'application/json; charset=utf-8',
@@ -95,4 +102,34 @@ function parseRSS(xmlText) {
     }
   }
   return articles;
+}
+
+// 图片代理：绕过微信防盗链
+async function proxyImage(imgUrl) {
+  if (!imgUrl) return new Response('no url', { status: 400 });
+
+  try {
+    const res = await fetch(imgUrl, {
+      cf: { cacheTtl: 86400, cacheEverything: true },
+      headers: {
+        'Referer': 'https://mp.weixin.qq.com/',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+    });
+
+    if (!res.ok) return new Response('fetch failed: ' + res.status, { status: 502 });
+
+    const contentType = res.headers.get('Content-Type') || 'image/jpeg';
+    const body = await res.arrayBuffer();
+
+    return new Response(body, {
+      headers: {
+        'Content-Type': contentType,
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'public, max-age=86400',
+      },
+    });
+  } catch (e) {
+    return new Response('error: ' + e.message, { status: 502 });
+  }
 }
