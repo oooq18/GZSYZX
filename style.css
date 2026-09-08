@@ -668,8 +668,8 @@ main {
 /* ===== 欢迎区 ===== */
 .welcome-section {
   text-align: center;
-  margin-top: 60px;
-  margin-bottom: 100px;
+  margin-top: 40px;
+  margin-bottom: 0;
   padding: 20px 0;
   position: relative;
 }
@@ -1643,7 +1643,7 @@ footer::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 60px;
+  margin-top: 40px;
   margin-bottom: 80px;
 }
 .we-stage-role {
