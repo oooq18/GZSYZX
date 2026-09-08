@@ -1667,12 +1667,15 @@ footer::after {
 .we-stage-role-top-left-left span {
   border-left: solid 5px #e91c00;
   padding-left: 5px;
+  padding-bottom: 6px;
   font-family: '字魂59号-创粗黑';
   line-height: 1;
+  display: inline-block;
 }
 .we-stage-role-bottom {
   border-left: solid 5px #e91c00;
   padding-left: 8px;
+  padding-top: 2px;
   font-family: "DIN 1451 LT W06 Mittelschrift";
   font-size: 60%;
   text-transform: uppercase;
