@@ -849,7 +849,8 @@
         html += '<div class="cached-img-item">';
         html += '<img src="' + img.blobUrl + '" alt="' + name + '" loading="lazy" />';
         html += '<div class="cached-img-name">' + name + '</div>';
-        html += '<button class="cached-img-del" onclick="deleteCachedImage(\\'' + img.url.replace(/'/g, "\\'") + '\\')">删除</button>';
+        const safeUrl = img.url.replace(/'/g, '&#39;');
+        html += '<button class="cached-img-del" onclick="deleteCachedImage(\'' + safeUrl + '\')">删除</button>';
         html += '</div>';
       });
       html += '</div>';
