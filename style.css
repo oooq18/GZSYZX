@@ -404,9 +404,9 @@ img {
 }
 
 .hero-motto {
-  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-size: clamp(1rem, 2.5vw, 1.8rem);
   color: rgba(255, 255, 255, 0.95);
-  letter-spacing: 8px;
+  letter-spacing: clamp(4px, 2vw, 8px);
   margin-bottom: 40px;
   font-weight: 300;
   white-space: nowrap;
@@ -425,7 +425,7 @@ img {
 /* 首页专属：校名和校训放大 */
 .hero-home .hero-title {
   font-family: '江城黑体', '创粗黑', '微软雅黑', sans-serif;
-  font-size: clamp(2.2rem, 7vw, 6rem);
+  font-size: clamp(1.8rem, 5.5vw, 5rem);
   letter-spacing: clamp(4px, 1.5vw, 8px);
   margin-bottom: 28px;
   white-space: nowrap;
