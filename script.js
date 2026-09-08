@@ -352,13 +352,32 @@
   /* ===== 语言切换 ===== */
   (function initLangSwitch() {
     const LANG_KEY = 'gzsyzx_lang';
-    let currentLang = localStorage.getItem(LANG_KEY) || 'zh';
+    // 优先用户手动选择，其次跟随系统语言
+    let savedLang = localStorage.getItem(LANG_KEY);
+    let currentLang;
+    if (savedLang) {
+      currentLang = savedLang;
+    } else {
+      const sysLang = (navigator.language || navigator.userLanguage || 'zh').toLowerCase();
+      currentLang = sysLang.startsWith('en') ? 'en' : 'zh';
+    }
 
-    // 创建切换按钮
-    const switcher = document.createElement('div');
-    switcher.className = 'lang-switch';
-    switcher.innerHTML = '<button data-lang="zh" class="' + (currentLang === 'zh' ? 'active' : '') + '">中</button><button data-lang="en" class="' + (currentLang === 'en' ? 'active' : '') + '">EN</button>';
-    document.body.appendChild(switcher);
+    // 创建切换按钮，放到页脚
+    const footer = document.querySelector('footer');
+    if (footer) {
+      const langWrap = document.createElement('div');
+      langWrap.className = 'footer-lang';
+      langWrap.innerHTML = '<span>Language</span><div class="lang-switch"><button data-lang="zh" class="' + (currentLang === 'zh' ? 'active' : '') + '">中</button><button data-lang="en" class="' + (currentLang === 'en' ? 'active' : '') + '">EN</button></div>';
+      footer.appendChild(langWrap);
+      var switcher = langWrap.querySelector('.lang-switch');
+    } else {
+      // 兜底：放body
+      const switcher = document.createElement('div');
+      switcher.className = 'lang-switch';
+      switcher.innerHTML = '<button data-lang="zh" class="' + (currentLang === 'zh' ? 'active' : '') + '">中</button><button data-lang="en" class="' + (currentLang === 'en' ? 'active' : '') + '">EN</button>';
+      document.body.appendChild(switcher);
+      var switcher = switcher;
+    }
 
     function applyLang(lang) {
       currentLang = lang;
@@ -366,7 +385,7 @@
       document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
 
       // 更新按钮状态
-      switcher.querySelectorAll('button').forEach(btn => {
+      document.querySelectorAll('.lang-switch button').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
       });
 
@@ -381,15 +400,16 @@
       });
 
       // 更新页面title
-      const titleEn = document.querySelector('title')?.dataset.en;
-      if (titleEn) {
-        document.title = lang === 'en' ? titleEn : (document.querySelector('title').dataset.zh || document.title);
+      const titleEl = document.querySelector('title');
+      if (titleEl && titleEl.dataset.en) {
+        if (!titleEl.dataset.zh) titleEl.dataset.zh = titleEl.textContent;
+        document.title = lang === 'en' ? titleEl.dataset.en : titleEl.dataset.zh;
       }
     }
 
     // 绑定按钮事件
-    switcher.addEventListener('click', (e) => {
-      const btn = e.target.closest('button');
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.lang-switch button');
       if (btn && btn.dataset.lang) {
         applyLang(btn.dataset.lang);
       }

@@ -1585,41 +1585,39 @@ footer::after {
 
 /* ===== 语言切换 ===== */
 .lang-switch {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 1000;
-  display: flex;
-  background: rgba(255,255,255,0.95);
+  display: inline-flex;
+  background: rgba(255,255,255,0.1);
   border-radius: 20px;
   padding: 3px;
-  box-shadow: 0 2px 12px rgba(16,33,91,0.15);
-  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
 }
 .lang-switch button {
   border: none;
   background: transparent;
-  padding: 5px 12px;
+  padding: 4px 12px;
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   border-radius: 16px;
-  color: var(--color-text-secondary);
+  color: rgba(255,255,255,0.6);
   transition: all 0.2s;
   font-family: 'Rajdhani', sans-serif;
   letter-spacing: 0.5px;
 }
 .lang-switch button.active {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: #fff;
 }
-@media (max-width: 768px) {
-  .lang-switch {
-    top: 10px;
-    right: 10px;
-  }
-  .lang-switch button {
-    padding: 4px 10px;
-    font-size: 0.7rem;
-  }
+.footer-lang {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 16px;
+}
+.footer-lang span {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
 }
