@@ -826,7 +826,7 @@ main {
 .news-card-title {
   font-family: var(--font-title);
   font-size: 1.8rem;
-  color: var(--color-text);
+  color: var(--color-primary);
   line-height: 1.5;
   margin-bottom: 14px;
   display: -webkit-box;
