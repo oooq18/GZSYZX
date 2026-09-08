@@ -480,10 +480,6 @@
   <div id="loginScreen">
     <div class="login-box">
       <input type="password" class="login-input" id="passInput" maxlength="6" autocomplete="off" autofocus inputmode="numeric">
-      <div style="margin-top:25px;">
-        <button class="wue-btn" id="loginBtn" style="padding:10px 40px;font-size:0.9rem;">进入</button>
-      </div>
-      <div class="login-hint" id="loginHint">验证失败</div>
     </div>
   </div>
 
@@ -610,36 +606,19 @@
     }
 
     const passInput = document.getElementById('passInput');
-    const loginHint = document.getElementById('loginHint');
-    const loginBtn = document.getElementById('loginBtn');
 
-    function doLogin() {
-      const val = passInput.value.trim();
-      if (val.length !== 6) {
-        passInput.classList.add('error');
-        setTimeout(() => passInput.classList.remove('error'), 300);
-        return;
+    setInterval(() => {
+      const val = passInput.value;
+      if (val.length === 6) {
+        if (checkPass(val)) {
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('mainInterface').style.display = 'block';
+          initTerminal();
+        } else {
+          passInput.value = '';
+        }
       }
-      if (checkPass(val)) {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('mainInterface').style.display = 'block';
-        initTerminal();
-      } else {
-        passInput.classList.add('error');
-        loginHint.classList.add('show');
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 600);
-      }
-    }
-
-    loginBtn.addEventListener('click', doLogin);
-    passInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') doLogin();
-    });
-    passInput.addEventListener('input', (e) => {
-      if (e.target.value.length === 6) doLogin();
-    });
+    }, 200);
 
     function updateClock() {
       const n = new Date();
