@@ -351,16 +351,9 @@
 
   /* ===== 语言切换 ===== */
   (function initLangSwitch() {
-    const LANG_KEY = 'gzsyzx_lang';
-    // 优先用户手动选择，其次跟随系统语言
-    let savedLang = localStorage.getItem(LANG_KEY);
-    let currentLang;
-    if (savedLang) {
-      currentLang = savedLang;
-    } else {
-      const sysLang = (navigator.language || navigator.userLanguage || 'zh').toLowerCase();
-      currentLang = sysLang.startsWith('en') ? 'en' : 'zh';
-    }
+    // 每次打开都检测系统语言：非中文一律用英文
+    const sysLang = (navigator.language || navigator.userLanguage || 'zh').toLowerCase();
+    let currentLang = sysLang.startsWith('zh') ? 'zh' : 'en';
 
     // 创建切换按钮，放到页脚
     const footer = document.querySelector('footer');
@@ -381,7 +374,6 @@
 
     function applyLang(lang) {
       currentLang = lang;
-      localStorage.setItem(LANG_KEY, lang);
       document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
 
       // 更新按钮状态
