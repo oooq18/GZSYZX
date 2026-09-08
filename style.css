@@ -1642,13 +1642,11 @@ footer::after {
   align-items: center;
   justify-content: center;
   margin-top: 16px;
-  animation: countdownFadeIn 0.8s ease-out;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: countdownFadeIn 0.7s ease forwards;
 }
 @keyframes countdownFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
   to {
     opacity: 1;
     transform: translateY(0);
