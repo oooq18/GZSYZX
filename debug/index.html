@@ -299,6 +299,19 @@
       padding-left: 8px;
       line-height: 1.6;
     }
+    .news-entry-thumb {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      margin-top: 8px;
+      margin-left: 8px;
+      border: 1px solid var(--border);
+      display: block;
+    }
+    .news-entry-thumb-wrap {
+      padding-left: 8px;
+      margin-top: 8px;
+    }
 
     .empty-state {
       text-align: center;
@@ -564,6 +577,10 @@
         html += '</div>';
         if (item.desc) {
           html += '<div class="news-entry-desc">' + item.desc.substring(0, 120) + (item.desc.length > 120 ? '...' : '') + '</div>';
+        }
+        if (item.thumb) {
+          const thumbProxy = 'https://gzsyzx-news.lca313.workers.dev/image?url=' + encodeURIComponent(item.thumb);
+          html += '<div class="news-entry-thumb-wrap"><img class="news-entry-thumb" src="' + thumbProxy + '" alt="缩略图" loading="lazy" onerror="this.style.display=\'none\'" /></div>';
         }
         html += '</div>';
       });
