@@ -115,6 +115,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-title);
   font-weight: normal;
+  line-height: 1.3;
 }
 
 /* 英文标签用Rajdhani（流浪地球2英文主力字体） */
