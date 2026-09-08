@@ -39,6 +39,19 @@
   font-style: normal;
   font-display: swap;
 }
+/* 原项目字体名称（一比一复刻用） */
+@font-face {
+  font-family: 'DIN 1451 LT W06 Mittelschrift';
+  font-style: normal;
+  font-weight: 100;
+  src: url('fonts/DIN 1451 LT W06 Mittelschrift.otf') format('opentype');
+}
+@font-face {
+  font-family: '字魂59号-创粗黑';
+  font-style: normal;
+  font-weight: 100;
+  src: url('fonts/字魂59号-创粗黑.ttf') format('truetype');
+}
 
 /* 首页大标题：江城黑体 900W（子集版，46KB） */
 @font-face {
@@ -1623,59 +1636,62 @@ footer::after {
 }
 
 /* ===== 节假日倒计时（流浪地球2风格，一比一复刻h5-wandering-earth） ===== */
-.holiday-countdown {
+.we-stage {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 36px;
+}
+.we-stage-role {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 36px;
-  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-size: 200%;
   user-select: none;
 }
-.countdown-top {
+.we-stage-role-top {
   display: flex;
   flex-direction: row;
   align-items: flex-end;
 }
-.countdown-top-left {
+.we-stage-role-top-left {
   display: flex;
   flex-direction: column;
 }
-.countdown-event {
-  font-family: '字魂59号创粗黑', '创粗黑', '微软雅黑', sans-serif;
-  white-space: nowrap;
-}
-.countdown-remain-wrap {
+.we-stage-role-top-left-left {
   text-align: right;
 }
-.countdown-remain-wrap span {
+.we-stage-role-top-left-left span {
   border-left: solid 5px #e91c00;
   padding-left: 5px;
-  font-family: '字魂59号创粗黑', '创粗黑', '微软雅黑', sans-serif;
+  font-family: '字魂59号-创粗黑';
 }
-.countdown-number {
-  font-family: 'DIN1451', 'DIN 1451 LT W06 Mittelschrift', 'Rajdhani', monospace;
+.we-stage-role-bottom {
+  border-left: solid 5px #e91c00;
+  padding-left: 8px;
+  font-family: "DIN 1451 LT W06 Mittelschrift";
+  font-size: 60%;
+  text-transform: uppercase;
+}
+.we-stage-role-top-right {
+  font-family: '字魂59号-创粗黑';
+}
+.we-stage-role-top-center {
+  font-family: "DIN 1451 LT W06 Mittelschrift";
   font-size: 200%;
   line-height: 100%;
   margin: 0px 8px;
   color: #e91c00;
 }
-.countdown-unit {
-  font-family: '字魂59号创粗黑', '创粗黑', '微软雅黑', sans-serif;
-}
-.countdown-bottom {
-  border-left: solid 5px #e91c00;
-  padding-left: 8px;
-  font-family: 'DIN1451', 'DIN 1451 LT W06 Mittelschrift', 'Rajdhani', monospace;
-  font-size: 60%;
-  text-transform: uppercase;
-}
-.countdown-en-remain {
-  display: flex;
-  gap: 4px;
+.we-stage-role-top-left-top {
+  font-family: '字魂59号-创粗黑';
+  white-space: nowrap;
 }
 @media (max-width: 768px) {
-  .holiday-countdown {
+  .we-stage {
     margin-top: 24px;
-    font-size: 0.95rem;
+  }
+  .we-stage-role {
+    font-size: 150%;
   }
 }

@@ -405,9 +405,9 @@
     }
 
     function alignCountdown() {
-      const remainSpan = document.querySelector('.countdown-remain-wrap span');
-      const role = document.getElementById('holidayCountdown');
-      const bottom = document.querySelector('.countdown-bottom');
+      const remainSpan = document.querySelector('.we-stage-role-top-left-left span');
+      const role = document.querySelector('.we-stage-role');
+      const bottom = document.querySelector('.we-stage-role-bottom');
       if (remainSpan && role && bottom) {
         const a = remainSpan.getBoundingClientRect().left;
         const b = role.getBoundingClientRect().left;
