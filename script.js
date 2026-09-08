@@ -249,16 +249,17 @@
     let originRect = null;
     let isAnimating = false;
 
-    function getFullscreenRect() {
+    function getFullscreenRect(imgEl) {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       const maxW = vw * 0.92;
       const maxH = vh * 0.88;
-      const img = new Image();
-      img.src = lightboxImg.src;
+      // 直接用页面上已加载的原图尺寸，不用新建Image对象
+      let natW = imgEl.naturalWidth || imgEl.offsetWidth;
+      let natH = imgEl.naturalHeight || imgEl.offsetHeight;
       let w = maxW, h = maxH;
-      if (img.naturalWidth && img.naturalHeight) {
-        const ratio = img.naturalWidth / img.naturalHeight;
+      if (natW && natH) {
+        const ratio = natW / natH;
         if (maxW / ratio > maxH) {
           h = maxH;
           w = maxH * ratio;
@@ -300,7 +301,7 @@
       // 同时启动：背景模糊 + 图片放大
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
-      const target = getFullscreenRect();
+      const target = getFullscreenRect(imgEl);
       applyRect(target);
       setTimeout(() => { isAnimating = false; }, 350);
     }
