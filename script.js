@@ -419,6 +419,13 @@
     updateCountdown();
     window.addEventListener('resize', alignCountdown);
     window.addEventListener('load', alignCountdown);
+    // 字体加载完成后重新对齐
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(alignCountdown);
+    }
+    // 兜底：延迟再对齐一次
+    setTimeout(alignCountdown, 300);
+    setTimeout(alignCountdown, 1000);
     // 每分钟更新一次
     setInterval(updateCountdown, 60000);
   })();
