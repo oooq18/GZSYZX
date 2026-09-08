@@ -364,19 +364,19 @@
 
     // 创建切换按钮，放到页脚
     const footer = document.querySelector('footer');
+    let switcher;
     if (footer) {
       const langWrap = document.createElement('div');
       langWrap.className = 'footer-lang';
       langWrap.innerHTML = '<span>Language</span><div class="lang-switch"><button data-lang="zh" class="' + (currentLang === 'zh' ? 'active' : '') + '">中</button><button data-lang="en" class="' + (currentLang === 'en' ? 'active' : '') + '">EN</button></div>';
       footer.appendChild(langWrap);
-      var switcher = langWrap.querySelector('.lang-switch');
+      switcher = langWrap.querySelector('.lang-switch');
     } else {
       // 兜底：放body
-      const switcher = document.createElement('div');
+      switcher = document.createElement('div');
       switcher.className = 'lang-switch';
       switcher.innerHTML = '<button data-lang="zh" class="' + (currentLang === 'zh' ? 'active' : '') + '">中</button><button data-lang="en" class="' + (currentLang === 'en' ? 'active' : '') + '">EN</button>';
       document.body.appendChild(switcher);
-      var switcher = switcher;
     }
 
     function applyLang(lang) {
