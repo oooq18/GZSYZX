@@ -343,6 +343,56 @@
       word-break: break-all;
     }
 
+    .cached-img-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .cached-img-item {
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.2);
+      padding: 6px;
+      text-align: center;
+    }
+    .cached-img-item img {
+      width: 100%;
+      height: 80px;
+      object-fit: cover;
+      display: block;
+    }
+    .cached-img-name {
+      font-size: 0.6rem;
+      color: var(--text-faint);
+      margin-top: 5px;
+      word-break: break-all;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .font-preview-item {
+      padding: 14px;
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      background: rgba(0,0,0,0.2);
+    }
+    .font-name {
+      font-size: 0.7rem;
+      color: var(--accent-dim);
+      font-family: 'Share Tech Mono', monospace;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .font-sample {
+      font-size: 1.4rem;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .font-sample-en {
+      font-size: 1rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+    }
+
     .toast {
       position: fixed;
       top: 25px;
@@ -454,6 +504,29 @@
           <button class="wue-btn" onclick="refreshLS()">刷新</button>
         </div>
         <div id="lsContent"><div class="empty-state">加载中...</div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">缓存图片</div>
+        <span class="panel-badge" id="cachedImgBadge">检查中</span>
+      </div>
+      <div class="panel-body">
+        <div class="btn-row">
+          <button class="wue-btn" onclick="refreshCachedImages()">刷新</button>
+        </div>
+        <div id="cachedImgContent"><div class="empty-state">加载中...</div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">字体预览</div>
+        <span class="panel-badge" id="fontBadge">6 款字体</span>
+      </div>
+      <div class="panel-body">
+        <div id="fontContent"></div>
       </div>
     </div>
 
@@ -686,6 +759,86 @@
       refreshLS();
     }
 
+    async function refreshCachedImages() {
+      const badge = document.getElementById('cachedImgBadge');
+      const content = document.getElementById('cachedImgContent');
+
+      if (!('caches' in window)) {
+        badge.textContent = '不支持';
+        badge.className = 'panel-badge danger';
+        content.innerHTML = '<div class="empty-state">浏览器不支持Cache API</div>';
+        return;
+      }
+
+      const keys = await caches.keys();
+      if (keys.length === 0) {
+        badge.textContent = '无缓存';
+        badge.className = 'panel-badge warn';
+        content.innerHTML = '<div class="empty-state">Service Worker未缓存任何资源<br><span style="font-size:0.7rem;">请先访问首页加载资源</span></div>';
+        return;
+      }
+
+      let images = [];
+      for (const key of keys) {
+        const cache = await caches.open(key);
+        const reqs = await cache.keys();
+        for (const req of reqs) {
+          const url = req.url;
+          if (/\.(png|jpe?g|gif|svg|webp|ico)(\?|$)/i.test(url) || url.includes('/images/')) {
+            try {
+              const res = await cache.match(req);
+              const blob = await res.blob();
+              images.push({ url, blobUrl: URL.createObjectURL(blob) });
+            } catch(e) {}
+          }
+        }
+      }
+
+      if (images.length === 0) {
+        badge.textContent = '无图片';
+        badge.className = 'panel-badge warn';
+        content.innerHTML = '<div class="empty-state">缓存中没有图片资源</div>';
+        return;
+      }
+
+      badge.textContent = images.length + ' 张';
+      badge.className = 'panel-badge ok';
+
+      let html = '<div class="data-row"><span class="data-label">缓存图片总数</span><span class="data-value">' + images.length + '</span></div>';
+      html += '<div class="cached-img-grid">';
+      images.forEach(img => {
+        const name = img.url.split('/').pop().split('?')[0] || img.url;
+        html += '<div class="cached-img-item">';
+        html += '<img src="' + img.blobUrl + '" alt="' + name + '" loading="lazy" />';
+        html += '<div class="cached-img-name">' + name + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function initFontPreview() {
+      const content = document.getElementById('fontContent');
+      const fonts = [
+        { name: '江城黑体 900W (子集)', family: "'江城黑体900W', 'Jiangcheng黑体900W', sans-serif", file: '江城黑体900W-subset.ttf' },
+        { name: '字魂59号-创粗黑', family: "'字魂59号-创粗黑', 'Zihun59', sans-serif", file: '字魂59号-创粗黑.ttf' },
+        { name: '字魂57号-创细黑', family: "'字魂57号-创细黑', 'Zihun57', sans-serif", file: '字魂57号-创细黑.ttf' },
+        { name: 'DIN 1451 Mittelschrift', family: "'DIN 1451 LT W06 Mittelschrift', 'DIN', monospace", file: 'DIN 1451 LT W06 Mittelschrift.otf' },
+        { name: 'Rajdhani Medium', family: "'Rajdhani', sans-serif", file: 'Rajdhani Medium.otf' },
+        { name: 'Share Tech Mono (等宽)', family: "'Share Tech Mono', monospace", file: 'Google Fonts' },
+      ];
+
+      let html = '';
+      fonts.forEach(f => {
+        html += '<div class="font-preview-item">';
+        html += '<div class="font-name">' + f.name + ' | ' + f.file + '</div>';
+        html += '<div class="font-sample" style="font-family:' + f.family + ';">广州实验中学 研精覃思循真至美</div>';
+        html += '<div class="font-sample-en" style="font-family:' + f.family + ';">GUANGZHOU EXPERIMENTAL SECONDARY SCHOOL 0123456789</div>';
+        html += '</div>';
+      });
+      content.innerHTML = html;
+    }
+
     function runDiagnostics() {
       const badge = document.getElementById('diagBadge');
       const content = document.getElementById('diagContent');
@@ -763,6 +916,8 @@
       refreshNews();
       refreshSW();
       refreshLS();
+      refreshCachedImages();
+      initFontPreview();
     }
   </script>
 
