@@ -575,7 +575,7 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 32px;
-  margin-bottom: 100px;
+  margin-bottom: 80px;
 }
 
 .feature-card {
@@ -669,7 +669,7 @@ main {
 .welcome-section {
   text-align: center;
   margin-top: 40px;
-  margin-bottom: 120px;
+  margin-bottom: 80px;
   padding: 0;
   position: relative;
 }
@@ -1644,7 +1644,7 @@ footer::after {
   align-items: center;
   justify-content: center;
   margin-top: 0;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
 }
 .we-stage-role {
   display: flex;
