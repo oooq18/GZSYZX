@@ -1642,6 +1642,17 @@ footer::after {
   align-items: center;
   justify-content: center;
   margin-top: 16px;
+  animation: countdownFadeIn 0.8s ease-out;
+}
+@keyframes countdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .we-stage-role {
   display: flex;
@@ -1649,6 +1660,7 @@ footer::after {
   font-size: 200%;
   user-select: none;
   line-height: 1;
+  color: #000;
 }
 .we-stage-role-top {
   display: flex;
@@ -1671,6 +1683,7 @@ footer::after {
   font-family: '字魂59号-创粗黑', '创粗黑', '微软雅黑', sans-serif;
   line-height: 1;
   display: inline-block;
+  color: #000;
 }
 .we-stage-role-bottom {
   border-left: solid 5px #e91c00;
@@ -1682,10 +1695,12 @@ footer::after {
   line-height: 1.1;
   text-align: left;
   align-self: flex-start;
+  color: #000;
 }
 .we-stage-role-top-right {
   font-family: '字魂59号-创粗黑', '创粗黑', '微软雅黑', sans-serif;
   line-height: 1;
+  color: #000;
 }
 .we-stage-role-top-center {
   font-family: "DIN 1451 LT W06 Mittelschrift", 'DIN1451', 'Rajdhani', monospace;
@@ -1693,12 +1708,14 @@ footer::after {
   line-height: 100%;
   margin: 0px 8px;
   color: #e91c00;
+  transition: opacity 0.3s ease;
 }
 .we-stage-role-top-left-top {
   font-family: '字魂59号-创粗黑', '创粗黑', '微软雅黑', sans-serif;
   white-space: nowrap;
   line-height: 1;
   margin-bottom: 0;
+  color: #000;
 }
 @media (max-width: 768px) {
   .we-stage {
