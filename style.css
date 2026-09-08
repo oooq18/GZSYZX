@@ -1622,13 +1622,13 @@ footer::after {
   color: rgba(255,255,255,0.5);
 }
 
-/* ===== 节假日倒计时（流浪地球2风格，参考h5-wandering-earth） ===== */
+/* ===== 节假日倒计时（流浪地球2风格，一比一复刻h5-wandering-earth） ===== */
 .holiday-countdown {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 36px;
-  font-size: clamp(1rem, 2.2vw, 1.4rem);
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
   user-select: none;
 }
 .countdown-top {
@@ -1642,7 +1642,6 @@ footer::after {
 }
 .countdown-event {
   font-family: '字魂59号创粗黑', '创粗黑', '微软雅黑', sans-serif;
-  color: #1a1a1a;
   white-space: nowrap;
 }
 .countdown-remain-wrap {
@@ -1652,18 +1651,16 @@ footer::after {
   border-left: solid 5px #e91c00;
   padding-left: 5px;
   font-family: '字魂59号创粗黑', '创粗黑', '微软雅黑', sans-serif;
-  color: #1a1a1a;
 }
 .countdown-number {
   font-family: 'DIN1451', 'DIN 1451 LT W06 Mittelschrift', 'Rajdhani', monospace;
   font-size: 200%;
   line-height: 100%;
-  margin: 0 8px;
+  margin: 0px 8px;
   color: #e91c00;
 }
 .countdown-unit {
   font-family: '字魂59号创粗黑', '创粗黑', '微软雅黑', sans-serif;
-  color: #1a1a1a;
 }
 .countdown-bottom {
   border-left: solid 5px #e91c00;
@@ -1671,9 +1668,6 @@ footer::after {
   font-family: 'DIN1451', 'DIN 1451 LT W06 Mittelschrift', 'Rajdhani', monospace;
   font-size: 60%;
   text-transform: uppercase;
-  color: rgba(26,26,26,0.6);
-  align-self: center;
-  margin-top: 2px;
 }
 .countdown-en-remain {
   display: flex;
@@ -1682,6 +1676,6 @@ footer::after {
 @media (max-width: 768px) {
   .holiday-countdown {
     margin-top: 24px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 }

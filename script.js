@@ -399,9 +399,26 @@
       if (daysEl) daysEl.textContent = diffDays;
       if (enEventEl) enEventEl.textContent = nextHoliday.en.toUpperCase();
       if (enDaysEl) enDaysEl.textContent = diffDays;
+
+      // 对齐：底部英文红竖线和"还剩"红竖线左对齐（复刻原项目逻辑）
+      alignCountdown();
+    }
+
+    function alignCountdown() {
+      const remainSpan = document.querySelector('.countdown-remain-wrap span');
+      const role = document.getElementById('holidayCountdown');
+      const bottom = document.querySelector('.countdown-bottom');
+      if (remainSpan && role && bottom) {
+        const a = remainSpan.getBoundingClientRect().left;
+        const b = role.getBoundingClientRect().left;
+        bottom.style.marginLeft = (a - b) + 'px';
+        remainSpan.style.lineHeight = remainSpan.offsetHeight + 'px';
+      }
     }
 
     updateCountdown();
+    window.addEventListener('resize', alignCountdown);
+    window.addEventListener('load', alignCountdown);
     // 每分钟更新一次
     setInterval(updateCountdown, 60000);
   })();
