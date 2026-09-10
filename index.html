@@ -7,6 +7,16 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon-192.png" />
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <script>
+    // 动态设置favicon（解决Safari根路径favicon缓存bug）
+    (function() {
+      var link = document.createElement('link');
+      link.rel = 'icon';
+      link.type = 'image/png';
+      link.href = '/images/favicon-32.png';
+      document.head.appendChild(link);
+    })();
+  </script>
   <link rel="preload" href="/fonts/江城黑体900W-subset.ttf" as="font" type="font/ttf" crossorigin />
   <title data-en="Guangzhou Experimental Secondary School">广州实验中学</title>
   <link rel="stylesheet" href="/style.css?v=29" />
