@@ -8,13 +8,31 @@
   <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
   <link rel="icon" type="image/svg+xml" href="/images/logo.svg" />
   <link rel="preload" href="/fonts/江城黑体900W-subset.ttf" as="font" type="font/ttf" crossorigin />
-  <title>404 - 页面未找到 | 广州实验中学</title>
+  <title data-zh="404 - 页面未找到 | 广州实验中学" data-en="404 - Page Not Found | Guangzhou Experimental Secondary School">404 - 页面未找到 | 广州实验中学</title>
   <link rel="stylesheet" href="/style.css?v=28" />
   <style>
     .error-page {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .error-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(80vw, 600px);
+      height: min(80vw, 600px);
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .error-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
     .error-content {
       flex: 1;
@@ -23,33 +41,36 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 60px 20px;
+      padding: 100px 20px 60px;
+      position: relative;
+      z-index: 1;
     }
     .error-code {
       font-family: '江城黑体900W', '字魂59号创粗黑', sans-serif;
-      font-size: clamp(120px, 25vw, 200px);
+      font-size: clamp(120px, 25vw, 220px);
       font-weight: 900;
       color: var(--color-primary);
       line-height: 1;
-      margin-bottom: 20px;
-      letter-spacing: -5px;
+      margin-bottom: 10px;
+      letter-spacing: -8px;
     }
     .error-title {
       font-family: '江城黑体900W', '字魂59号创粗黑', sans-serif;
-      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
       color: var(--color-text);
       margin-bottom: 15px;
+      letter-spacing: 2px;
     }
     .error-desc {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: var(--color-text-secondary);
       margin-bottom: 40px;
-      max-width: 400px;
-      line-height: 1.6;
+      max-width: 420px;
+      line-height: 1.7;
     }
     .error-btn {
       display: inline-block;
-      padding: 14px 40px;
+      padding: 14px 45px;
       background: var(--color-primary);
       color: #fff;
       text-decoration: none;
@@ -57,6 +78,7 @@
       font-size: 1rem;
       font-weight: 600;
       transition: all 0.3s;
+      letter-spacing: 1px;
     }
     .error-btn:hover {
       background: var(--color-primary-dark);
@@ -67,6 +89,11 @@
 </head>
 <body>
   <div class="error-page">
+    <!-- 背景校标 -->
+    <div class="error-bg">
+      <img src="/images/logo.svg" alt="校标背景" />
+    </div>
+
     <!-- 校标头部 -->
     <header class="brand-header scrolled">
       <a href="/" class="brand">
@@ -81,9 +108,9 @@
     <!-- 404内容 -->
     <main class="error-content">
       <div class="error-code">404</div>
-      <h1 class="error-title">页面未找到</h1>
-      <p class="error-desc">抱歉，您访问的页面不存在或已被移动。请检查网址是否正确，或返回首页继续浏览。</p>
-      <a href="/" class="error-btn">返回首页</a>
+      <h1 class="error-title" data-en="Page Not Found">页面未找到</h1>
+      <p class="error-desc" data-en="Sorry, the page you are looking for does not exist or has been moved. Please check the URL or return to the homepage.">抱歉，您访问的页面不存在或已被移动。请检查网址是否正确，或返回首页继续浏览。</p>
+      <a href="/" class="error-btn" data-en="Back to Home">返回首页</a>
     </main>
 
     <!-- 页脚 -->
@@ -92,29 +119,31 @@
         <div class="footer-brand">
           <img src="/images/校标修改.svg" alt="校徽" />
           <div class="footer-brand-text">
-            <h3>广州实验中学</h3>
-            <p>广州市教育局与黄埔区人民政府共建</p>
-            <p>公办完全中学 · 广东省义务教育标准化学校</p>
+            <h3 data-en="Guangzhou Experimental Secondary School">广州实验中学</h3>
+            <p data-en="Co-built by Guangzhou Education Bureau & Huangpu District Government">广州市教育局与黄埔区人民政府共建</p>
+            <p data-en="Public Secondary School · Guangdong Standardized School">公办完全中学 · 广东省义务教育标准化学校</p>
           </div>
         </div>
         <div class="footer-col">
-          <h4>快速导航</h4>
-          <a href="/">首页</a>
-          <a href="/about/">学校简介</a>
-          <a href="/condition/">办学条件</a>
-          <a href="/philosophy/">办学理念</a>
+          <h4 data-en="Quick Links">快速导航</h4>
+          <a href="/" data-en="Home">首页</a>
+          <a href="/about/" data-en="About">学校简介</a>
+          <a href="/condition/" data-en="Facilities">办学条件</a>
+          <a href="/philosophy/" data-en="Philosophy">办学理念</a>
         </div>
         <div class="footer-col">
-          <h4>联系我们</h4>
+          <h4 data-en="Contact Us">联系我们</h4>
           <p>广州市黄埔区修业路6号</p>
-          <p>公办完全中学</p>
-          <p>创办于2021年</p>
+          <p data-en="Public Secondary School">公办完全中学</p>
+          <p data-en="Founded in 2021">创办于2021年</p>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2025 广州实验中学 版权所有 | 校训：研精覃思 循真至美</p>
+        <p>© 2025 <span data-en="Guangzhou Experimental Secondary School">广州实验中学</span> <span data-en="All Rights Reserved">版权所有</span> | <span data-en="Motto:">校训：</span>研精覃思 循真至美</p>
       </div>
     </footer>
   </div>
+
+  <script src="/script.js?v=22"></script>
 </body>
 </html>
