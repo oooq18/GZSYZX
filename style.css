@@ -1724,3 +1724,163 @@ footer::after {
     font-size: 150%;
   }
 }
+
+/* ===== 新年皮肤 ===== */
+body.newyear-skin {
+  --color-primary: #C8102E;
+  --color-primary-dark: #8B0000;
+  --color-primary-light: #E63946;
+  --color-primary-lighter: #FF6B6B;
+  --color-accent: #FFD700;
+  --color-accent-dark: #DAA520;
+  --color-accent-light: #FFE44D;
+  --color-accent-lighter: #FFF3B0;
+  --color-bg: #FFF8F0;
+  --color-card: #FFFEF5;
+  --color-text: #8B0000;
+  --color-text-secondary: #A52A2A;
+  --color-text-muted: #CD853F;
+  --color-border: #F5DEB3;
+  background-color: var(--color-bg);
+}
+
+body.newyear-skin .hero-overlay {
+  background: linear-gradient(180deg, rgba(139,0,0,0.3) 0%, rgba(139,0,0,0.6) 100%);
+}
+
+/* 新年装饰 */
+.ny-decorations {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+#nyFireworks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ny-lantern {
+  position: absolute;
+  top: 10px;
+  width: 50px;
+  height: 65px;
+  animation: nySwing 3s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+.ny-lantern-left { left: 15px; }
+.ny-lantern-right { right: 15px; animation-delay: -1.5s; }
+
+.ny-lantern-body {
+  width: 50px;
+  height: 55px;
+  background: radial-gradient(circle at 30% 30%, #FF4444, #C8102E 60%, #8B0000);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFD700;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 0 20px rgba(255, 100, 50, 0.6);
+  position: relative;
+}
+
+.ny-lantern-body::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 5px;
+  background: #FFD700;
+  border-radius: 2px;
+}
+
+.ny-lantern-body::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 15px;
+  background: linear-gradient(180deg, #FFD700, #FF4500);
+}
+
+@keyframes nySwing {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+/* 切换按钮 */
+.ny-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C8102E, #8B0000);
+  border: 2px solid #FFD700;
+  color: #FFD700;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10000;
+  box-shadow: 0 4px 15px rgba(200, 16, 46, 0.4);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ny-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(200, 16, 46, 0.6);
+}
+
+body.newyear-skin .ny-toggle {
+  background: linear-gradient(135deg, #10215B, #0A1538);
+  border-color: #C29C83;
+  color: #C29C83;
+}
+
+/* 金色粒子 */
+.ny-particle {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: #FFD700;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  animation: nyFall linear infinite;
+  box-shadow: 0 0 6px #FFD700;
+}
+
+@keyframes nyFall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity: 0.3; }
+}
+
+@media (max-width: 768px) {
+  .ny-lantern {
+    width: 35px;
+    height: 45px;
+  }
+  .ny-lantern-body {
+    width: 35px;
+    height: 38px;
+    font-size: 1rem;
+  }
+}

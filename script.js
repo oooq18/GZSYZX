@@ -583,4 +583,143 @@
       applyLang('en');
     }
   })();
+
+  // ===== 新年皮肤切换 =====
+  (function() {
+    const toggle = document.getElementById('nyToggle');
+    const decorations = document.getElementById('nyDecorations');
+    if (!toggle || !decorations) return;
+
+    const STORAGE_KEY = 'gzsyzx_newyear_skin';
+    let fireworksCanvas = null;
+    let fireworksCtx = null;
+    let fireworksParticles = [];
+    let fireworksAnimId = null;
+    let fireworksInterval = null;
+    let particles = [];
+
+    // 检查localStorage
+    if (localStorage.getItem(STORAGE_KEY) === '1') {
+      enableNewYear();
+    }
+
+    toggle.addEventListener('click', () => {
+      if (document.body.classList.contains('newyear-skin')) {
+        disableNewYear();
+      } else {
+        enableNewYear();
+      }
+    });
+
+    function enableNewYear() {
+      document.body.classList.add('newyear-skin');
+      decorations.style.display = 'block';
+      localStorage.setItem(STORAGE_KEY, '1');
+      startFireworks();
+      startParticles();
+    }
+
+    function disableNewYear() {
+      document.body.classList.remove('newyear-skin');
+      decorations.style.display = 'none';
+      localStorage.setItem(STORAGE_KEY, '0');
+      stopFireworks();
+      stopParticles();
+    }
+
+    // 烟花
+    function startFireworks() {
+      fireworksCanvas = document.getElementById('nyFireworks');
+      if (!fireworksCanvas) return;
+      fireworksCtx = fireworksCanvas.getContext('2d');
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      const colors = ['#FFD700', '#FF4500', '#FF6347', '#FFE4B5', '#FFA500'];
+
+      class Particle {
+        constructor(x, y) {
+          this.x = x;
+          this.y = y;
+          this.color = colors[Math.floor(Math.random() * colors.length)];
+          this.vx = (Math.random() - 0.5) * 6;
+          this.vy = (Math.random() - 0.5) * 6;
+          this.alpha = 1;
+          this.decay = Math.random() * 0.015 + 0.01;
+          this.size = Math.random() * 2 + 1;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          this.vy += 0.05;
+          this.alpha -= this.decay;
+        }
+        draw() {
+          fireworksCtx.save();
+          fireworksCtx.globalAlpha = this.alpha;
+          fireworksCtx.fillStyle = this.color;
+          fireworksCtx.shadowBlur = 10;
+          fireworksCtx.shadowColor = this.color;
+          fireworksCtx.beginPath();
+          fireworksCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          fireworksCtx.fill();
+          fireworksCtx.restore();
+        }
+      }
+
+      function createFirework() {
+        const x = Math.random() * fireworksCanvas.width;
+        const y = Math.random() * fireworksCanvas.height * 0.4 + 50;
+        for (let i = 0; i < 60; i++) {
+          fireworksParticles.push(new Particle(x, y));
+        }
+      }
+
+      function animate() {
+        fireworksCtx.fillStyle = 'rgba(139, 0, 0, 0.1)';
+        fireworksCtx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+        for (let i = fireworksParticles.length - 1; i >= 0; i--) {
+          fireworksParticles[i].update();
+          fireworksParticles[i].draw();
+          if (fireworksParticles[i].alpha <= 0) fireworksParticles.splice(i, 1);
+        }
+        fireworksAnimId = requestAnimationFrame(animate);
+      }
+
+      function resizeCanvas() {
+        fireworksCanvas.width = window.innerWidth;
+        fireworksCanvas.height = window.innerHeight;
+      }
+
+      animate();
+      createFirework();
+      fireworksInterval = setInterval(createFirework, 2000);
+    }
+
+    function stopFireworks() {
+      if (fireworksAnimId) cancelAnimationFrame(fireworksAnimId);
+      if (fireworksInterval) clearInterval(fireworksInterval);
+      fireworksParticles = [];
+      if (fireworksCtx) fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+    }
+
+    // 金色粒子
+    function startParticles() {
+      for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'ny-particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        p.style.animationDelay = Math.random() * 5 + 's';
+        p.style.width = p.style.height = (Math.random() * 3 + 2) + 'px';
+        document.body.appendChild(p);
+        particles.push(p);
+      }
+    }
+
+    function stopParticles() {
+      particles.forEach(p => p.remove());
+      particles = [];
+    }
+  })();
 })();
