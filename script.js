@@ -616,7 +616,6 @@
       decorations.style.display = 'block';
       localStorage.setItem(STORAGE_KEY, '1');
       startFireworks();
-      startParticles();
     }
 
     function disableNewYear() {
@@ -624,7 +623,6 @@
       decorations.style.display = 'none';
       localStorage.setItem(STORAGE_KEY, '0');
       stopFireworks();
-      stopParticles();
     }
 
     // 烟花
@@ -700,25 +698,6 @@
       if (fireworksInterval) clearInterval(fireworksInterval);
       fireworksParticles = [];
       if (fireworksCtx) fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
-    }
-
-    // 金色粒子
-    function startParticles() {
-      for (let i = 0; i < 20; i++) {
-        const p = document.createElement('div');
-        p.className = 'ny-particle';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.animationDuration = (Math.random() * 5 + 5) + 's';
-        p.style.animationDelay = Math.random() * 5 + 's';
-        p.style.width = p.style.height = (Math.random() * 3 + 2) + 'px';
-        document.body.appendChild(p);
-        particles.push(p);
-      }
-    }
-
-    function stopParticles() {
-      particles.forEach(p => p.remove());
-      particles = [];
     }
   })();
 })();
