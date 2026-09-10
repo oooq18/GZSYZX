@@ -1212,15 +1212,26 @@ footer::after {
   border-radius: 1px;
 }
 
-.footer-col a,
-.footer-col p {
+.footer-col a {
   display: block;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.65);
   font-size: 0.9rem;
   margin-bottom: 12px;
   transition: var(--transition);
   text-indent: 0;
   line-height: 1.6;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.footer-col p {
+  display: block;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+  text-indent: 0;
+  line-height: 1.6;
+  cursor: default;
 }
 
 .footer-col a:hover {
