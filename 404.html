@@ -43,7 +43,7 @@
     }
     .error-bg {
       position: absolute;
-      top: 30%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       width: min(90vw, 700px);
@@ -112,11 +112,6 @@
 </head>
 <body>
   <div class="error-page">
-    <!-- 背景校标 -->
-    <div class="error-bg">
-      <img src="/images/logo.svg" alt="校标背景" />
-    </div>
-
     <!-- 校标头部 -->
     <header class="brand-header">
       <a href="/" class="brand">
@@ -130,6 +125,10 @@
 
     <!-- 404内容 -->
     <main class="error-content">
+      <!-- 背景校标 -->
+      <div class="error-bg">
+        <img src="/images/logo.svg" alt="校标背景" />
+      </div>
       <div class="error-code">404</div>
       <h1 class="error-title" data-en="Page Not Found">页面未找到</h1>
       <p class="error-desc" data-en="Sorry, the page you are looking for does not exist or has been moved. Please check the URL or return to the homepage.">抱歉，您访问的页面不存在或已被移动。请检查网址是否正确，或返回首页继续浏览。</p>
