@@ -43,7 +43,7 @@
     }
     .error-bg {
       position: absolute;
-      top: 50%;
+      top: 32%;
       left: 50%;
       transform: translate(-50%, -50%);
       width: min(90vw, 700px);
@@ -67,6 +67,13 @@
       padding: 100px 20px 60px;
       position: relative;
       z-index: 1;
+    }
+    .error-code,
+    .error-title,
+    .error-desc,
+    .error-btn {
+      position: relative;
+      z-index: 2;
     }
     .error-code {
       font-family: '江城黑体', '创粗黑', '微软雅黑', sans-serif;
@@ -92,21 +99,46 @@
       line-height: 1.7;
     }
     .error-btn {
-      display: inline-block;
-      padding: 14px 45px;
-      background: var(--color-primary);
-      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 40px;
+      background: transparent;
+      color: var(--color-primary);
       text-decoration: none;
-      border-radius: 8px;
+      border: 2px solid var(--color-primary);
+      border-radius: 0;
       font-size: 1rem;
       font-weight: 600;
+      letter-spacing: 2px;
       transition: all 0.3s;
-      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      z-index: 2;
+    }
+    .error-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--color-primary);
+      transition: left 0.3s;
+      z-index: -1;
     }
     .error-btn:hover {
-      background: var(--color-primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(16, 33, 91, 0.3);
+      color: #fff;
+    }
+    .error-btn:hover::before {
+      left: 0;
+    }
+    .error-btn .arrow {
+      display: inline-block;
+      transition: transform 0.3s;
+    }
+    .error-btn:hover .arrow {
+      transform: translateX(-5px);
     }
   </style>
 </head>
@@ -132,7 +164,7 @@
       <div class="error-code">404</div>
       <h1 class="error-title" data-en="Page Not Found">页面未找到</h1>
       <p class="error-desc" data-en="Sorry, the page you are looking for does not exist or has been moved. Please check the URL or return to the homepage.">抱歉，您访问的页面不存在或已被移动。请检查网址是否正确，或返回首页继续浏览。</p>
-      <a href="/" class="error-btn" data-en="Back to Home">返回首页</a>
+      <a href="/" class="error-btn" data-en="Back to Home"><span class="arrow">←</span>返回首页</a>
     </main>
 
     <!-- 页脚 -->
