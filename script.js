@@ -676,8 +676,7 @@
       }
 
       function animate() {
-        fireworksCtx.fillStyle = 'rgba(139, 0, 0, 0.1)';
-        fireworksCtx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+        fireworksCtx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
         for (let i = fireworksParticles.length - 1; i >= 0; i--) {
           fireworksParticles[i].update();
           fireworksParticles[i].draw();

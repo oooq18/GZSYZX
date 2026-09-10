@@ -1731,9 +1731,9 @@ body.newyear-skin {
   --color-primary-dark: #8B0000;
   --color-primary-light: #E63946;
   --color-primary-lighter: #FF6B6B;
-  --color-accent: #FFD700;
-  --color-accent-dark: #DAA520;
-  --color-accent-light: #FFE44D;
+  --color-accent: #DAA520;
+  --color-accent-dark: #B8860B;
+  --color-accent-light: #FFD700;
   --color-accent-lighter: #FFF3B0;
   --color-bg: #FFF8F0;
   --color-card: #FFFEF5;
@@ -1744,8 +1744,15 @@ body.newyear-skin {
   background-color: var(--color-bg);
 }
 
+body.newyear-skin .hero-title,
+body.newyear-skin .hero-motto,
+body.newyear-skin .brand-name,
+body.newyear-skin .brand-ename {
+  color: #fff !important;
+}
+
 body.newyear-skin .hero-overlay {
-  background: linear-gradient(180deg, rgba(139,0,0,0.3) 0%, rgba(139,0,0,0.6) 100%);
+  background: linear-gradient(180deg, rgba(139,0,0,0.2) 0%, rgba(139,0,0,0.5) 100%);
 }
 
 /* 新年装饰 */
