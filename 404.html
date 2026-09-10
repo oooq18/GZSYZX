@@ -18,6 +18,29 @@
       position: relative;
       overflow: hidden;
     }
+    /* 404页面顶部校标栏强制白色背景 */
+    .error-page .brand-header {
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 10px 32px;
+    }
+    .error-page .brand-header .brand-name {
+      color: var(--color-primary) !important;
+    }
+    .error-page .brand-header .brand-ename {
+      color: var(--color-text-muted) !important;
+    }
+    .error-page .brand-header {
+      background: transparent;
+    }
+    .error-page .brand-header .brand-name {
+      color: var(--color-primary);
+    }
+    .error-page .brand-header .brand-ename {
+      color: var(--color-text-muted);
+    }
     .error-bg {
       position: absolute;
       top: 50%;
@@ -95,7 +118,7 @@
     </div>
 
     <!-- 校标头部 -->
-    <header class="brand-header scrolled">
+    <header class="brand-header">
       <a href="/" class="brand">
         <img src="/images/校标修改.svg" alt="广州实验中学徽标" />
         <div class="brand-text">
