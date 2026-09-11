@@ -146,11 +146,9 @@
     async function fetchFromWorker(url) {
       const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
-      if (!text || text.length < 200) throw new Error('empty response');
-      const articles = parseFeed(text);
-      if (articles.length === 0) throw new Error('no articles parsed');
-      return articles;
+      const data = await res.json();
+      if (!data || !Array.isArray(data.articles) || data.articles.length === 0) throw new Error('no articles parsed');
+      return data.articles.slice(0, MAX_ARTICLES);
     }
 
     const CACHE_KEY = 'gzsyzx_news_cache';
