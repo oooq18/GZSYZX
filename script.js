@@ -46,28 +46,21 @@
     revealElements.forEach(el => el.classList.add('visible'));
   }
 
-  /* ===== 新闻动态：自动加载公众号最新文章 ===== */
+  /* ===== 新闻动态：读取静态 news.json ===== */
   const newsGrid = document.getElementById('newsGrid');
   if (newsGrid) {
-    // Cloudflare Worker 代理地址
-    const WORKER_URL = 'https://gzsyzx-news.lca313.workers.dev/';
-    const RSS_SOURCES = [
-      'https://rsshub.app/wechat/ce/MzkyNTc0Nzk5MA==',
-      'https://rss.shab.fun/wechat/ce/MzkyNTc0Nzk5MA==',
-      'https://rsshub.rssforever.com/wechat/ce/MzkyNTc0Nzk5MA=='
-    ];
     const MAX_ARTICLES = 1;
 
     function renderNews(articles) {
-      if (articles.length === 0) {
+      if (!articles || articles.length === 0) {
         newsGrid.innerHTML = '<div class="news-error">暂无文章</div>';
         return;
       }
       newsGrid.innerHTML = articles.map(a => {
-        const thumbUrl = a.thumb ? WORKER_URL + 'image?url=' + encodeURIComponent(a.thumb) : '';
+        const thumbUrl = a.thumb || '';
         return `
         <a href="${a.link}" target="_blank" rel="noopener" class="news-card">
-          ${thumbUrl ? `<img class="news-card-thumb" data-src="${thumbUrl}" alt="${a.title}" loading="lazy" />` : ''}
+          ${thumbUrl ? `<img class="news-card-thumb" src="${thumbUrl}" alt="${a.title}" loading="lazy" onerror="this.style.display='none'" />` : ''}
           <div class="news-card-body">
             ${a.date ? `<div class="news-card-date">${a.date}</div>` : ''}
             <h3 class="news-card-title">${a.title}</h3>
@@ -75,86 +68,10 @@
           </div>
         </a>`;
       }).join('');
-      loadNewsImages();
-    }
-
-    async function loadNewsImages() {
-      const imgs = newsGrid.querySelectorAll('.news-card-thumb[data-src]');
-      for (const img of imgs) {
-        const url = img.dataset.src;
-        try {
-          const res = await fetch(url, { cache: 'force-cache' });
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          const blob = await res.blob();
-          img.src = URL.createObjectURL(blob);
-        } catch (e) {
-          img.style.display = 'none';
-        }
-      }
-    }
-
-    async function fetchFromJSON() {
-      const res = await fetch('/news.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      if (data && data.articles && data.articles.length > 0) {
-        return data.articles.slice(0, MAX_ARTICLES);
-      }
-      throw new Error('empty articles');
-    }
-
-    function parseFeed(text) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, 'text/xml');
-      // 同时支持 RSS (<item>) 和 Atom (<entry>)
-      const items = doc.querySelectorAll('item, entry');
-      const articles = [];
-      items.forEach((item, i) => {
-        if (i >= MAX_ARTICLES) return;
-        const title = item.querySelector('title')?.textContent?.trim() || '';
-        // RSS用<link>文本，Atom用<link href=>
-        let link = item.querySelector('link')?.textContent?.trim() || '';
-        if (!link) link = item.querySelector('link')?.getAttribute('href') || '';
-        const pubDate = item.querySelector('pubDate, published, updated')?.textContent?.trim() || '';
-        const descRaw = item.querySelector('description, summary, content')?.textContent || '';
-        let thumb = '';
-        const imgMatch = descRaw.match(/<img[^>]+src="([^"]+)"/);
-        if (imgMatch) thumb = imgMatch[1];
-        const desc = descRaw.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().substring(0, 80);
-        let dateStr = '';
-        if (pubDate) {
-          const d = new Date(pubDate);
-          if (!isNaN(d)) {
-            dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-          }
-        }
-        if (title && link) articles.push({ title, link, date: dateStr, desc, thumb });
-      });
-      return articles;
-    }
-
-    async function fetchFromRSS(url) {
-      const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
-      if (!text || text.length < 200) throw new Error('empty response');
-      const articles = parseFeed(text);
-      if (articles.length === 0) throw new Error('no articles parsed');
-      return articles;
-    }
-
-    async function fetchFromWorker(url) {
-      // 带时间戳参数 + no-store，绕过一切缓存层，强制实时拉取
-      const sep = url.includes('?') ? '&' : '?';
-      const res = await fetch(url + sep + 't=' + Date.now(), { cache: 'no-store', signal: AbortSignal.timeout(10000) });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      if (!data || !Array.isArray(data.articles) || data.articles.length === 0) throw new Error('no articles parsed');
-      return data.articles.slice(0, MAX_ARTICLES);
     }
 
     const CACHE_KEY = 'gzsyzx_news_cache';
-    const CACHE_EXPIRE = 30 * 60 * 1000; // 30分钟
+    const CACHE_EXPIRE = 30 * 60 * 1000;
 
     function getCache() {
       try {
@@ -183,46 +100,6 @@
       return true;
     }
 
-    function mergeArticles(...lists) {
-      const seen = new Set();
-      const result = [];
-      for (const list of lists) {
-        for (const a of list) {
-          if (a.link && !seen.has(a.link)) {
-            seen.add(a.link);
-            result.push(a);
-          }
-        }
-      }
-      return result.slice(0, MAX_ARTICLES);
-    }
-
-    async function fetchLatest() {
-      let workerArticles = [];
-      let jsonArticles = [];
-      const tasks = [];
-      if (WORKER_URL) {
-        tasks.push(fetchFromWorker(WORKER_URL).then(r => { workerArticles = r; }).catch(e => console.warn('Worker:', e.message)));
-      }
-      tasks.push(fetchFromJSON().then(r => { jsonArticles = r; }).catch(e => console.warn('JSON:', e.message)));
-      await Promise.allSettled(tasks);
-      let merged = mergeArticles(workerArticles, jsonArticles);
-      if (merged.length === 0) {
-        for (const url of RSS_SOURCES) {
-          try {
-            const articles = await fetchFromRSS(url);
-            if (articles.length > 0) {
-              merged = articles.slice(0, MAX_ARTICLES);
-              break;
-            }
-          } catch (e) {
-            console.warn('RSS源失败:', url, e.message);
-          }
-        }
-      }
-      return merged;
-    }
-
     async function loadNews() {
       const cache = getCache();
       // 有缓存：先立即显示缓存
@@ -231,21 +108,24 @@
       } else {
         newsGrid.innerHTML = '<div class="news-loading">正在加载最新文章...</div>';
       }
-      // 后台获取最新文章
+      // 读取静态 news.json
       try {
-        const latest = await fetchLatest();
-        if (latest.length > 0) {
+        const res = await fetch('/news.json', { cache: 'no-cache', signal: AbortSignal.timeout(8000) });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const articles = (data.articles || []).slice(0, MAX_ARTICLES);
+        if (articles.length > 0) {
           // 和缓存对比，有变化才更新
-          if (!isSameArticles(latest, cache?.articles)) {
-            renderNews(latest);
-            setCache(latest);
+          if (!isSameArticles(articles, cache?.articles)) {
+            renderNews(articles);
+            setCache(articles);
           }
         }
       } catch (e) {
-        console.warn('新闻更新失败:', e.message);
-        // 获取失败但有缓存的话保持缓存显示，不报错
+        console.warn('新闻读取失败:', e.message);
+        // 读取失败但有缓存的话保持缓存显示，不报错
         if (!cache || cache.articles.length === 0) {
-          newsGrid.innerHTML = '<div class="news-error">文章加载失败，请稍后刷新重试</div>';
+          newsGrid.innerHTML = '<div class="news-error">暂无文章</div>';
         }
       }
     }
