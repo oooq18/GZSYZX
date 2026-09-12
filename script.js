@@ -60,7 +60,7 @@
         const thumbUrl = a.thumb || '';
         return `
         <a href="${a.link}" target="_blank" rel="noopener" class="news-card">
-          ${thumbUrl ? `<img class="news-card-thumb" src="${thumbUrl}" alt="${a.title}" loading="lazy" onerror="this.style.display='none'" />` : ''}
+          ${thumbUrl ? `<img class="news-card-thumb" src="${thumbUrl}" alt="${a.title}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" />` : ''}
           <div class="news-card-body">
             ${a.date ? `<div class="news-card-date">${a.date}</div>` : ''}
             <h3 class="news-card-title">${a.title}</h3>

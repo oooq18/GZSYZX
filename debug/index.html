@@ -687,7 +687,7 @@
           html += '<div class="news-entry-desc">' + item.desc.substring(0, 120) + (item.desc.length > 120 ? '...' : '') + '</div>';
         }
         if (item.thumb) {
-          html += '<div class="news-entry-thumb-wrap"><img class="news-entry-thumb" src="' + item.thumb + '" alt="缩略图" loading="lazy" onerror="this.style.display=\'none\'" /></div>';
+          html += '<div class="news-entry-thumb-wrap"><img class="news-entry-thumb" src="' + item.thumb + '" alt="缩略图" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'" /></div>';
         }
         html += '</div>';
       });
