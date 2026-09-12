@@ -1,13 +1,17 @@
 /**
- * 广州实验中学公众号文章代理 Worker
- * 部署到 Cloudflare Workers 后，前端请求此Worker即可获取最新文章
+ * 广州实验中学公众号文章代理 Worker v2
+ * 改进：
+ * 1. 去掉所有内部缓存，每次请求实时拉取
+ * 2. 响应头 no-store，绕过 Cloudflare/CDN 缓存层
+ * 3. 多 RSS 源轮询，一个失败自动换下一个
+ * 4. 文章按发布日期排序，最新在前
  */
-
 const BIZ = 'MzkyNTc0Nzk5MA=='; // 广州实验中学服务号 __biz
 const RSS_SOURCES = [
   `https://rsshub.app/wechat/ce/${BIZ}`,
   `https://rss.shab.fun/wechat/ce/${BIZ}`,
   `https://rsshub.rssforever.com/wechat/ce/${BIZ}`,
+  `https://rsshub.pseudoyu.com/wechat/ce/${BIZ}`,
 ];
 const MAX_ARTICLES = 6;
 
@@ -23,23 +27,28 @@ async function handleRequest(request) {
     return proxyImage(url.searchParams.get('url'));
   }
 
-  // CORS 头
+  // 禁止任何缓存
   const headers = {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Cache-Control': 'public, max-age=1800', // 缓存30分钟
+    'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+    'Pragma': 'no-cache',
+    'Expires': '0',
   };
 
   if (request.method === 'OPTIONS') {
     return new Response(null, { headers, status: 204 });
   }
 
-  for (const url of RSS_SOURCES) {
+  // 实时拉取：不用 caches.default，不做任何缓存
+  for (const rssUrl of RSS_SOURCES) {
     try {
-      const res = await fetch(url, {
-        cf: { cacheTtl: 300, cacheEverything: true },
-        headers: { 'User-Agent': 'Mozilla/5.0' },
+      const res = await fetch(rssUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        },
+        cf: { cacheTtl: 0, cacheEverything: false },
       });
       if (!res.ok) continue;
       const text = await res.text();
@@ -47,14 +56,16 @@ async function handleRequest(request) {
 
       const articles = parseRSS(text);
       if (articles.length > 0) {
+        // 按日期排序，最新在前
+        articles.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
         return new Response(JSON.stringify({
           updated: new Date().toISOString(),
-          source: url,
+          source: rssUrl,
           articles: articles.slice(0, MAX_ARTICLES),
         }), { headers });
       }
     } catch (e) {
-      console.error('RSS源失败:', url, e.message);
+      console.error('RSS源失败:', rssUrl, e.message);
     }
   }
 

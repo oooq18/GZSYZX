@@ -144,7 +144,9 @@
     }
 
     async function fetchFromWorker(url) {
-      const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+      // 带时间戳参数 + no-store，绕过一切缓存层，强制实时拉取
+      const sep = url.includes('?') ? '&' : '?';
+      const res = await fetch(url + sep + 't=' + Date.now(), { cache: 'no-store', signal: AbortSignal.timeout(10000) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       if (!data || !Array.isArray(data.articles) || data.articles.length === 0) throw new Error('no articles parsed');
