@@ -1,9 +1,12 @@
 /**
- * 广州实验中学公众号文章代理 Worker v3 - 多源并行版
- * 同时请求多个 RSSHub 实例，合并去重，取最新文章
- * 返回诊断信息，方便排查数据源问题
+ * 广州实验中学公众号文章代理 Worker v5 (Service Worker格式)
+ * 功能：
+ * 1. 实时请求：多源并行抓取 → 合并去重取最新（RSS UA 通过 RSSHub 检查）
+ * 2. Cron 定时：每天自动抓取并更新 GitHub 仓库的 news.json（快照备份）
+ * 3. 图片代理
+ * KV: GZSYZX_KV.GH_PAT (GitHub token)
  */
-const BIZ = 'MzkyNTc0Nzk5MA=='; // 广州实验中学服务号 __biz
+const BIZ = 'MzkyNTc0Nzk5MA==';
 const SOURCES = [
   { name: 'rsshub.app', url: `https://rsshub.app/wechat/ce/${BIZ}` },
   { name: 'rss.kael.ink', url: `https://rss.kael.ink/wechat/ce/${BIZ}` },
@@ -15,7 +18,15 @@ const SOURCES = [
   { name: 'holoxx.f5.si', url: `https://holoxx.f5.si/wechat/ce/${BIZ}` },
 ];
 const MAX_ARTICLES = 8;
-const FETCH_TIMEOUT = 8000; // 每个源最多等8秒
+const FETCH_TIMEOUT = 8000;
+const UA = 'Mozilla/5.0 (X11; Linux x86_64) RSS Reader';
+const GH_OWNER = 'oooq18';
+const GH_REPO = 'GZSYZX';
+const NEWS_PATH = 'news.json';
+
+addEventListener('scheduled', event => {
+  event.waitUntil(updateNewsSnapshot());
+});
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request));
@@ -24,9 +35,18 @@ addEventListener('fetch', event => {
 async function handleRequest(request) {
   const url = new URL(request.url);
 
-  // 图片代理路由：/image?url=xxx
+  // 图片代理路由
   if (url.pathname === '/image' || url.pathname.endsWith('/image')) {
     return proxyImage(url.searchParams.get('url'));
+  }
+
+  // 手动触发更新：/update?key=xxx
+  if (url.pathname === '/update' || url.pathname.endsWith('/update')) {
+    if (url.searchParams.get('key') !== 'gzsyzx2026') {
+      return new Response(JSON.stringify({ error: 'forbidden' }), { status: 403, headers: { 'Content-Type': 'application/json' } });
+    }
+    const result = await updateNewsSnapshot();
+    return new Response(JSON.stringify(result), { headers: { 'Content-Type': 'application/json' } });
   }
 
   const headers = {
@@ -42,11 +62,8 @@ async function handleRequest(request) {
     return new Response(null, { headers, status: 204 });
   }
 
-  // 并行请求所有源
-  const results = await Promise.allSettled(
-    SOURCES.map(src => fetchSource(src.url))
-  );
-
+  // 实时抓取所有源
+  const results = await Promise.allSettled(SOURCES.map(src => fetchSource(src.url)));
   const diagnostics = [];
   let allArticles = [];
 
@@ -62,16 +79,7 @@ async function handleRequest(request) {
     }
   }
 
-  // 合并去重 + 按日期排序（最新在前）
-  const seen = new Set();
-  const unique = [];
-  allArticles.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-  for (const a of allArticles) {
-    if (!seen.has(a.link)) {
-      seen.add(a.link);
-      unique.push(a);
-    }
-  }
+  const unique = dedupeSorted(allArticles);
 
   if (unique.length === 0) {
     return new Response(JSON.stringify({
@@ -90,6 +98,108 @@ async function handleRequest(request) {
   }), { headers });
 }
 
+// 定时/手动：抓取并更新 news.json 到 GitHub
+async function updateNewsSnapshot() {
+  const log = { at: new Date().toISOString(), diagnostics: [] };
+
+  let ghPat = null;
+  try {
+    ghPat = await GZSYZX_KV.get('GH_PAT');
+  } catch (e) {
+    log.kv_error = e.message;
+  }
+  if (!ghPat) {
+    log.status = 'no_github_token';
+    return log;
+  }
+
+  const results = await Promise.allSettled(SOURCES.map(src => fetchSource(src.url)));
+  let allArticles = [];
+  for (let i = 0; i < SOURCES.length; i++) {
+    const r = results[i];
+    if (r.status === 'fulfilled') {
+      log.diagnostics.push(`${SOURCES[i].name}:${r.value.httpStatus}:${r.value.articles.length}`);
+      allArticles = allArticles.concat(r.value.articles);
+    } else {
+      log.diagnostics.push(`${SOURCES[i].name}:ERR`);
+    }
+  }
+
+  const unique = dedupeSorted(allArticles);
+  log.total = unique.length;
+  log.latest = unique.slice(0, 3).map(a => `${a.date} ${a.title}`);
+
+  if (unique.length === 0) {
+    log.status = 'no_data';
+    return log;
+  }
+
+  try {
+    // 读取现有 news.json 获取 sha
+    const getRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${NEWS_PATH}`, {
+      headers: {
+        'Authorization': `token ${ghPat}`,
+        'User-Agent': UA,
+        'Accept': 'application/vnd.github+json',
+      },
+    });
+    let sha = null;
+    let oldArticles = [];
+    if (getRes.ok) {
+      const meta = await getRes.json();
+      sha = meta.sha;
+      try {
+        const decoded = JSON.parse(atob(meta.content));
+        oldArticles = decoded.articles || [];
+      } catch (e) {}
+    }
+
+    const oldLinks = new Set(oldArticles.map(a => a.link));
+    const merged = unique.concat(oldArticles.filter(a => !oldLinks.has(a.link))).slice(0, 10);
+    const content = JSON.stringify({ updated: new Date().toISOString(), articles: merged }, null, 2);
+
+    const putBody = {
+      message: `auto: 更新公众号新闻 ${new Date().toISOString().slice(0, 16)}`,
+      content: btoa(content),
+    };
+    if (sha) putBody.sha = sha;
+
+    const putRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${NEWS_PATH}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${ghPat}`,
+        'User-Agent': UA,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(putBody),
+    });
+
+    log.github_status = putRes.status;
+    log.status = putRes.ok ? 'updated' : 'github_error';
+    if (!putRes.ok) {
+      log.github_error = (await putRes.text()).substring(0, 300);
+    }
+  } catch (e) {
+    log.status = 'error';
+    log.error = e.message;
+  }
+  return log;
+}
+
+function dedupeSorted(articles) {
+  const seen = new Set();
+  const unique = [];
+  articles.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  for (const a of articles) {
+    if (!seen.has(a.link)) {
+      seen.add(a.link);
+      unique.push(a);
+    }
+  }
+  return unique;
+}
+
 async function fetchSource(feedUrl) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
@@ -97,11 +207,13 @@ async function fetchSource(feedUrl) {
   try {
     const res = await fetch(feedUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': UA,
         'Accept': 'application/xml,application/rss+xml,text/xml,text/html,*/*',
+        'Accept-Language': 'zh-CN,zh;q=0.9',
       },
       signal: ctrl.signal,
       cf: { cacheTtl: 0, cacheEverything: false },
+      redirect: 'follow',
     });
     const text = await res.text();
     const articles = res.ok ? parseRSS(text) : [];
@@ -114,11 +226,9 @@ async function fetchSource(feedUrl) {
 }
 
 function parseRSS(xmlText) {
-  // 非XML内容（HTML验证页等）直接放弃
   if (!xmlText || (!xmlText.includes('<item>') && !xmlText.includes('<entry>')) || xmlText.includes('Verifying Browser') || xmlText.includes('Security Verification')) {
     return [];
   }
-
   const articles = [];
   const items = xmlText.match(/<item>[\s\S]*?<\/item>/g) || [];
 
@@ -162,7 +272,7 @@ async function proxyImage(imgUrl) {
       cf: { cacheTtl: 86400, cacheEverything: true },
       headers: {
         'Referer': 'https://mp.weixin.qq.com/',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'User-Agent': UA,
       },
     });
     if (!res.ok) return new Response('fetch failed: ' + res.status, { status: 502 });
