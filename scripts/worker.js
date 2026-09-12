@@ -1,19 +1,21 @@
 /**
- * 广州实验中学公众号文章代理 Worker v2
- * 改进：
- * 1. 去掉所有内部缓存，每次请求实时拉取
- * 2. 响应头 no-store，绕过 Cloudflare/CDN 缓存层
- * 3. 多 RSS 源轮询，一个失败自动换下一个
- * 4. 文章按发布日期排序，最新在前
+ * 广州实验中学公众号文章代理 Worker v3 - 多源并行版
+ * 同时请求多个 RSSHub 实例，合并去重，取最新文章
+ * 返回诊断信息，方便排查数据源问题
  */
 const BIZ = 'MzkyNTc0Nzk5MA=='; // 广州实验中学服务号 __biz
-const RSS_SOURCES = [
-  `https://rsshub.app/wechat/ce/${BIZ}`,
-  `https://rss.shab.fun/wechat/ce/${BIZ}`,
-  `https://rsshub.rssforever.com/wechat/ce/${BIZ}`,
-  `https://rsshub.pseudoyu.com/wechat/ce/${BIZ}`,
+const SOURCES = [
+  { name: 'rsshub.app', url: `https://rsshub.app/wechat/ce/${BIZ}` },
+  { name: 'rss.kael.ink', url: `https://rss.kael.ink/wechat/ce/${BIZ}` },
+  { name: 'rss.datuan.dev', url: `https://rss.datuan.dev/wechat/ce/${BIZ}` },
+  { name: 'rss.spriple.org', url: `https://rss.spriple.org/wechat/ce/${BIZ}` },
+  { name: 'rss.4040940.xyz', url: `https://rss.4040940.xyz/wechat/ce/${BIZ}` },
+  { name: 'rsshub.email-once.com', url: `https://rsshub.email-once.com/wechat/ce/${BIZ}` },
+  { name: 'virworks-balancer', url: `https://rsshub-balancer.virworks.moe/wechat/ce/${BIZ}` },
+  { name: 'holoxx.f5.si', url: `https://holoxx.f5.si/wechat/ce/${BIZ}` },
 ];
-const MAX_ARTICLES = 6;
+const MAX_ARTICLES = 8;
+const FETCH_TIMEOUT = 8000; // 每个源最多等8秒
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request));
@@ -27,7 +29,6 @@ async function handleRequest(request) {
     return proxyImage(url.searchParams.get('url'));
   }
 
-  // 禁止任何缓存
   const headers = {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
@@ -41,49 +42,90 @@ async function handleRequest(request) {
     return new Response(null, { headers, status: 204 });
   }
 
-  // 实时拉取：不用 caches.default，不做任何缓存
-  for (const rssUrl of RSS_SOURCES) {
-    try {
-      const res = await fetch(rssUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        },
-        cf: { cacheTtl: 0, cacheEverything: false },
-      });
-      if (!res.ok) continue;
-      const text = await res.text();
-      if (!text || text.includes('<error>') || text.length < 200) continue;
+  // 并行请求所有源
+  const results = await Promise.allSettled(
+    SOURCES.map(src => fetchSource(src.url))
+  );
 
-      const articles = parseRSS(text);
-      if (articles.length > 0) {
-        // 按日期排序，最新在前
-        articles.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-        return new Response(JSON.stringify({
-          updated: new Date().toISOString(),
-          source: rssUrl,
-          articles: articles.slice(0, MAX_ARTICLES),
-        }), { headers });
-      }
-    } catch (e) {
-      console.error('RSS源失败:', rssUrl, e.message);
+  const diagnostics = [];
+  let allArticles = [];
+
+  for (let i = 0; i < SOURCES.length; i++) {
+    const r = results[i];
+    const src = SOURCES[i];
+    if (r.status === 'fulfilled') {
+      const val = r.value;
+      diagnostics.push({ source: src.name, http: val.httpStatus, count: val.articles.length, ms: val.ms });
+      allArticles = allArticles.concat(val.articles);
+    } else {
+      diagnostics.push({ source: src.name, http: 'ERR', count: 0, error: String(r.reason && r.reason.message || r.reason).substring(0, 80) });
     }
+  }
+
+  // 合并去重 + 按日期排序（最新在前）
+  const seen = new Set();
+  const unique = [];
+  allArticles.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  for (const a of allArticles) {
+    if (!seen.has(a.link)) {
+      seen.add(a.link);
+      unique.push(a);
+    }
+  }
+
+  if (unique.length === 0) {
+    return new Response(JSON.stringify({
+      updated: new Date().toISOString(),
+      articles: [],
+      diagnostics,
+      error: '所有数据源均失败',
+    }), { headers, status: 502 });
   }
 
   return new Response(JSON.stringify({
     updated: new Date().toISOString(),
-    articles: [],
-    error: '所有RSS源均失败',
-  }), { headers, status: 502 });
+    source: 'multi',
+    diagnostics,
+    articles: unique.slice(0, MAX_ARTICLES),
+  }), { headers });
+}
+
+async function fetchSource(feedUrl) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
+  const start = Date.now();
+  try {
+    const res = await fetch(feedUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'application/xml,application/rss+xml,text/xml,text/html,*/*',
+      },
+      signal: ctrl.signal,
+      cf: { cacheTtl: 0, cacheEverything: false },
+    });
+    const text = await res.text();
+    const articles = res.ok ? parseRSS(text) : [];
+    return { httpStatus: res.status, articles, ms: Date.now() - start };
+  } catch (e) {
+    return { httpStatus: 'ERR', articles: [], ms: Date.now() - start, error: e.name + ': ' + e.message };
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function parseRSS(xmlText) {
+  // 非XML内容（HTML验证页等）直接放弃
+  if (!xmlText || (!xmlText.includes('<item>') && !xmlText.includes('<entry>')) || xmlText.includes('Verifying Browser') || xmlText.includes('Security Verification')) {
+    return [];
+  }
+
   const articles = [];
   const items = xmlText.match(/<item>[\s\S]*?<\/item>/g) || [];
 
   for (const item of items) {
     const titleMatch = item.match(/<title><!\[CDATA\[([\s\S]*?)\]\]><\/title>/) || item.match(/<title>([\s\S]*?)<\/title>/);
     const linkMatch = item.match(/<link>([\s\S]*?)<\/link>/);
-    const dateMatch = item.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
+    const dateMatch = item.match(/<pubDate>([\s\S]*?)<\/pubDate>/) || item.match(/<updated>([\s\S]*?)<\/updated>/);
     const descMatch = item.match(/<description><!\[CDATA\[([\s\S]*?)\]\]><\/description>/) || item.match(/<description>([\s\S]*?)<\/description>/);
 
     const title = titleMatch ? titleMatch[1].trim() : '';
@@ -91,15 +133,12 @@ function parseRSS(xmlText) {
     const pubDate = dateMatch ? dateMatch[1].trim() : '';
     const descRaw = descMatch ? descMatch[1] : '';
 
-    // 提取封面图
     let thumb = '';
     const imgMatch = descRaw.match(/<img[^>]+src="([^"]+)"/);
     if (imgMatch) thumb = imgMatch[1];
 
-    // 清理描述
     const desc = descRaw.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().substring(0, 80);
 
-    // 格式化日期
     let dateStr = '';
     if (pubDate) {
       const d = new Date(pubDate);
@@ -118,7 +157,6 @@ function parseRSS(xmlText) {
 // 图片代理：绕过微信防盗链
 async function proxyImage(imgUrl) {
   if (!imgUrl) return new Response('no url', { status: 400 });
-
   try {
     const res = await fetch(imgUrl, {
       cf: { cacheTtl: 86400, cacheEverything: true },
@@ -127,12 +165,9 @@ async function proxyImage(imgUrl) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       },
     });
-
     if (!res.ok) return new Response('fetch failed: ' + res.status, { status: 502 });
-
     const contentType = res.headers.get('Content-Type') || 'image/jpeg';
     const body = await res.arrayBuffer();
-
     return new Response(body, {
       headers: {
         'Content-Type': contentType,
