@@ -69,14 +69,13 @@
         return;
       }
       img.removeAttribute('data-src');
-      const onLoad = () => {
+      // 用Image对象预加载，确保已缓存图片也能触发load回调
+      const preloader = new Image();
+      preloader.onload = preloader.onerror = () => {
+        img.src = src;
         img.classList.add('loaded');
-        img.removeEventListener('load', onLoad);
-        img.removeEventListener('error', onLoad);
       };
-      img.addEventListener('load', onLoad);
-      img.addEventListener('error', onLoad);
-      img.src = src;
+      preloader.src = src;
     }
 
     function isNearViewport(img) {
@@ -267,7 +266,9 @@
       scrollPos = window.scrollY || window.pageYOffset;
       originRect = imgEl.getBoundingClientRect();
 
-      lightboxImg.src = imgEl.src;
+      // 优先用data-src（懒加载未完成时），否则用src
+      const realSrc = imgEl.dataset.src || imgEl.src;
+      lightboxImg.src = realSrc;
       lightboxImg.alt = imgEl.alt || '';
 
       // 先禁用过渡，瞬间放到小图位置
