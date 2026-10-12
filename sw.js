@@ -1,5 +1,5 @@
 /* 广州实验中学官网 Service Worker */
-const CACHE_VERSION = 'gzsyzx-v1';
+const CACHE_VERSION = 'gzsyzx-v2';
 const CORE_ASSETS = [
   '/',
   '/style.css',
@@ -48,7 +48,21 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 静态资源（CSS/JS/图片/字体）：缓存优先，后台更新
+  // JS/CSS：网络优先（带版本号，确保更新立即生效），失败回退缓存
+  if (url.pathname.endsWith('.js') || url.pathname.endsWith('.css')) {
+    event.respondWith(
+      fetch(request).then((response) => {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_VERSION).then((cache) => cache.put(request, clone));
+        }
+        return response;
+      }).catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // 图片/字体：缓存优先，后台更新
   event.respondWith(
     caches.match(request).then((cached) => {
       const networkFetch = fetch(request).then((response) => {
