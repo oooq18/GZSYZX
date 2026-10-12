@@ -1600,15 +1600,15 @@ footer::after {
 }
 
 /* ===== 图片懒加载：模糊占位 + 渐清晰动画 ===== */
-.lazy-img {
+img.lazy-img {
   filter: blur(20px);
   transform: scale(1.04);
-  transition: filter 0.5s ease, transform 0.5s ease;
+  transition: filter 0.5s ease, transform 0.5s ease !important;
   will-change: filter, transform;
   background: var(--color-bg);
 }
 
-.lazy-img.loaded {
+img.lazy-img.loaded {
   filter: blur(0);
   transform: scale(1);
 }

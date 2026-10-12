@@ -54,8 +54,17 @@
       if (img.dataset.lazySetup) return;
       img.dataset.lazySetup = '1';
       img.classList.add('lazy-img');
-      // 已有src的移到data-src
-      if (img.src && !img.dataset.src && !img.complete) {
+      // 已缓存的图片：双rAF后加loaded，确保模糊→清晰的过渡动画生效
+      if (img.complete && img.naturalWidth > 0) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            img.classList.add('loaded');
+          });
+        });
+        return;
+      }
+      // 未缓存：把src移到data-src，等进入视口前300px再加载
+      if (img.src && !img.dataset.src) {
         img.dataset.src = img.src;
         img.removeAttribute('src');
       }
