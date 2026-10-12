@@ -49,24 +49,16 @@
   /* ===== 图片懒加载：模糊占位 + 渐清晰 + 提前300px加载 ===== */
   (function initLazyImages() {
     const LAZY_SELECTOR = '.news-card-thumb, .split-image img, .facility-grid img, .campus-gallery img, .feature-card .card-image img';
+    const TRANSPARENT_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
     function setupImage(img) {
       if (img.dataset.lazySetup) return;
       img.dataset.lazySetup = '1';
       img.classList.add('lazy-img');
-      // 已缓存的图片：双rAF后加loaded，确保模糊→清晰的过渡动画生效
-      if (img.complete && img.naturalWidth > 0) {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            img.classList.add('loaded');
-          });
-        });
-        return;
-      }
-      // 未缓存：把src移到data-src，等进入视口前300px再加载
-      if (img.src && !img.dataset.src) {
-        img.dataset.src = img.src;
-        img.removeAttribute('src');
+      // 把真实src移到data-src，用透明GIF占位（避免broken icon）
+      if (img.getAttribute('src') && !img.dataset.src) {
+        img.dataset.src = img.getAttribute('src');
+        img.src = TRANSPARENT_GIF;
       }
     }
 
@@ -77,10 +69,6 @@
         return;
       }
       img.removeAttribute('data-src');
-      if (img.complete && img.naturalWidth > 0) {
-        img.classList.add('loaded');
-        return;
-      }
       const onLoad = () => {
         img.classList.add('loaded');
         img.removeEventListener('load', onLoad);
@@ -89,6 +77,11 @@
       img.addEventListener('load', onLoad);
       img.addEventListener('error', onLoad);
       img.src = src;
+    }
+
+    function isNearViewport(img) {
+      const rect = img.getBoundingClientRect();
+      return rect.top < window.innerHeight + 300 && rect.bottom > -300;
     }
 
     if (!('IntersectionObserver' in window)) {
@@ -115,7 +108,12 @@
       const root = scope || document;
       root.querySelectorAll(LAZY_SELECTOR).forEach(img => {
         setupImage(img);
-        imgObserver.observe(img);
+        // 首屏或附近的图片立即加载，不等Observer异步回调
+        if (isNearViewport(img)) {
+          loadImage(img);
+        } else {
+          imgObserver.observe(img);
+        }
       });
     }
 
