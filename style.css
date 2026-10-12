@@ -511,7 +511,7 @@ main {
 
 .section-header {
   text-align: center;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
   position: relative;
 }
 
@@ -575,8 +575,8 @@ main {
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 32px;
-  margin-bottom: 80px;
+  gap: 28px;
+  margin-bottom: 72px;
 }
 
 .feature-card {
@@ -602,11 +602,11 @@ main {
 }
 
 .feature-card .card-image {
-  width: calc(100% + 48px);
-  margin: -24px -24px 20px;
+  width: calc(100% + 72px);
+  margin: -44px -36px 24px;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: 16px 16px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .feature-card .card-image img {
@@ -669,8 +669,7 @@ main {
 /* ===== 欢迎区 ===== */
 .welcome-section {
   text-align: center;
-  margin-top: 40px;
-  margin-bottom: 80px;
+  margin-bottom: 72px;
   padding: 0;
   position: relative;
 }
@@ -753,12 +752,12 @@ main {
 
 /* ===== 新闻动态 ===== */
 .news-section {
-  margin-bottom: 80px;
+  margin-bottom: 72px;
   position: relative;
 }
 
 .news-section .section-header {
-  margin-bottom: 30px;
+  margin-bottom: 48px;
 }
 
 .news-section::before {
@@ -881,7 +880,7 @@ main {
 /* ===== 二维码区 ===== */
 .qr-section {
   text-align: center;
-  margin-bottom: 80px;
+  margin-bottom: 72px;
   padding: 56px 40px;
   background: var(--color-card);
   border-radius: var(--radius-lg);
@@ -955,7 +954,7 @@ main {
 /* ===== 子页面：内容布局 ===== */
 .page-header {
   text-align: center;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
   position: relative;
 }
 
@@ -1355,31 +1354,6 @@ footer::after {
     margin: 0 12px;
   }
 
-  main {
-    padding: 48px 16px;
-  }
-
-  .content-block {
-    padding: 28px 20px;
-  }
-
-  .feature-grid {
-    gap: 16px;
-  }
-
-  .feature-card {
-    padding: 24px 20px;
-  }
-
-  .welcome-section {
-    padding: 36px 20px;
-  }
-
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-
   .stats-bar {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1507,22 +1481,29 @@ footer::after {
 /* 移动端适配 */
 @media (max-width: 768px) {
   main {
-    padding: 64px 20px;
+    padding: 56px 20px;
   }
   .welcome-section {
     padding: 12px 0;
-    margin-bottom: 48px;
+    margin-bottom: 56px;
   }
   .welcome-label {
     font-size: 0.7rem;
     letter-spacing: 5px;
   }
+  .we-stage {
+    margin-bottom: 56px;
+  }
   .feature-grid {
     gap: 20px;
-    margin-bottom: 64px;
+    margin-bottom: 56px;
   }
   .feature-card {
     padding: 32px 24px;
+  }
+  .feature-card .card-image {
+    width: calc(100% + 48px);
+    margin: -32px -24px 20px;
   }
   .content-block {
     padding: 32px 24px;
@@ -1546,9 +1527,11 @@ footer::after {
   .news-section::before {
     font-size: 3.5rem;
     top: -10px;
+    right: 0;
   }
   .qr-section {
     padding: 40px 20px;
+    margin-bottom: 56px;
   }
   .qr-item img {
     width: 120px;
@@ -1662,7 +1645,7 @@ footer::after {
   align-items: center;
   justify-content: center;
   margin-top: 0;
-  margin-bottom: 60px;
+  margin-bottom: 72px;
 }
 .we-stage-role {
   display: flex;
