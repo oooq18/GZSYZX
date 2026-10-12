@@ -46,6 +46,77 @@
     revealElements.forEach(el => el.classList.add('visible'));
   }
 
+  /* ===== 图片懒加载：模糊占位 + 渐清晰 + 提前300px加载 ===== */
+  (function initLazyImages() {
+    const LAZY_SELECTOR = '.news-card-thumb, .split-image img, .facility-grid img, .campus-gallery img, .feature-card .card-image img';
+
+    function setupImage(img) {
+      if (img.dataset.lazySetup) return;
+      img.dataset.lazySetup = '1';
+      img.classList.add('lazy-img');
+      // 已有src的移到data-src
+      if (img.src && !img.dataset.src && !img.complete) {
+        img.dataset.src = img.src;
+        img.removeAttribute('src');
+      }
+    }
+
+    function loadImage(img) {
+      const src = img.dataset.src;
+      if (!src) {
+        img.classList.add('loaded');
+        return;
+      }
+      img.removeAttribute('data-src');
+      if (img.complete && img.naturalWidth > 0) {
+        img.classList.add('loaded');
+        return;
+      }
+      const onLoad = () => {
+        img.classList.add('loaded');
+        img.removeEventListener('load', onLoad);
+        img.removeEventListener('error', onLoad);
+      };
+      img.addEventListener('load', onLoad);
+      img.addEventListener('error', onLoad);
+      img.src = src;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll(LAZY_SELECTOR).forEach(img => {
+        setupImage(img);
+        loadImage(img);
+      });
+      return;
+    }
+
+    const imgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          loadImage(entry.target);
+          imgObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      rootMargin: '300px 0px',
+      threshold: 0.01
+    });
+
+    function observeImages(scope) {
+      const root = scope || document;
+      root.querySelectorAll(LAZY_SELECTOR).forEach(img => {
+        setupImage(img);
+        imgObserver.observe(img);
+      });
+    }
+
+    // 初始加载
+    observeImages();
+
+    // 暴露给新闻动态渲染后调用
+    window.observeLazyImages = observeImages;
+  })();
+
   /* ===== 新闻动态：读取静态 news.json ===== */
   const newsGrid = document.getElementById('newsGrid');
   if (newsGrid) {
@@ -60,7 +131,7 @@
         const thumbUrl = a.thumb || '';
         return `
         <a href="${a.link}" target="_blank" rel="noopener" class="news-card">
-          ${thumbUrl ? `<img class="news-card-thumb" src="${thumbUrl}" alt="${a.title}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'" />` : ''}
+          ${thumbUrl ? `<img class="news-card-thumb" data-src="${thumbUrl}" alt="${a.title}" referrerpolicy="no-referrer" onerror="this.style.display='none'" />` : ''}
           <div class="news-card-body">
             ${a.date ? `<div class="news-card-date">${a.date}</div>` : ''}
             <h3 class="news-card-title">${a.title}</h3>
@@ -68,6 +139,10 @@
           </div>
         </a>`;
       }).join('');
+      // 处理动态生成的懒加载图片
+      if (window.observeLazyImages) {
+        window.observeLazyImages(newsGrid);
+      }
     }
 
     const CACHE_KEY = 'gzsyzx_news_cache';

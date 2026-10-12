@@ -1599,6 +1599,29 @@ footer::after {
   z-index: 10000;
 }
 
+/* ===== 图片懒加载：模糊占位 + 渐清晰动画 ===== */
+.lazy-img {
+  filter: blur(20px);
+  transform: scale(1.04);
+  transition: filter 0.5s ease, transform 0.5s ease;
+  will-change: filter, transform;
+  background: var(--color-bg);
+}
+
+.lazy-img.loaded {
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* 图片容器固定尺寸，防止布局跳动 */
+.news-card-thumb,
+.split-image img,
+.facility-grid img,
+.campus-gallery img,
+.feature-card .card-image img {
+  background: var(--color-bg);
+}
+
 /* ===== 语言切换 ===== */
 .lang-switch {
   display: inline-flex;
